@@ -6,207 +6,277 @@
 // ChatGPT Se Liya Hua Syntex --->
 // 1. PowerShell Windows operating system ka modern object-oriented command-line shell aur automation tool hai jo .NET framework par chalta hai.
 // 2. Normal CMD plain text deta hai jisme data filter karna mushkil hota hai, jabki PowerShell rich structured ".NET Objects" return karta hai jisse troubleshooting super-fast hoti hai.
-// 3. Format: Main-main core commands upar hain, fir advanced IP/Routing/File/Firewall commands hain, aur aakhri me Windows vs Linux ka comparison hai. Har command seedha '1 Line' format me hai!
+// 3. Format: Main-main core commands upar hain, fir advanced IP/Routing/File/Clean commands hain, aur aakhri me Windows vs Linux ka comparison hai. Har command seedha '1 Line' format me hai!
 
 // ================================================================================
 
 
-// ========================================= 1. Network & Port Diagnostics (Top Daily Drivers) =================== //
+// ========================================= 1. System Update & Windows Package Management (winget / CLI) ======= //
 // ================================================================================
 
-// 1. Test-NetConnection -ComputerName <IP/Domain> -Port <Port> -----> Specific TCP port open hai ya firewall ne block kiya hai check karne ke liye (TcpTestSucceeded: True/False).
+// 1. winget upgrade                           -----> System me installed sabhi software applications ke available updates check karne ke liye.
 
-// 2. Test-NetConnection -ComputerName <IP/Domain>              -----> Fast network ping aur reachability check karne ke liye (PingSucceeded: True/False).
+// 2. winget upgrade --all --silent            -----> Sabhi softwares (Chrome, Zoom, Adobe, 7-Zip) ko background me silently ek sath update karne ke liye (Linux: apt upgrade equivalent).
 
-// 3. Test-NetConnection -ComputerName <Host> -Port 80 -InformationLevel Detailed -----> Detailed route trace, round-trip latency aur interface alias nikalne ke liye.
+// 3. winget install -e --id Google.Chrome     -----> Google Chrome ya kisi bhi official app ko direct CLI se install karne ke liye.
 
-// 4. Test-Connection -ComputerName 8.8.8.8 -Count 4           -----> Modern object-oriented ping packet drop aur response time check karne ke liye.
+// 4. winget uninstall <app_name>              -----> Kisi software application ko CLI se silently uninstall karne ke liye.
 
-// 5. Test-Connection -ComputerName 8.8.8.8 -Count 20 | Select Address, ResponseTime -----> Network jitter aur micro packet drops trace karne ke liye.
+// 5. Get-HotFix                               -----> Installed Windows Security updates aur latest KB patches ki list dekhne ke liye.
 
-// 6. Clear-DnsClientCache                                     -----> Corrupt ya purane local DNS cache ko flush (clean) karne ke liye (ipconfig /flushdns equivalent).
-
-// 7. Resolve-DnsName -Name google.com                        -----> Modern object-oriented DNS lookup test karne ke liye (nslookup replacement).
-
-// 8. Resolve-DnsName -Name portal.local -Server 192.168.1.10 -----> Specific internal DNS server se query karke record verify karne ke liye.
-
-// 9. Get-NetTCPConnection -State Listen                       -----> System par kaun kaun se TCP ports actively listen kar rahe hain unhe dekhne ke liye (netstat -ano replacement).
+// 6. Get-HotFix | Sort-Object InstalledOn -Descending | Select -First 5 -----> Aakhri 5 updates dekhna (jab user bole "Kal update ke baad problem shuru hui").
 
 
 // ================================================================================
 
 
-// ========================================= 2. Network IP Configuration & Routing (Beginner to Advance) ========= //
+// ========================================= 2. Windows Deep Clean & Junk Removal =============================== //
 // ================================================================================
 
-// 10. Get-NetIPAddress -AddressFamily IPv4                    -----> Machine ke sabhi network adapters ke live IPv4 addresses, subnets aur interface aliases dekhne ke liye.
+// 7. Clear-RecycleBin -Force                  -----> Windows Desktop ke Recycle Bin (Trash) ko bina prompt ke CLI se permanently empty karne ke liye.
 
-// 11. Get-NetIPConfiguration                                  -----> IP address, Default Gateway, DNS Servers aur interface name ka clean summary dekhne ke liye.
+// 8. Remove-Item -Path "C:\Windows\Temp\*" -Recurse -Force -ErrorAction SilentlyContinue -----> Windows System Temp folder me bhari junk files ko delete karke space bachane ke liye.
 
-// 12. New-NetIPAddress -InterfaceAlias "Ethernet" -IPAddress 192.168.1.50 -PrefixLength 24 -DefaultGateway 192.168.1.1 -----> Network adapter par naya Static IP aur Gateway assign karne ke liye via CLI.
+// 9. Remove-Item -Path "$env:TEMP\*" -Recurse -Force -ErrorAction SilentlyContinue -----> Current User ke Local Temp folder (`%temp%`) ki faltu files ko clean karne ke liye.
 
-// 13. Remove-NetIPAddress -InterfaceAlias "Ethernet" -IPAddress 192.168.1.50 -Confirm:$false -----> Network adapter se IP address ko delete/remove karne ke liye via CLI.
+// 10. cleanmgr /sagerun:1                     -----> Windows Disk Cleanup tool ko automated background mode me chala kar system junk clean karne ke liye.
 
-// 14. Set-NetIPInterface -InterfaceAlias "Ethernet" -Dhcp Enabled -----> Adapter ko Static IP se hata kar wapas Automatic (DHCP) mode par daalne ke liye.
-
-// 15. Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses ("8.8.8.8","8.8.4.4") -----> Network card par DNS servers (Google DNS) manually set karne ke liye via CLI.
-
-// 16. Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ResetServerAddresses -----> DNS server ko reset karke wapas router/DHCP se automatic lene ke liye.
-
-// 17. Get-NetAdapter                                          -----> Physical Ethernet aur Wi-Fi cards ki link state (Up/Disabled), link speed (1Gbps/100Mbps) aur MAC address dekhne ke liye.
-
-// 18. Disable-NetAdapter -Name "Ethernet" -Confirm:$false    -----> Network card ko CLI se disable (band) karne ke liye.
-
-// 19. Enable-NetAdapter -Name "Ethernet" -Confirm:$false     -----> Network card ko CLI se wapas enable (chalu) karne ke liye.
-
-// 20. Restart-NetAdapter -Name "Ethernet"                     -----> Bina PC reboot kiye network card ke driver aur DHCP lease ko cleanly reload karne ke liye.
-
-// 21. Get-NetRoute                                            -----> Windows routing table aur active gateways inspect karne ke liye (route print replacement).
-
-// 22. New-NetRoute -DestinationPrefix "10.0.0.0/8" -InterfaceAlias "Ethernet" -NextHop 192.168.1.254 -----> Specific subnet ke liye static route add karne ke liye.
-
-// 23. Remove-NetRoute -DestinationPrefix "10.0.0.0/8" -Confirm:$false -----> Static route ko routing table se delete karne ke liye.
-
-// 24. Get-NetNeighbor -AddressFamily IPv4                     -----> Local network me judey devices ke IP se physical MAC address table (ARP) dekhne ke liye.
-
-// 25. Get-NetFirewallRule | Where-Object {$_.Enabled -eq "True" -and $_.Direction -eq "Inbound"} -----> Active inbound Windows Defender firewall rules inspect karne ke liye.
-
-// 26. New-NetFirewallRule -DisplayName "Allow Port 8080" -Direction Inbound -LocalPort 8080 -Protocol TCP -Action Allow -----> Naya firewall inbound port rule open karne ke liye.
+// 11. Master Deep Clean One-Liner (Windows):
+//     Clear-RecycleBin -Force; Remove-Item "$env:TEMP\*" -Recurse -Force -EA SilentlyContinue; Remove-Item "C:\Windows\Temp\*" -Recurse -Force -EA SilentlyContinue
 
 
 // ================================================================================
 
 
-// ========================================= 3. Services Management (Background Daemons) ======================== //
+// ========================================= 3. Directory Navigation & PowerShell Super Shortcuts =============== //
 // ================================================================================
 
-// 27. Get-Service -Name <service>                             -----> Background service running hai ya stopped check karne ke liye (e.g. Get-Service -Name Spooler).
+// 12. Get-Location                            -----> Print Working Directory: Aap is waqt kis folder/drive me baithe hain dekhne ke liye (pwd equivalent).
 
-// 28. Get-Service -Name *print*                               -----> Wildcard search se service ka exact technical naam dhoondne ke liye.
+// 13. Set-Location -Path "C:\Windows"         -----> Kisi specific folder ke andar navigate/move karne ke liye (cd equivalent).
 
-// 29. Restart-Service -Name <service> -Force                  -----> Atki hui background service ko uske dependent services ke sath bina GUI khole restart karne ke liye.
+// 14. Set-Location ..                         -----> Current folder se ek step peeche parent folder me wapas aane ke liye (cd .. equivalent).
 
-// 30. Start-Service -Name <service>                           -----> Kisi band hui (stopped) background service ko start karne ke liye.
+// 15. Set-Location ~                          -----> Current logged-in user ke home directory (`C:\Users\username`) me jump karne ke liye.
 
-// 31. Stop-Service -Name <service> -Force                     -----> Kisi running background service ko zabardasti band karne ke liye.
+// 16. Get-History                             -----> PowerShell console par run ki gayi purani executed commands ki list dekhne ke liye (history equivalent).
 
-// 32. Set-Service -Name <service> -StartupType Automatic      -----> Service ka startup type badal kar Automatic set karne ke liye via CLI.
+// 17. Invoke-History <Id>                     -----> Purani history me se kisi specific ID wali command ko dobara re-run karne ke liye.
 
-// 33. Set-Service -Name <service> -StartupType Disabled       -----> Unwanted ya risky service ko boot time par disable karne ke liye.
+// 18. Clear-Host                              -----> PowerShell screen ko 1 second me clear karne ke liye (cls / Ctrl + L equivalent).
 
-// 34. Get-Service | Where-Object {$_.StartType -eq "Automatic" -and $_.Status -eq "Stopped"} -----> Server par sabhi crashed automatic services ko 1 second me dhoondne ke liye.
-
-
-// ================================================================================
-
-
-// ========================================= 4. Process Management & Force Kill ================================= //
-// ================================================================================
-
-// 35. Get-Process                                             -----> System me chal rahe saare live programs, worker processes aur unke PID dekhne ke liye.
-
-// 36. Get-Process -Name chrome                                -----> Specific application background me chal rahi hai ya nahi check karne ke liye.
-
-// 37. Get-Process | Sort-Object CPU -Descending | Select-Object -First 5 -----> Top 5 sabse zyada CPU khane wale programs filter karne ke liye.
-
-// 38. Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First 5 -----> Top 5 sabse zyada RAM (Memory) khane wale software filter karne ke liye.
-
-// 39. (Get-Process -Name svchost).Path                        -----> Suspicious background process ka exact file path trace karne ke liye (Malware detection).
-
-// 40. Stop-Process -Name chrome -Force                        -----> Freeze hue software ko uske naam se zabardasti band (kill) karne ke liye.
-
-// 41. Stop-Process -Id <PID> -Force                           -----> Specific Process ID par surgical strike karke sirf usi hanging tab/window ko kill karne ke liye.
-
-// 42. Stop-Process -Name excel -Force -PassThru               -----> Kill hone ke baad console par live confirmation object dekhne ke liye.
-
-// 43. Wait-Process -Name installer                            -----> Background setup complete hone tak PowerShell execution ko pause/wait karne ke liye.
+// 19. Super PowerShell Shortcuts:
+//     - [Tab]                                 -----> Cmdlets, parameters aur file paths ko automatically auto-complete karne ke liye.
+//     - [Ctrl + C]                            -----> Terminal par chal rahi command, script ya loop ko forcefully cancel/stop karne ke liye.
+//     - [F7]                                  -----> History popup window khol kar purani commands ko arrow key se choose karne ke liye.
 
 
 // ================================================================================
 
 
-// ========================================= 5. File & Directory Operations (CLI File Management) =============== //
+// ========================================= 4. Files & Folder Creation (Create, Copy, Remove) ================== //
 // ================================================================================
 
-// 44. Get-Location                                            -----> Present directory check karne ke liye (pwd equivalent).
+// 20. New-Item -Path "index.js" -ItemType File -----> Nayi blank empty file create karne ke liye (Linux: `touch index.js` equivalent!).
 
-// 45. Set-Location -Path "C:\Windows\System32"                -----> Folder ke andar navigate karne ke liye (cd equivalent).
+// 21. New-Item -Path "app\src" -ItemType Directory -----> Naya folder ya nested directory tree create karne ke liye (Linux: `mkdir -p` equivalent!).
 
-// 46. Get-ChildItem -Path "C:\" -Force                        -----> Hidden files samet saari files aur folders ki list dekhne ke liye (dir / ls equivalent).
+// 22. Get-ChildItem -Path "C:\" -Force        -----> Hidden files samet saari files aur folders ki list dekhne ke liye (dir / ls -la equivalent).
 
-// 47. New-Item -Path "C:\IT_Logs" -ItemType Directory         -----> Naya folder create karne ke liye (mkdir equivalent).
+// 23. Copy-Item -Path "file.txt" -Destination "backup.txt" -----> Single file ko duplicate/copy karne ke liye.
 
-// 48. New-Item -Path "C:\IT_Logs\test.txt" -ItemType File -Value "Hello Floor" -----> Nayi text file create karne ke liye content ke sath.
+// 24. Copy-Item -Path "C:\Data\*" -Destination "D:\Backup\" -Recurse -----> Poore folder aur sub-folders ko recursively copy karne ke liye (cp -r equivalent).
 
-// 49. Remove-Item -Path "C:\IT_Logs" -Recurse -Force          -----> Folder aur uske andar ke saare contents ko forcefully delete karne ke liye (rm -rf equivalent).
+// 25. Remove-Item -Path "file.txt"            -----> File ko delete karne ke liye (rm equivalent).
 
-// 50. Copy-Item -Path "C:\Data\*" -Destination "D:\Backup\" -Recurse -----> Files aur folders ko dusri drive me copy karne ke liye.
+// 26. Remove-Item -Path "C:\OldFolder" -Recurse -Force -----> Kisi folder aur uske andar ke saare contents ko forcefully delete karne ke liye (rm -rf equivalent).
 
-// 51. Move-Item -Path "C:\OldFile.txt" -Destination "C:\NewFile.txt" -----> File ko rename ya move karne ke liye.
-
-// 52. Get-Content -Path "C:\Logs\app.log" -Tail 20            -----> File ki aakhri 20 lines dekhne ke liye.
-
-// 53. Get-Content -Path "C:\Logs\app.log" -Wait               -----> Live real-time log follow karne ke liye (Linux: tail -f equivalent!).
-
-// 54. Select-String -Path "C:\Logs\*.log" -Pattern "Error"    -----> Log files ke andar kisi specific error word ko search karne ke liye (Linux: grep equivalent!).
-
-// 55. Compress-Archive -Path "C:\Data\*" -DestinationPath "C:\Backup.zip" -----> Files ko zip compressed archive banane ke liye.
-
-// 56. Expand-Archive -Path "C:\Backup.zip" -DestinationPath "C:\Extracted\" -----> Zip archive file ko extract/unzip karne ke liye.
+// 27. Move-Item -Path "C:\old" -Destination "C:\new" -----> File ya folder ko rename karne ya move karne ke liye (mv equivalent).
 
 
 // ================================================================================
 
 
-// ========================================= 6. System Forensic, Hardware & Updates ============================ //
+// ========================================= 5. File Viewing & Live Log Inspection ============================== //
 // ================================================================================
 
-// 57. Get-HotFix                                              -----> Installed Windows Security updates aur latest KB patches ki list dekhne ke liye.
+// 28. Get-Content -Path "C:\app.log"          -----> File ka poora text content terminal screen par print karke padhne ke liye (cat equivalent).
 
-// 58. Get-HotFix | Sort-Object InstalledOn -Descending | Select -First 5 -----> Aakhri 5 updates dekhna (jab user bole "Kal update ke baad problem shuru hui").
+// 29. Get-Content -Path "C:\app.log" -TotalCount 10 -----> File ki shuruwaat ki pehli 10 lines print karne ke liye (head -n 10 equivalent).
 
-// 59. Get-ComputerInfo                                        -----> PC ka model name, OS build, total RAM aur BIOS details dekhne ke liye.
+// 30. Get-Content -Path "C:\app.log" -Tail 20 -----> File ki aakhri 20 lines print karne ke liye (tail -n 20 equivalent).
 
-// 60. (Get-CimInstance -ClassName Win32_BIOS).SerialNumber     -----> Laptop/Desktop ka official Dell Service Tag ya Serial Number warranty ke liye nikalne ke liye.
+// 31. Get-Content -Path "C:\app.log" -Wait    -----> Live Log Monitoring: File me naye aane wale logs ko real-time me screen par scroll karna (Linux: `tail -f` equivalent!).
 
-// 61. Get-CimInstance -ClassName Win32_PhysicalMemory         -----> Physical RAM sticks, speed (MHz) aur khali slots check karne ke liye bina cabinet khole.
-
-// 62. (Get-CimInstance -ClassName Win32_OperatingSystem).LastBootUpTime -----> System ka exact boot uptime check karna (jab user jhoot bole ki "Maine reboot kiya").
-
-// 63. Get-PSDrive -PSProvider FileSystem                      -----> Sabhi hard drive partitions ka free aur used storage space dekhne ke liye.
-
-// 64. Get-Volume                                              -----> Hard drives ke drive letters, file system (NTFS) aur health status dekhne ke liye.
+// 32. Select-String -Path "C:\Logs\*.log" -Pattern "Error" -----> Log files ke andar kisi specific error word ko search karke nikalne ke liye (Linux: `grep` equivalent!).
 
 
 // ================================================================================
 
 
-// ========================================= 7. Remote Fleet Management & Active Directory ===================== //
+// ========================================= 6. Network & Port Diagnostics (Top Daily Drivers) =================== //
 // ================================================================================
 
-// 65. Restart-Computer -Force                                 -----> Local system ko CLI se forcefully reboot karne ke liye.
+// 33. Test-NetConnection -ComputerName <IP/Domain> -Port <Port> -----> Specific TCP port open hai ya firewall ne block kiya hai check karne ke liye (TcpTestSucceeded: True/False).
 
-// 66. Restart-Computer -ComputerName <RemotePC> -Force        -----> Remote kiosk, counter PC ya billing terminal ko bina desk par jaye CLI se reboot karne ke liye.
+// 34. Test-NetConnection -ComputerName <IP/Domain>              -----> Fast network ping aur reachability check karne ke liye (PingSucceeded: True/False).
 
-// 67. Invoke-Command -ComputerName <RemotePC> -ScriptBlock { Restart-Service -Name Spooler -Force } -----> WinRM ke zariye remote PC par command chalane ke liye.
+// 35. Test-NetConnection -ComputerName <Host> -Port 80 -InformationLevel Detailed -----> Detailed route trace, round-trip latency aur interface alias nikalne ke liye.
 
-// 68. Test-WsMan <RemotePC>                                   -----> Verify karna ki remote machine par Windows Remote Management (Port 5985) open hai ya nahi.
+// 36. Test-Connection -ComputerName 8.8.8.8 -Count 4           -----> Modern object-oriented ping packet drop aur response time check karne ke liye.
 
-// 69. Get-ADUser -Identity <user> -Properties *               -----> Active Directory user ka status, password set date aur lockout check karne ke liye.
+// 37. Test-Connection -ComputerName 8.8.8.8 -Count 20 | Select Address, ResponseTime -----> Network jitter aur micro packet drops trace karne ke liye.
 
-// 70. Unlock-ADAccount -Identity <user>                       -----> Locked Active Directory user ko CLI se 1 second me unlock karne ke liye.
+// 38. Clear-DnsClientCache                                     -----> Corrupt ya purane local DNS cache ko flush (clean) karne ke liye (ipconfig /flushdns equivalent).
 
-// 71. Search-ADAccount -LockedOut | Select Name, SamAccountName -----> Poore domain me jitne bhi users is waqt locked hain unki list nikalne ke liye.
+// 39. Resolve-DnsName -Name google.com                        -----> Modern object-oriented DNS lookup test karne ke liye (nslookup replacement).
 
-// 72. Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625} -MaxEvents 10 -----> Machine par aakhri 10 Failed Logon attempts (Event ID 4625) filter karne ke liye.
+// 40. Resolve-DnsName -Name portal.local -Server 192.168.1.10 -----> Specific internal DNS server se query karke record verify karne ke liye.
 
-// 73. Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 -----> System log ke aakhri 5 Critical Errors filter karne ke liye.
+// 41. Get-NetTCPConnection -State Listen                       -----> System par kaun kaun se TCP ports actively listen kar rahe hain unhe dekhne ke liye (netstat -ano replacement).
 
 
 // ================================================================================
 
 
-// ========================================= 8. Windows vs Linux Commands Comparison (Complete Farq) ============= //
+// ========================================= 7. Network IP Configuration & Routing (Beginner to Advance) ========= //
+// ================================================================================
+
+// 42. Get-NetIPAddress -AddressFamily IPv4                    -----> Machine ke sabhi network adapters ke live IPv4 addresses, subnets aur interface aliases dekhne ke liye.
+
+// 43. Get-NetIPConfiguration                                  -----> IP address, Default Gateway, DNS Servers aur interface name ka clean summary dekhne ke liye.
+
+// 44. New-NetIPAddress -InterfaceAlias "Ethernet" -IPAddress 192.168.1.50 -PrefixLength 24 -DefaultGateway 192.168.1.1 -----> Network adapter par naya Static IP aur Gateway assign karne ke liye via CLI.
+
+// 45. Remove-NetIPAddress -InterfaceAlias "Ethernet" -IPAddress 192.168.1.50 -Confirm:$false -----> Network adapter se IP address ko delete/remove karne ke liye via CLI.
+
+// 46. Set-NetIPInterface -InterfaceAlias "Ethernet" -Dhcp Enabled -----> Adapter ko Static IP se hata kar wapas Automatic (DHCP) mode par daalne ke liye.
+
+// 47. Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses ("8.8.8.8","8.8.4.4") -----> Network card par DNS servers (Google DNS) manually set karne ke liye via CLI.
+
+// 48. Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ResetServerAddresses -----> DNS server ko reset karke wapas router/DHCP se automatic lene ke liye.
+
+// 49. Get-NetAdapter                                          -----> Physical Ethernet aur Wi-Fi cards ki link state (Up/Disabled), link speed (1Gbps/100Mbps) aur MAC address dekhne ke liye.
+
+// 50. Disable-NetAdapter -Name "Ethernet" -Confirm:$false    -----> Network card ko CLI se disable (band) karne ke liye.
+
+// 51. Enable-NetAdapter -Name "Ethernet" -Confirm:$false     -----> Network card ko CLI se wapas enable (chalu) karne ke liye.
+
+// 52. Restart-NetAdapter -Name "Ethernet"                     -----> Bina PC reboot kiye network card ke driver aur DHCP lease ko cleanly reload karne ke liye.
+
+// 53. Get-NetRoute                                            -----> Windows routing table aur active gateways inspect karne ke liye (route print replacement).
+
+// 54. New-NetRoute -DestinationPrefix "10.0.0.0/8" -InterfaceAlias "Ethernet" -NextHop 192.168.1.254 -----> Specific subnet ke liye static route add karne ke liye.
+
+// 55. Remove-NetRoute -DestinationPrefix "10.0.0.0/8" -Confirm:$false -----> Static route ko routing table se delete karne ke liye.
+
+// 56. Get-NetNeighbor -AddressFamily IPv4                     -----> Local network me judey devices ke IP se physical MAC address table (ARP) dekhne ke liye.
+
+// 57. Get-NetFirewallRule | Where-Object {$_.Enabled -eq "True" -and $_.Direction -eq "Inbound"} -----> Active inbound Windows Defender firewall rules inspect karne ke liye.
+
+// 58. New-NetFirewallRule -DisplayName "Allow Port 8080" -Direction Inbound -LocalPort 8080 -Protocol TCP -Action Allow -----> Naya firewall inbound port rule open karne ke liye.
+
+
+// ================================================================================
+
+
+// ========================================= 8. Services Management (Background Daemons) ======================== //
+// ================================================================================
+
+// 59. Get-Service -Name <service>                             -----> Background service running hai ya stopped check karne ke liye (e.g. Get-Service -Name Spooler).
+
+// 60. Get-Service -Name *print*                               -----> Wildcard search se service ka exact technical naam dhoondne ke liye.
+
+// 61. Restart-Service -Name <service> -Force                  -----> Atki hui background service ko uske dependent services ke sath bina GUI khole restart karne ke liye.
+
+// 62. Start-Service -Name <service>                           -----> Kisi band hui (stopped) background service ko start karne ke liye.
+
+// 63. Stop-Service -Name <service> -Force                     -----> Kisi running background service ko zabardasti band karne ke liye.
+
+// 64. Set-Service -Name <service> -StartupType Automatic      -----> Service ka startup type badal kar Automatic set karne ke liye via CLI.
+
+// 65. Set-Service -Name <service> -StartupType Disabled       -----> Unwanted ya risky service ko boot time par disable karne ke liye.
+
+// 66. Get-Service | Where-Object {$_.StartType -eq "Automatic" -and $_.Status -eq "Stopped"} -----> Server par sabhi crashed automatic services ko 1 second me dhoondne ke liye.
+
+
+// ================================================================================
+
+
+// ========================================= 9. Process Management & Force Kill ================================= //
+// ================================================================================
+
+// 67. Get-Process                                             -----> System me chal rahe saare live programs, worker processes aur unke PID dekhne ke liye.
+
+// 68. Get-Process -Name chrome                                -----> Specific application background me chal rahi hai ya nahi check karne ke liye.
+
+// 69. Get-Process | Sort-Object CPU -Descending | Select-Object -First 5 -----> Top 5 sabse zyada CPU khane wale programs filter karne ke liye.
+
+// 70. Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First 5 -----> Top 5 sabse zyada RAM (Memory) khane wale software filter karne ke liye.
+
+// 71. (Get-Process -Name svchost).Path                        -----> Suspicious background process ka exact file path trace karne ke liye (Malware detection).
+
+// 72. Stop-Process -Name chrome -Force                        -----> Freeze hue software ko uske naam se zabardasti band (kill) karne ke liye.
+
+// 73. Stop-Process -Id <PID> -Force                           -----> Specific Process ID par surgical strike karke sirf usi hanging tab/window ko kill karne ke liye.
+
+// 74. Stop-Process -Name excel -Force -PassThru               -----> Kill hone ke baad console par live confirmation object dekhne ke liye.
+
+// 75. Wait-Process -Name installer                            -----> Background setup complete hone tak PowerShell execution ko pause/wait karne ke liye.
+
+
+// ================================================================================
+
+
+// ========================================= 10. System Forensic, Hardware & Storage ============================ //
+// ================================================================================
+
+// 76. Get-ComputerInfo                                        -----> PC ka model name, OS build, total RAM aur BIOS details dekhne ke liye.
+
+// 77. (Get-CimInstance -ClassName Win32_BIOS).SerialNumber     -----> Laptop/Desktop ka official Dell Service Tag ya Serial Number warranty ke liye nikalne ke liye.
+
+// 78. Get-CimInstance -ClassName Win32_PhysicalMemory         -----> Physical RAM sticks, speed (MHz) aur khali slots check karne ke liye bina cabinet khole.
+
+// 79. (Get-CimInstance -ClassName Win32_OperatingSystem).LastBootUpTime -----> System ka exact boot uptime check karna (jab user jhoot bole ki "Maine reboot kiya").
+
+// 80. Get-PSDrive -PSProvider FileSystem                      -----> Sabhi hard drive partitions ka free aur used storage space dekhne ke liye.
+
+// 81. Get-Volume                                              -----> Hard drives ke drive letters, file system (NTFS) aur health status dekhne ke liye.
+
+// 82. Compress-Archive -Path "C:\Data\*" -DestinationPath "C:\Backup.zip" -----> Files ko zip compressed archive banane ke liye.
+
+// 83. Expand-Archive -Path "C:\Backup.zip" -DestinationPath "C:\Extracted\" -----> Zip archive file ko extract/unzip karne ke liye.
+
+
+// ================================================================================
+
+
+// ========================================= 11. Remote Fleet Management & Active Directory ===================== //
+// ================================================================================
+
+// 84. Restart-Computer -Force                                 -----> Local system ko CLI se forcefully reboot karne ke liye.
+
+// 85. Restart-Computer -ComputerName <RemotePC> -Force        -----> Remote kiosk, counter PC ya billing terminal ko bina desk par jaye CLI se reboot karne ke liye.
+
+// 86. Invoke-Command -ComputerName <RemotePC> -ScriptBlock { Restart-Service -Name Spooler -Force } -----> WinRM ke zariye remote PC par command chalane ke liye.
+
+// 87. Test-WsMan <RemotePC>                                   -----> Verify karna ki remote machine par Windows Remote Management (Port 5985) open hai ya nahi.
+
+// 88. Get-ADUser -Identity <user> -Properties *               -----> Active Directory user ka status, password set date aur lockout check karne ke liye.
+
+// 89. Unlock-ADAccount -Identity <user>                       -----> Locked Active Directory user ko CLI se 1 second me unlock karne ke liye.
+
+// 90. Search-ADAccount -LockedOut | Select Name, SamAccountName -----> Poore domain me jitne bhi users is waqt locked hain unki list nikalne ke liye.
+
+// 91. Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625} -MaxEvents 10 -----> Machine par aakhri 10 Failed Logon attempts (Event ID 4625) filter karne ke liye.
+
+// 92. Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 -----> System log ke aakhri 5 Critical Errors filter karne ke liye.
+
+
+// ================================================================================
+
+
+// ========================================= 12. Windows vs Linux Commands Comparison (Complete Farq) ============ //
 // ================================================================================
 
 // --- NETWORKING ---
@@ -227,16 +297,19 @@
 
 // --- BASIC TERMINAL & FILES ---
 // 13. Files / Folders List     -----> Windows: dir (ya Get-ChildItem)                        | Linux: ls -la
-// 14. Terminal Screen Clear    -----> Windows: cls (ya Clear-Host)                           | Linux: clear
+// 14. Terminal Screen Clear    -----> Windows: cls (ya Clear-Host / Ctrl + L)                | Linux: clear (Ctrl + L)
 // 15. System Reboot / Restart  -----> Windows: Restart-Computer -Force                       | Linux: sudo reboot
 // 16. Search Inside File (Grep)-----> Windows: Select-String                                 | Linux: grep
 // 17. Live Log Follow (Tail)   -----> Windows: Get-Content -Wait                             | Linux: tail -f
+// 18. Empty File Create        -----> Windows: New-Item -ItemType File                       | Linux: touch <file>
+// 19. Empty Trash / Cache      -----> Windows: Clear-RecycleBin -Force                       | Linux: rm -rf ~/.cache/* ~/.local/share/Trash/*
+// 20. Package Install / Update -----> Windows: winget upgrade --all / winget install         | Linux: sudo apt update && sudo apt upgrade -y
 
 
 // ================================================================================
 
 
-// ========================================= 9. Dono Me Technically Kya Farq Hai? =============================== //
+// ========================================= 13. Dono Me Technically Kya Farq Hai? =============================== //
 // ================================================================================
 
 // 1. Output Format   -----> PowerShell '.NET Objects' return karta hai (properties filter karna super asaan hai). Linux plain text string stream deta hai (jisme grep, awk lagana padta hai).
