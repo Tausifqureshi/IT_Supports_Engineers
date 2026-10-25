@@ -276,7 +276,104 @@
 // ================================================================================
 
 
-// ========================================= 12. Windows vs Linux Commands Comparison (Complete Farq) ============ //
+// ========================================= 12. Windows Defender Firewall Management (CLI) ===================== //
+// ================================================================================
+
+// 93. Get-NetFirewallRule                                      -----> System me configured sabhi inbound aur outbound firewall rules ki list dekhne ke liye.
+
+// 94. Get-NetFirewallRule -DisplayName "*Remote Desktop*" | Select Name, DisplayName, Enabled, Direction -----> RDP firewall rules ka active/disabled status check karne ke liye.
+
+// 95. New-NetFirewallRule -DisplayName "Allow Custom ERP Port 8080" -Direction Inbound -LocalPort 8080 -Protocol TCP -Action Allow -----> Company ke ERP/Software ke liye specific port 8080 allow karne ke liye.
+
+// 96. Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False -----> Emergency troubleshooting me firewall ko temporary disable karne ke liye (Turn OFF).
+
+// 97. Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True -----> Troubleshooting ke baad firewall ko turant wapas re-enable (Turn ON) karne ke liye.
+
+// 98. Enable-NetFirewallRule -DisplayGroup "File and Printer Sharing" -----> Office network par folder sharing aur printer access firewall me 1 click me allow karne ke liye.
+
+// 99. Remove-NetFirewallRule -DisplayName "Allow Custom ERP Port 8080" -----> Banaye gaye firewall rule ko delete/remove karne ke liye.
+
+
+// ================================================================================
+
+
+// ========================================= 13. BitLocker & Drive Encryption Management (CLI) =================== //
+// ================================================================================
+
+// 100. Get-BitLockerVolume                                     -----> Sabhi local drives (C:, D:) ka BitLocker protection status, encryption percentage aur lock status dekhne ke liye.
+
+// 101. (Get-BitLockerVolume -MountPoint C:).KeyProtector       -----> Locked laptop ka 48-digit BitLocker Recovery Key extract karne ke liye (User lockout me life-saver).
+
+// 102. Suspend-BitLocker -MountPoint "C:" -RebootCount 1       -----> BIOS/Firmware update karne se pehle BitLocker suspend karna taaki agle restart par Blue Screen ya BitLocker prompt na aaye.
+
+// 103. Resume-BitLocker -MountPoint "C:"                       -----> BIOS update ke baad BitLocker encryption ko dobara actively resume karne ke liye.
+
+// 104. Unlock-BitLocker -MountPoint "D:" -Password (ConvertTo-SecureString "Pass123" -AsPlainText -Force) -----> Locked external ya secondary drive ko CLI se unlock karne ke liye.
+
+
+// ================================================================================
+
+
+// ========================================= 14. Printers, Print Spooler & Driver Diagnostics (CLI) ============= //
+// ================================================================================
+
+// 105. Get-Printer                                             -----> Workstation par installed sabhi network aur local USB printers ki list dekhne ke liye.
+
+// 106. Get-PrintJob -PrinterName "HP_LaserJet"                 -----> Stuck ya pending print jobs aur unki Job ID check karne ke liye.
+
+// 107. Remove-PrintJob -PrinterName "HP_LaserJet" -ID <JobId>  -----> Print queue me fase hue document ko forcefully cancel/delete karne ke liye.
+
+// 108. Restart-Service -Name Spooler -Force                    -----> Print Spooler service ko restart karke printing freeze issue ko 5 second me resolve karne ke liye.
+
+// 109. Get-PrinterDriver                                       -----> Workstation me installed printer drivers ki architecture aur version list dekhne ke liye.
+
+// 110. Add-Printer -Name "Floor3_Printer" -DriverName "HP Universal Printing PCL 6" -PortName "192.168.1.200" -----> CLI se network IP printer deploy karne ke liye.
+
+
+// ================================================================================
+
+
+// ========================================= 15. Local Users, Groups & Credential Auditing (CLI) ================ //
+// ================================================================================
+
+// 111. Get-LocalUser                                           -----> Machine par bane sabhi local user accounts aur unka Enabled/Disabled status dekhne ke liye.
+
+// 112. New-LocalUser -Name "IT_Admin_Temp" -Password (ConvertTo-SecureString "Pass@1234" -AsPlainText -Force) -FullName "Temporary Admin" -----> Emergency onsite support ke liye naya local user create karne ke liye.
+
+// 113. Add-LocalGroupMember -Group "Administrators" -Member "IT_Admin_Temp" -----> Local user ko machine par Local Administrator rights assign karne ke liye.
+
+// 114. Set-LocalUser -Name "IT_Admin_Temp" -PasswordNeverExpires $true -----> Account ka password expire hone se rokne ke liye.
+
+// 115. Disable-LocalUser -Name "IT_Admin_Temp"                 -----> Kaam pura hone ke baad temporary user account ko disable/lock karne ke liye.
+
+// 116. Remove-LocalUser -Name "IT_Admin_Temp"                  -----> Temporary user account ko system se permanently delete karne ke liye.
+
+// 117. Get-LocalGroupMember -Group "Administrators"            -----> Machine ke Administrators group me kaun-kaun se users aur domain accounts baithe hain audit karne ke liye (Security check).
+
+
+// ================================================================================
+
+
+// ========================================= 16. Disks, Partitions & Modern Volume Maintenance (CLI) ============ //
+// ================================================================================
+
+// 118. Get-Disk                                                -----> Machine me lagi sabhi physical hard drives, SSDs aur USB drives ka Partition Style (GPT/MBR) aur health dekhne ke liye.
+
+// 119. Initialize-Disk -Number 1 -PartitionStyle GPT           -----> Nayi uninitialized raw hard drive/SSD ko modern GPT format me initialize karne ke liye.
+
+// 120. New-Partition -DiskNumber 1 -UseMaximumSize -AssignDriveLetter | Format-Volume -FileSystem NTFS -NewFileSystemLabel "CompanyData" -----> Poori nayi disk ko 1 line me partition banakar drive letter assign aur NTFS format karne ke liye.
+
+// 121. Repair-Volume -DriveLetter C -Scan                      -----> Modern online chkdsk: Live running Windows me bina PC reboot kiye disk corruption scan karne ke liye.
+
+// 122. Repair-Volume -DriveLetter C -SpotFix                   -----> Agle quick reboot par sirf corrupted cluster spot ko 10 second me fix karne ke liye.
+
+// 123. Clear-Disk -Number 1 -RemoveData -Confirm:$false        -----> Disk ko poori tarah wipe/clean karne ke liye (Decommissioning ke waqt).
+
+
+// ================================================================================
+
+
+// ========================================= 17. Windows vs Linux Commands Comparison (Complete Farq) ============ //
 // ================================================================================
 
 // --- NETWORKING ---
@@ -309,7 +406,7 @@
 // ================================================================================
 
 
-// ========================================= 13. Dono Me Technically Kya Farq Hai? =============================== //
+// ========================================= 18. Dono Me Technically Kya Farq Hai? =============================== //
 // ================================================================================
 
 // 1. Output Format   -----> PowerShell '.NET Objects' return karta hai (properties filter karna super asaan hai). Linux plain text string stream deta hai (jisme grep, awk lagana padta hai).
@@ -325,3 +422,4 @@
 // ================================================================================
 // Note created for Tausif Qureshi | Universal IT Support & Systems Engineer Blueprint
 // ================================================================================
+

@@ -45,21 +45,27 @@ IT_Supports_Engineers/
 ## 🚀 Module Overview & Core Skills
 
 ### 🐧 Module 01: Linux Administration & Backend Systems (`01_Linux_Administration/`)
-* **Core Philosophy**: Clean, high-speed 1-line command references (`----->`) optimized for fast floor recall.
-* **49 Commands Covered**:
-  * **Services Control (systemd)**: `systemctl status`, `restart`, `start`, `stop`, `enable`, `disable`, `--failed`.
-  * **Process Management**: `ps aux`, `grep`, `top`, `htop`, `kill -9 <PID>`, `pkill -9 -f`.
-  * **Logs & Telemetry**: `journalctl -u -n 50`, `journalctl -xe`, `tail -f /var/log/syslog`, `tail -f /var/log/auth.log`, `dmesg -T`.
-  * **Storage & Memory**: `df -h`, `du -sh *`, `free -m`, `truncate -s 0` (zero-downtime log truncate).
-  * **Permissions & Rights**: `chmod 755/644`, `chown`, `useradd`, `passwd`, `usermod -aG sudo`.
-  * **Network & Sockets**: `ip a`, `ss -tulnp`, `netstat -tulnp`, `ping`, `traceroute`, `nc -zv`, `curl -Iv`.
-  * **Package Management & Cron**: `apt update`, `apt install`, `apt autoremove --purge`, `dpkg --configure -a`, `crontab -e`.
-  * **Critical Hierarchy**: `/etc`, `/var/log`, `/home`, `/tmp`, `/opt`.
+* **Core Philosophy**: Clean, high-speed 1-line command references (`----->`) optimized for fast floor recall with 20 comprehensive categories.
+* **181 Commands Covered Across 20 Categories**:
+  * **System Update & Deep Junk Clean**: `apt update/upgrade`, `autoremove`, `autoclean`, `journalctl --vacuum-time=3d`, Master Clean One-Liner.
+  * **Shortcuts & Navigation**: `pwd`, `ls -la`, `cd ..`, `cd ~`, `history | grep`, `[Tab]`, `[Ctrl+C]`, `[Ctrl+L]`.
+  * **File Ops & Streams**: `mkdir -p`, `touch`, `cp -r`, `mv`, `rm -rf`, `tail -f`, `grep -i`, `awk`, `sed`, `nano`, `wc -l`.
+  * **Services & Processes**: `systemctl` (status, restart, enable, --failed), `ps aux`, `top`, `htop`, `kill -9`, `pkill -9`.
+  * **Disks & Storage**: `df -h`, `du -sh *`, `fdisk -l`, `lsblk -f`, `mount`, `umount`, `fsck -y`, `smartctl -H/-a`.
+  * **IP & Network Routing**: `ip a`, `ip link`, `ip route`, `ip neigh`, `ss -tulnp`, `resolvectl flush-caches`, `traceroute`, `nc -zv`.
+  * **Hardware Telemetry**: `lscpu`, `lshw -short`, `lspci`, `lsusb`, `dmidecode -t bios/system`, `sensors`.
+  * **Permissions & Users**: `chmod 755/644`, `chown -R`, `useradd -m`, `userdel -r`, `passwd -l/-u`, `usermod -aG sudo`, `visudo`.
+  * **SSH & Remote Sync**: `ssh-keygen`, `ssh-copy-id`, `scp -r`, `rsync -avzP`, `curl -I/-O`, `wget -c`.
+  * **Firewall & Security**: `ufw status/enable/disable`, `ufw allow 22/80/443/3389`, `ufw deny from IP`, `iptables -L -n -v`, `fail2ban-client`.
+  * **Package Troubleshooting & Distros**: `dpkg -i`, `dpkg -l`, `apt --fix-broken install`, `dpkg --configure -a`, `dnf/yum install/update`, `rpm -qa/-ivh`.
+  * **System Health, Audit & Shutdown**: `dmesg -T`, `uptime -p`, `who`, `w`, `last -n 10`, `last reboot`, `shutdown -r +15`.
+  * **Windows vs Linux Comparison**: 20 side-by-side floor comparisons and deep technical architectural differences.
 
 ---
 
 ### 🌐 Module 02: Enterprise Networking & Infrastructure (`02_Enterprise_Networking/`)
 * **Network Diagnostics**: `ping -t`, `tracert`, `nslookup`, `ipconfig /all /release /renew /flushdns`, `netstat -ano`, `arp -a`.
+* **TCP/IP Stack Repair & Wi-Fi Tools**: `pathping` (hop-by-hop packet loss), `route print`, `netsh int ip reset`, `netsh winsock reset`, `netsh wlan show profiles`, `netsh wlan show profile key=clear` (password extract), `nbtstat -R`.
 * **IP & Subnetting**: Class A/B/C private ranges, `/24 Subnetting` (254 usable IPs), Default Gateway, APIPA `169.254.x.x` root cause & fix.
 * **Static IP vs DHCP Reservation**: Why DHCP MAC reservations are standard for printers, POS counters, and kiosks.
 * **Standard Enterprise Ports**: DNS (53), DHCP (67/68), HTTP/S (80/443), SSH (22), RDP (3389), SMB (445), NTP (123).
@@ -70,7 +76,18 @@ IT_Supports_Engineers/
 
 ### 🪟 Module 03: Windows, Active Directory & IT Operations (`03_Windows_And_Active_Directory/`)
 * **Windows Run Shortcuts (`Window_Run_Commands.js`)**: Top 11 consoles (`services.msc`, `ncpa.cpl`, `devmgmt.msc`, `eventvwr.msc`, `appwiz.cpl`, `diskmgmt.msc`, etc.) structured into L1 Surface vs L2 Root Cause fixes.
-* **PowerShell Diagnostics (`PowerShell_Commands.js`)**: `.NET Objects` filtering, `Test-NetConnection`, `Get-Service`, `Restart-Service -Force`, `Get-Process`, `Stop-Process -Id`, and side-by-side Linux vs Windows command comparisons.
+* **PowerShell Diagnostics (`PowerShell_Commands.js`)**: 123 commands across 18 enterprise categories:
+  * Package Management (`winget`), Deep Clean (`Clear-RecycleBin`), Directory Navigation & Shortcuts.
+  * Live Log Following (`Get-Content -Wait`), Pattern Searching (`Select-String`), Network Testing (`Test-NetConnection`).
+  * IP/DNS/DHCP Management (`Get/Set-NetIPAddress`, `Get-NetTCPConnection`, `Clear-DnsClientCache`).
+  * Background Services (`Get/Restart-Service`), Force Process Killing (`Stop-Process -Id`).
+  * Hardware Forensics (Dell Service Tag / Serial via WMI `Win32_BIOS`, RAM MHz, LastBootUpTime).
+  * Remote WinRM (`Invoke-Command`, `Test-WsMan`), Active Directory CLI (`Get-ADUser`, `Unlock-ADAccount`, `Search-ADAccount -LockedOut`), Event Viewer Forensic (`Get-WinEvent` 4625 failed logins).
+  * Windows Defender Firewall (`Get/New/Set-NetFirewallRule`, `Enable-NetFirewallRule`).
+  * BitLocker Security (`Get-BitLockerVolume`, 48-digit Recovery Key extraction, Suspend/Resume BitLocker for BIOS updates).
+  * Printers & Print Spooler (`Get/Remove-PrintJob`, `Restart-Service Spooler`, `Add-Printer`).
+  * Local Accounts & Auditing (`Get/New/Disable-LocalUser`, `Add-LocalGroupMember` Administrators check).
+  * Modern Disks & Volumes (`Get-Disk`, `Initialize-Disk GPT`, `Format-Volume NTFS`, `Repair-Volume -Scan/-SpotFix`).
 * **Active Directory & GPO (`Active_Directory_GPO.js`)**:
   * ADUC (`dsa.msc`): User unlocks, temporary password resets, Security Groups vs Distribution Lists, domain secure channel trust repair (`Reset-ComputerSecureChannel`).
   * Shared Folders: Share Permissions (Outer Gate) vs NTFS Permissions (Inner Gate) — *Most Restrictive Wins*.

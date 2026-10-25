@@ -40,8 +40,30 @@
 // ================================================================================
 
 
-// ========================================= 2. IP & Subnetting Basics (Floor Par Kitna Zaroori Hai) ================= //
+// ========================================= 2. TCP/IP Stack Repair, Routing & Wi-Fi Commands =================== //
 // ================================================================================
+
+// 12. pathping <domain/IP>             -----> Ping aur Tracert combine karke 250 packets bhej kar hop-by-hop exact packet loss percentage calculate karne ke liye.
+
+// 13. route print                      -----> System ka active IPv4 routing table, interface metrics aur default gateway route check karne ke liye.
+
+// 14. netsh int ip reset               -----> Corrupt TCP/IP protocol stack ko factory default settings par reset karne ke liye (Network down ka master repair).
+
+// 15. netsh winsock reset              -----> Winsock socket catalog ko reset karke browser me website na khulne ke socket issues theek karne ke liye.
+
+// 16. netsh wlan show profiles         -----> Laptop par pehle se judey sabhi Wi-Fi access points aur SSIDs ki list dekhne ke liye.
+
+// 17. netsh wlan show profile name="Office_WiFi" key=clear -----> Saved Wi-Fi network ka security key password (Key Content) terminal par nikalne ke liye.
+
+// 18. nbtstat -R                       -----> NetBIOS remote cache name table ko purge aur reload karne ke liye (Shared network drives naming issue).
+
+
+// ================================================================================
+
+
+// ========================================= 3. IP & Subnetting Basics (Floor Par Kitna Zaroori Hai) ================= //
+// ================================================================================
+
 
 // 1. Private IPv4 Ranges (Jo sirf internal office/kiosk me use hoti hain):
 //    - Class A: 10.0.0.0 se 10.255.255.255       -----> Airport, Banks aur badi corporate MNCs me use hota hai.
@@ -66,7 +88,7 @@
 // ================================================================================
 
 
-// ========================================= 3. Static IP vs DHCP Reservation (Field Difference) ================= //
+// ========================================= 4. Static IP vs DHCP Reservation (Field Difference) ================= //
 // ================================================================================
 
 // 1. Static IP Assignment:
@@ -83,7 +105,7 @@
 // ================================================================================
 
 
-// ========================================= 4. Standard Enterprise Ports & Protocols =========================== //
+// ========================================= 5. Standard Enterprise Ports & Protocols =========================== //
 // Har Support Engineer Ko Zubani Yaad Hone Chahiye — Interview & Firewall Rules Ke Liye
 // ================================================================================
 
@@ -109,7 +131,7 @@
 // ================================================================================
 
 
-// ========================================= 5. VLANs, Switches & Physical Cabling ================================ //
+// ========================================= 6. VLANs, Switches & Physical Cabling ================================ //
 // ================================================================================
 
 // 1. VLAN (Virtual Local Area Network) Kya Hai?
@@ -137,7 +159,7 @@
 // ================================================================================
 
 
-// ========================================= 6. Practical Floor Troubleshooting Flow (Step-by-Step) ============= //
+// ========================================= 7. Practical Floor Troubleshooting Flow (Step-by-Step) ============= //
 // Jab User Bole: "Mera Internet / Portal Nahi Chal Raha" — Real Support Escalation Flow
 // ================================================================================
 

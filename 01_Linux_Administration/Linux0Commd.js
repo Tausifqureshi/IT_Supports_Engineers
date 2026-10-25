@@ -5,8 +5,8 @@
 // ========================================= Linux in IT Support Kya Hai? ======================================= //
 // ChatGPT Se Liya Hua Syntex --->
 // 1. Linux enterprise servers, airport kiosks, firewalls aur cloud instances ka primary OS hai.
-// 2. Desktop & Systems Support me Linux ka kaam: Terminal se software update, deep junk clean, IP assign/delete, services bounce, processes kill, logs inspect, disk free, aur permissions manage karna hota hai.
-// 3. Format: Main-main core commands upar hain, fir advanced IP/Routing/Files hain, aur aakhri me Windows vs Linux ka comparison hai. Har command seedha '1 Line' format me hai!
+// 2. Desktop & Systems Support me Linux ka kaam: Terminal se software update, deep junk clean, IP assign/delete, services bounce, processes kill, logs inspect, disk free, hardware identify aur permissions manage karna hota hai.
+// 3. Format: Main-main core commands upar hain, fir advanced IP/Routing/Files/Hardware hain, aur aakhri me Windows vs Linux ka comparison hai. Har command seedha '1 Line' format me hai!
 
 // ================================================================================
 
@@ -108,212 +108,403 @@
 // ================================================================================
 
 
-// ========================================= 5. Services Control (systemd Daemons) ============================== //
+// ========================================= 5. Text Editing, Stream Filters & Search Tools ===================== //
 // ================================================================================
 
-// 33. systemctl status <service>              -----> Service active (running) hai ya dead/failed check karne ke liye (e.g. systemctl status nginx).
+// 33. nano <file>                             -----> Terminal par configuration file ko edit karne ke liye beginner-friendly lightweight editor.
 
-// 34. sudo systemctl restart <service>        -----> Stuck ya crash hui background service ko turant restart (bounce) karne ke liye.
+// 34. less <file>                             -----> Badi log files ko memory crash kiye bina page-by-page scroll karke inspect karne ke liye (exit ke liye 'q' dabayein).
 
-// 35. sudo systemctl start <service>          -----> Kisi band (stopped) service ko chalu karne ke liye.
+// 35. wc -l <file>                            -----> File ke andar total kitni lines hain count karne ke liye (Line Count).
 
-// 36. sudo systemctl stop <service>           -----> Kisi running service ko safe tareeqe se band karne ke liye.
+// 36. sort <file> | uniq                      -----> Text lines ko alphabetically sort karke duplicate entries ko remove karne ke liye.
 
-// 37. sudo systemctl enable <service>         -----> Server reboot hone ke baad service apne aap auto-start ho jaye, yeh set karne ke liye.
+// 37. sed -i 's/old_text/new_text/g' <file>   -----> Bina file khole direct terminal se kisi word ko doosre word se globally replace/update karne ke liye.
 
-// 38. sudo systemctl disable <service>        -----> Boot time par service ko auto-start hone se rokne ke liye.
+// 38. awk '{print $1, $3}' /var/log/app.log   -----> Log file me se specific columns (jaise IP address aur Timestamp) filter karke print karne ke liye.
 
-// 39. systemctl --failed                      -----> Server par jitni bhi crashed ya failed services hain unki list 1 second me dekhne ke liye.
-
-// 40. sudo systemctl daemon-reload            -----> Nayi ya modified service configuration files ko reload karne ke liye.
-
-// 41. journalctl -u <service> -n 50 --no-pager -----> Service ke aakhri 50 crash logs screen freeze hue bina dekhne ke liye.
-
-// 42. journalctl -xe                         -----> Systemd ke detailed error logs aur recent boot/service failure reasons dekhne ke liye.
+// 39. echo "nameserver 8.8.8.8" >> /etc/resolv.conf -----> File ke aakhri me naya line/text bina purana data mitaye append (add) karne ke liye.
 
 
 // ================================================================================
 
 
-// ========================================= 6. Process Management (ps, top, kill) =============================== //
+// ========================================= 6. Services Control (systemd Daemons) ============================== //
 // ================================================================================
 
-// 43. ps aux                                  -----> System me chal rahe saare background processes aur unke Process ID (PID) dekhne ke liye.
+// 40. systemctl status <service>              -----> Service active (running) hai ya dead/failed check karne ke liye (e.g. systemctl status nginx).
 
-// 44. ps aux | grep <name>                    -----> Kisi specific software (jaise chrome, java, nginx) ka PID dhoondne ke liye.
+// 41. sudo systemctl restart <service>        -----> Stuck ya crash hui background service ko turant restart (bounce) karne ke liye.
 
-// 45. top                                     -----> Real-time interactive CPU aur Memory consumption dekhne ke liye (CLI Task Manager, exit ke liye 'q' dabayein).
+// 42. sudo systemctl start <service>          -----> Kisi band (stopped) service ko chalu karne ke liye.
 
-// 46. htop                                    -----> Colorful modern task manager jisme mouse scroll aur F9 se kill karna asaan hota hai.
+// 43. sudo systemctl stop <service>           -----> Kisi running service ko safe tareeqe se band karne ke liye.
 
-// 47. sudo kill -9 <PID>                      -----> Hanging ya frozen software ko uski PID se zabardasti (forcefully) band karne ke liye.
+// 44. sudo systemctl enable <service>         -----> Server reboot hone ke baad service apne aap auto-start ho jaye, yeh set karne ke liye.
 
-// 48. sudo pkill -9 -f <name>                 -----> Software ke naam se uske saare child processes ko ek jhatke me kill karne ke liye.
+// 45. sudo systemctl disable <service>        -----> Boot time par service ko auto-start hone se rokne ke liye.
 
-// 49. ps aux --sort=-%cpu | head -n 6        -----> Top 5 sabse zyada CPU khane wale programs filter karne ke liye.
+// 46. systemctl --failed                      -----> Server par jitni bhi crashed ya failed services hain unki list 1 second me dekhne ke liye.
 
-// 50. ps aux --sort=-%mem | head -n 6        -----> Top 5 sabse zyada RAM (Memory) khane wale programs filter karne ke liye.
+// 47. sudo systemctl daemon-reload            -----> Nayi ya modified service configuration files ko reload karne ke liye.
 
+// 48. journalctl -u <service> -n 50 --no-pager -----> Service ke aakhri 50 crash logs screen freeze hue bina dekhne ke liye.
 
-// ================================================================================
-
-
-// ========================================= 7. Storage & Memory Telemetry (df, du, free) ======================= //
-// ================================================================================
-
-// 51. df -h                                  -----> Hard disk ke sabhi partitions ka free aur used space human-readable (GB/MB) me dekhne ke liye.
-
-// 52. df -i                                  -----> Disk par Inodes usage check karne ke liye (Storage hote hue bhi "No space left" issue dhoondna).
-
-// 53. free -h                                -----> Server ki Total, Used aur Available RAM human-readable format (GB/MB) me check karne ke liye.
-
-// 54. free -m                                -----> Server ki Total, Used aur Available RAM exact Megabytes (MB) me check karne ke liye.
-
-// 55. du -sh *                               -----> Current folder ke andar kaun sa sub-folder sabse zyada space kha raha hai uska size dekhne ke liye.
-
-// 56. sudo truncate -s 0 <file.log>          -----> 100% full disk hone par bina service band kiye giant log file ko turant 0 byte (empty) karne ke liye.
-
-// 57. lsblk                                  -----> Hard drive ke sabhi physical disks aur unke partitions ka tree block layout dekhne ke liye.
+// 49. journalctl -xe                         -----> Systemd ke detailed error logs aur recent boot/service failure reasons dekhne ke liye.
 
 
 // ================================================================================
 
 
-// ========================================= 8. Network IP Configuration & Routing (Beginner to Advance) ========= //
+// ========================================= 7. Process Management (ps, top, kill) =============================== //
 // ================================================================================
 
-// 58. ip a                                   -----> Machine ka local IP address, subnet mask aur network card state dekhne ke liye (ip addr show).
+// 50. ps aux                                  -----> System me chal rahe saare background processes aur unke Process ID (PID) dekhne ke liye.
 
-// 59. sudo ip addr add 192.168.1.50/24 dev eth0 -----> Specific network card (eth0) par naya IP address assign/add karne ke liye via CLI.
+// 51. ps aux | grep <name>                    -----> Kisi specific software (jaise chrome, java, nginx) ka PID dhoondne ke liye.
 
-// 60. sudo ip addr del 192.168.1.50/24 dev eth0 -----> Network card se IP address ko delete/remove karne ke liye via CLI.
+// 52. top                                     -----> Real-time interactive CPU aur Memory consumption dekhne ke liye (CLI Task Manager, exit ke liye 'q' dabayein).
 
-// 61. sudo ip link set eth0 up               -----> Network interface card ko enable (chalu) karne ke liye.
+// 53. htop                                    -----> Colorful modern task manager jisme mouse scroll aur F9 se kill karna asaan hota hai.
 
-// 62. sudo ip link set eth0 down             -----> Network interface card ko disable (band) karne ke liye.
+// 54. sudo kill -9 <PID>                      -----> Hanging ya frozen software ko uski PID se zabardasti (forcefully) band karne ke liye.
 
-// 63. ip route show                          -----> System ka default gateway aur routing table dekhne ke liye (ip r).
+// 55. sudo pkill -9 -f <name>                 -----> Software ke naam se uske saare child processes ko ek jhatke me kill karne ke liye.
 
-// 64. sudo ip route add default via 192.168.1.1 dev eth0 -----> Network card par default gateway add/set karne ke liye.
+// 56. ps aux --sort=-%cpu | head -n 6        -----> Top 5 sabse zyada CPU khane wale programs filter karne ke liye.
 
-// 65. sudo ip route del default              -----> Purane default gateway ko route table se delete karne ke liye.
-
-// 66. sudo ip neigh                          -----> Local network me judey devices ke IP se physical MAC address table (ARP) dekhne ke liye.
-
-// 67. nmcli device status                    -----> NetworkManager ke zariye sabhi interfaces (Wi-Fi, Ethernet) ka status dekhne ke liye.
-
-// 68. sudo nmcli connection up "Wired connection 1" -----> Network connection ko restart ya reconnect karne ke liye.
-
-// 69. sudo resolvectl flush-caches           -----> Modern Ubuntu system par local DNS cache ko flush (clean) karne ke liye.
-
-// 70. ping -c 4 8.8.8.8                      -----> Network connectivity aur packet drop check karne ke liye (4 packets bhejta hai).
-
-// 71. traceroute <IP/Domain>                 -----> Packet destination tak kis-kis router (hop) se hokar ja raha hai aur kahan delay hai trace karne ke liye.
-
-// 72. sudo ss -tulnp                         -----> Server par kaun-kaun se TCP/UDP ports open hain aur kaun sa process/PID chal raha hai dekhne ke liye.
-
-// 73. netstat -tulnp                         -----> Classic network listening ports aur connected sockets dekhne ke liye.
-
-// 74. nc -zv <IP> <Port>                     -----> Remote server ka specific TCP port open hai ya firewall ne block kiya hai test karne ke liye (Netcat).
-
-// 75. curl -Iv <URL>                         -----> Website ka HTTP response status code (200 OK, 404, 502) aur SSL certificate verify karne ke liye.
-
-// 76. curl -I http://localhost:3000          -----> Check karna ki local web application port active hai aur HTTP 200 return kar raha hai ya nahi.
-
-// 77. wget <URL>                             -----> Internet se koi bhi file, driver ya package direct command line se download karne ke liye.
-
-// 78. scp file.txt user@192.168.1.50:/tmp/   -----> Secure Copy protocol se ek Linux PC se doosre remote PC par file transfer karne ke liye.
-
-// 79. sudo ufw status                        -----> Ubuntu Uncomplicated Firewall ka active status aur open rules dekhne ke liye.
-
-// 80. sudo ufw allow 22/tcp                  -----> Firewall me SSH port 22 ko open (allow) karne ke liye.
-
-// 81. sudo ufw deny from 192.168.1.150       -----> Malicious attacker IP ko firewall par block karne ke liye.
+// 57. ps aux --sort=-%mem | head -n 6        -----> Top 5 sabse zyada RAM (Memory) khane wale programs filter karne ke liye.
 
 
 // ================================================================================
 
 
-// ========================================= 9. Permissions, Users & Sudo Rights ================================= //
+// ========================================= 8. Storage & Memory Telemetry (df, du, free) ======================= //
 // ================================================================================
 
-// 82. chmod +x <script.sh>                   -----> Script ya installer file ko chalne ke liye 'Executable' permission dene ke liye.
+// 58. df -h                                  -----> Hard disk ke sabhi partitions ka free aur used space human-readable (GB/MB) me dekhne ke liye.
 
-// 83. ./deploy.sh                            -----> Current folder ke andar maujood executable script ko terminal par execute/run karne ke liye.
+// 59. df -i                                  -----> Disk par Inodes usage check karne ke liye (Storage hote hue bhi "No space left" issue dhoondna).
 
-// 84. chmod 755 <folder>                     -----> Folder ko standard rights dene ke liye (Owner ko Full, baaki sabko Read+Execute).
+// 60. free -h                                -----> Server ki Total, Used aur Available RAM human-readable format (GB/MB) me check karne ke liye.
 
-// 85. chmod 644 <file>                       -----> File ko standard rights dene ke liye (Owner ko Read+Write, baaki sabko Read-Only).
+// 61. free -m                                -----> Server ki Total, Used aur Available RAM exact Megabytes (MB) me check karne ke liye.
 
-// 86. sudo chown user:group <file>           -----> File ya folder ka legal Owner aur Group badalne ke liye.
+// 62. du -sh *                               -----> Current folder ke andar kaun sa sub-folder sabse zyada space kha raha hai uska size dekhne ke liye.
 
-// 87. sudo chown -R user:group <dir>         -----> Folder aur uske andar ke saare sub-folders/files ka owner recursively badalne ke liye.
+// 63. sudo truncate -s 0 <file.log>          -----> 100% full disk hone par bina service band kiye giant log file ko turant 0 byte (empty) karne ke liye.
 
-// 88. sudo useradd -m -s /bin/bash <user>    -----> System par naya user account uska home directory ke sath create karne ke liye.
-
-// 89. sudo userdel -r <user>                 -----> User account aur uski home directory ko system se permanently delete karne ke liye.
-
-// 90. sudo passwd <user>                     -----> Kisi user ka login password set ya reset karne ke liye.
-
-// 91. sudo passwd -l <user>                  -----> User account ko lock (disable) karne ke liye (Employee exit ke waqt).
-
-// 92. sudo passwd -u <user>                  -----> Locked user account ko wapas unlock karne ke liye.
-
-// 93. sudo usermod -aG sudo <user>           -----> Normal user ko Admin (sudo) privileges dene ke liye (Ubuntu).
-
-// 94. sudo visudo                            -----> `/etc/sudoers` file ko bina syntax error ke safely edit karne ke liye.
+// 64. lsblk                                  -----> Hard drive ke sabhi physical disks aur unke partitions ka tree block layout dekhne ke liye.
 
 
 // ================================================================================
 
 
-// ========================================= 10. Archive, Time, Cron & System Information ======================== //
+// ========================================= 9. Disks, Mounts & Filesystem Management =========================== //
 // ================================================================================
 
-// 95. tar -czvf backup.tar.gz /data/         -----> Folder ko compress karke `.tar.gz` archive backup file banane ke liye.
+// 65. sudo fdisk -l                          -----> System me lagi sabhi physical hard drives ke partition table aur sector details dekhne ke liye.
 
-// 96. tar -xzvf backup.tar.gz                -----> Compressed `.tar.gz` archive file ko un-compress (extract) karne ke liye.
+// 66. sudo blkid                             -----> Sabhi partitions ke unique UUID numbers aur Filesystem type (ext4, NTFS, xfs) dekhne ke liye.
 
-// 97. hostnamectl                            -----> Server ka current hostname, OS architecture aur kernel version dekhne ke liye.
+// 67. sudo mount /dev/sdb1 /mnt/usb          -----> External USB drive ya secondary hard disk partition ko access karne ke liye folder par mount karne ke liye.
 
-// 98. sudo hostnamectl set-hostname <name>   -----> Server ya kiosk PC ka computer name change karne ke liye.
+// 68. sudo umount /mnt/usb                   -----> Mounted drive ko safely eject/unmount karne ke liye.
 
-// 99. timedatectl                            -----> System time, time zone aur NTP synchronization status dekhne ke liye.
-
-// 100. sudo timedatectl set-timezone Asia/Dubai -----> System time zone ko Dubai (Gulf) time par set karne ke liye.
-
-// 101. crontab -l                            -----> System par kaun se scheduled automated tasks (backup/clean) set hain unhe dekhne ke liye.
-
-// 102. crontab -e                            -----> Naya automated schedule add ya edit karne ke liye (5-star syntax: Minute Hour Day Month Week).
-
-// 103. sudo dmesg -T                         -----> Kernel boot events aur newly plugged USB/Hardware detection logs timestamp ke sath dekhne ke liye.
+// 69. sudo fsck -y /dev/sda1                 -----> Corrupted filesystem aur bad sectors ko scan aur automatically repair karne ke liye.
 
 
 // ================================================================================
 
 
-// ========================================= 11. Critical Linux File System Paths =============================== //
+// ========================================= 10. Network IP Configuration & Routing (Beginner to Advance) ======== //
 // ================================================================================
 
-// 104. /etc                           -----> System aur applications ki configuration files ka folder (e.g. /etc/hosts, /etc/passwd).
+// 70. ip a                                   -----> Machine ka local IP address, subnet mask aur network card state dekhne ke liye (ip addr show).
 
-// 105. /etc/hosts                     -----> Local DNS mapping file (IP se hostname manually map karne ke liye).
+// 71. sudo ip addr add 192.168.1.50/24 dev eth0 -----> Specific network card (eth0) par naya IP address assign/add karne ke liye via CLI.
 
-// 106. /etc/resolv.conf               -----> System ke active DNS nameservers ki configuration file.
+// 72. sudo ip addr del 192.168.1.50/24 dev eth0 -----> Network card se IP address ko delete/remove karne ke liye via CLI.
 
-// 107. /var/log                       -----> Operating system aur services ke crash aur event logs ka main folder.
+// 73. sudo ip link set eth0 up               -----> Network interface card ko enable (chalu) karne ke liye.
 
-// 108. /home                          -----> Standard users ka personal data, documents aur desktop files store karne ki jagah.
+// 74. sudo ip link set eth0 down             -----> Network interface card ko disable (band) karne ke liye.
 
-// 109. /tmp                           -----> Temporary files ka folder (System reboot hone par automatically delete ho jata hai).
+// 75. ip route show                          -----> System ka default gateway aur routing table dekhne ke liye (ip r).
 
-// 110. /opt                           -----> Third-party enterprise applications aur custom software store karne ka folder.
+// 76. sudo ip route add default via 192.168.1.1 dev eth0 -----> Network card par default gateway add/set karne ke liye.
+
+// 77. sudo ip route del default              -----> Purane default gateway ko route table se delete karne ke liye.
+
+// 78. sudo ip neigh                          -----> Local network me judey devices ke IP se physical MAC address table (ARP) dekhne ke liye.
+
+// 79. nmcli device status                    -----> NetworkManager ke zariye sabhi interfaces (Wi-Fi, Ethernet) ka status dekhne ke liye.
+
+// 80. sudo nmcli connection up "Wired connection 1" -----> Network connection ko restart ya reconnect karne ke liye.
+
+// 81. sudo resolvectl flush-caches           -----> Modern Ubuntu system par local DNS cache ko flush (clean) karne ke liye.
+
+// 82. ping -c 4 8.8.8.8                      -----> Network connectivity aur packet drop check karne ke liye (4 packets bhejta hai).
+
+// 83. traceroute <IP/Domain>                 -----> Packet destination tak kis-kis router (hop) se hokar ja raha hai aur kahan delay hai trace karne ke liye.
+
+// 84. sudo ss -tulnp                         -----> Server par kaun-kaun se TCP/UDP ports open hain aur kaun sa process/PID chal raha hai dekhne ke liye.
+
+// 85. netstat -tulnp                         -----> Classic network listening ports aur connected sockets dekhne ke liye.
+
+// 86. nc -zv <IP> <Port>                     -----> Remote server ka specific TCP port open hai ya firewall ne block kiya hai test karne ke liye (Netcat).
+
+// 87. curl -Iv <URL>                         -----> Website ka HTTP response status code (200 OK, 404, 502) aur SSL certificate verify karne ke liye.
+
+// 88. curl -I http://localhost:3000          -----> Check karna ki local web application port active hai aur HTTP 200 return kar raha hai ya nahi.
+
+// 89. dig <domain>                           -----> Deep DNS record query (A, MX, TXT) lookup karne ke liye.
+
+// 90. dig +short <domain>                    -----> Domain ka clean IP address 1 second me pull karne ke liye.
+
+// 91. wget <URL>                             -----> Internet se koi bhi file, driver ya package direct command line se download karne ke liye.
+
+// 92. scp file.txt user@192.168.1.50:/tmp/   -----> Secure Copy protocol se ek Linux PC se doosre remote PC par file transfer karne ke liye.
+
+// 93. rsync -avz /data/ user@192.168.1.50:/backup/ -----> Fast incremental remote backup aur directory sync transfer karne ke liye.
+
+// 94. sudo ufw status                        -----> Ubuntu Uncomplicated Firewall ka active status aur open rules dekhne ke liye.
+
+// 95. sudo ufw allow 22/tcp                  -----> Firewall me SSH port 22 ko open (allow) karne ke liye.
+
+// 96. sudo ufw deny from 192.168.1.150       -----> Malicious attacker IP ko firewall par block karne ke liye.
 
 
 // ================================================================================
 
 
-// ========================================= 12. Windows vs Linux Commands Comparison (Complete Farq) ============ //
+// ========================================= 11. Hardware, CPU & Peripheral Telemetry ============================ //
+// ================================================================================
+
+// 97. lscpu                                  -----> CPU architecture, model name, number of cores aur virtualization support dekhne ke liye.
+
+// 98. sudo lshw -short                       -----> System ke sabhi hardware components (RAM, CPU, Motherboard, Disks) ka clean summary dekhne ke liye.
+
+// 99. lsusb                                  -----> USB ports me lage sabhi external devices (Barcode scanner, Printer, USB flash drive) ko detect karne ke liye.
+
+// 100. lspci                                 -----> Motherboard ke PCI slots me lage Network cards, Graphics cards aur controllers inspect karne ke liye.
+
+// 101. uname -r                              -----> Active Linux kernel release version dekhne ke liye.
+
+// 102. uname -a                              -----> System ka complete OS architecture (x86_64), hostname aur kernel details dekhne ke liye.
+
+// 103. cat /etc/os-release                   -----> Linux distribution ka exact official name aur version (e.g. Ubuntu 22.04 LTS) dekhne ke liye.
+
+// 104. uptime -p                             -----> Server kitne din, ghante aur minute se bina reboot hue chal raha hai clean format me dekhne ke liye.
+
+// 105. w                                     -----> Server par kaun kaun se users logged in hain aur wo is waqt kya command chala rahe hain live dekhne ke liye.
+
+// 106. last -n 10                            -----> System ke aakhri 10 user login sessions aur reboot events ki history dekhne ke liye.
+
+
+// ================================================================================
+
+
+// ========================================= 12. Permissions, Users & Sudo Rights ================================ //
+// ================================================================================
+
+// 107. chmod +x <script.sh>                  -----> Script ya installer file ko chalne ke liye 'Executable' permission dene ke liye.
+
+// 108. ./deploy.sh                           -----> Current folder ke andar maujood executable script ko terminal par execute/run karne ke liye.
+
+// 109. chmod 755 <folder>                    -----> Folder ko standard rights dene ke liye (Owner ko Full, baaki sabko Read+Execute).
+
+// 110. chmod 644 <file>                      -----> File ko standard rights dene ke liye (Owner ko Read+Write, baaki sabko Read-Only).
+
+// 111. sudo chown user:group <file>          -----> File ya folder ka legal Owner aur Group badalne ke liye.
+
+// 112. sudo chown -R user:group <dir>        -----> Folder aur uske andar ke saare sub-folders/files ka owner recursively badalne ke liye.
+
+// 113. sudo useradd -m -s /bin/bash <user>   -----> System par naya user account uska home directory ke sath create karne ke liye.
+
+// 114. sudo userdel -r <user>                -----> User account aur uski home directory ko system se permanently delete karne ke liye.
+
+// 115. sudo passwd <user>                    -----> Kisi user ka login password set ya reset karne ke liye.
+
+// 116. sudo passwd -l <user>                 -----> User account ko lock (disable) karne ke liye (Employee exit ke waqt).
+
+// 117. sudo passwd -u <user>                 -----> Locked user account ko wapas unlock karne ke liye.
+
+// 118. sudo usermod -aG sudo <user>          -----> Normal user ko Admin (sudo) privileges dene ke liye (Ubuntu).
+
+// 119. sudo visudo                           -----> `/etc/sudoers` file ko bina syntax error ke safely edit karne ke liye.
+
+
+// ================================================================================
+
+
+// ========================================= 13. Archive, Compression, Time & Cron =============================== //
+// ================================================================================
+
+// 120. tar -czvf backup.tar.gz /data/        -----> Folder ko compress karke `.tar.gz` archive backup file banane ke liye.
+
+// 121. tar -xzvf backup.tar.gz               -----> Compressed `.tar.gz` archive file ko un-compress (extract) karne ke liye.
+
+// 122. zip -r data.zip /path/to/folder/      -----> Standard `.zip` format me files aur folders ko compress karne ke liye.
+
+// 123. unzip data.zip                        -----> `.zip` archive file ko extract karne ke liye.
+
+// 124. gzip <file.log>                       -----> Badi single log file ko compress karke `.gz` banane ke liye.
+
+// 125. gunzip <file.log.gz>                  -----> Compressed `.gz` file ko wapas uncompress karne ke liye.
+
+// 126. hostnamectl                           -----> Server ka current hostname, OS architecture aur kernel version dekhne ke liye.
+
+// 127. sudo hostnamectl set-hostname <name>  -----> Server ya kiosk PC ka computer name change karne ke liye.
+
+// 128. timedatectl                           -----> System time, time zone aur NTP synchronization status dekhne ke liye.
+
+// 129. sudo timedatectl set-timezone Asia/Dubai -----> System time zone ko Dubai (Gulf) time par set karne ke liye.
+
+// 130. crontab -l                           -----> System par kaun se scheduled automated tasks (backup/clean) set hain unhe dekhne ke liye.
+
+// 131. crontab -e                           -----> Naya automated schedule add ya edit karne ke liye (5-star syntax: Minute Hour Day Month Week).
+
+
+// ================================================================================
+
+
+// ========================================= 14. Remote Access, Secure Shell & File Transfer (SSH, SCP, Rsync, Web) = //
+// ================================================================================
+
+// 132. ssh username@192.168.1.100 -p 22      -----> Remote Linux server/machine par encrypted terminal console session login karne ke liye.
+
+// 133. ssh-keygen -t rsa -b 4096            -----> Password-less secure SSH login ke liye 4096-bit public-private key pair generate karne ke liye.
+
+// 134. ssh-copy-id user@192.168.1.100       -----> Remote server par public key upload karke password-free auto login set karne ke liye.
+
+// 135. scp file.txt user@192.168.1.100:/tmp/ -----> Terminal se single file ko remote Linux machine ke kisi bhi path par securely copy karne ke liye.
+
+// 136. scp -r /data user@192.168.1.100:/backup/ -----> Local machine se poore ke poore folder ko remote server par securely transfer karne ke liye.
+
+// 137. rsync -avzP /source/ user@192.168.1.100:/dest/ -----> Enterprise delta file sync: Sirf modified bits transfer karta hai, interrupt hone par resume ho jata hai.
+
+// 138. curl -I https://google.com           -----> HTTP/HTTPS web response headers aur status code (200 OK, 404, 502) terminal par check karne ke liye.
+
+// 139. curl -O https://example.com/data.tar.gz -----> Web URL se direct file terminal par download karne ke liye.
+
+// 140. wget -c https://example.com/file.iso -----> Web link se file download karne ke liye (`-c` flag se disconnected/interrupted download wahi se resume hoti hai).
+
+
+// ================================================================================
+
+
+// ========================================= 15. Firewall & Security Control (UFW, iptables & Fail2ban) ========== //
+// ================================================================================
+
+// 141. sudo ufw status verbose              -----> Linux built-in firewall ka current status aur open/blocked ports ki detail list dekhne ke liye.
+
+// 142. sudo ufw enable                      -----> Linux firewall protection ko globally active (turn ON) karne ke liye.
+
+// 143. sudo ufw disable                     -----> Network troubleshooting ke waqt firewall ko temporary band (turn OFF) karne ke liye.
+
+// 144. sudo ufw allow 22/tcp                -----> Remote administration ke liye SSH port 22 ko firewall me allow karne ke liye.
+
+// 145. sudo ufw allow 80,443/tcp            -----> Web traffic (HTTP/HTTPS) ke ports ko ek line me allow karne ke liye.
+
+// 146. sudo ufw allow 3389/tcp              -----> Linux GUI remote desktop (xrdp) port ko open karne ke liye.
+
+// 147. sudo ufw allow from 192.168.1.0/24 to any port 22 proto tcp -----> Sirf office ke internal subnet ko SSH access allow karne ke liye (Security hardening).
+
+// 148. sudo ufw deny from 192.168.1.50      -----> Kisi infected ya unauthorized machine ki IP ko poori tarah block karne ke liye.
+
+// 149. sudo ufw delete allow 22             -----> Pehle se banaye gaye allow rule ko delete/revoke karne ke liye.
+
+// 150. sudo iptables -L -n -v               -----> Kernel-level raw firewall packet filtering rules aur dropped packet counters dekhne ke liye.
+
+// 151. sudo fail2ban-client status          -----> Brute-force SSH attack prevention service ka status aur banned IPs dekhne ke liye.
+
+
+// ================================================================================
+
+
+// ========================================= 16. Package Troubleshooting & Enterprise Distros (dpkg, RHEL DNF/RPM) = //
+// ================================================================================
+
+// 152. sudo dpkg -i package.deb             -----> Download kiye gaye offline `.deb` software installer package ko install karne ke liye.
+
+// 153. sudo dpkg -l | grep <package>        -----> System me installed specific software ka exact version aur build number check karne ke liye.
+
+// 154. sudo dpkg -r <package>               -----> Installed `.deb` package ko system se remove karne ke liye.
+
+// 155. sudo apt --fix-broken install        -----> Broken packages aur corrupted dependencies ko automatically repair aur re-align karne ke liye.
+
+// 156. sudo dpkg --configure -a             -----> Crash ya power cut ki wajah se beech me atki hui pending installations ko finalize karne ke liye.
+
+// 157. sudo add-apt-repository ppa:<repo>   -----> Naya verified PPA repository source system me add karne ke liye.
+
+// 158. sudo dnf install <package> (ya yum)  -----> RedHat/Rocky Linux/CentOS enterprise systems par naya software install karne ke liye.
+
+// 159. sudo dnf update -y                   -----> RedHat enterprise system ke sabhi packages aur security kernels ko update karne ke liye.
+
+// 160. rpm -qa | grep <package>             -----> RedHat enterprise distribution par installed RPM packages ki list filter karne ke liye.
+
+// 161. sudo rpm -ivh package.rpm            -----> RedHat par offline `.rpm` installer file ko install karne ke liye.
+
+
+// ================================================================================
+
+
+// ========================================= 17. System Health, SMART Drive Telemetry, Audit Logs & Shutdown ===== //
+// ================================================================================
+
+// 162. sudo smartctl -H /dev/sda            -----> Hard disk / SSD ka SMART health status (PASSED ya FAILED) 1 second me check karne ke liye.
+
+// 163. sudo smartctl -a /dev/sda            -----> Drive ke bad sectors, power-on hours, temperature aur failure prediction telemetry dekhne ke liye.
+
+// 164. sensors                              -----> Motherboard, CPU cores aur chassis fans ka real-time temperature aur RPM dekhne ke liye (lm-sensors).
+
+// 165. sudo dmesg -l err,crit               -----> System me aaye critical kernel crashes, PCIe errors aur hardware failures ko filter karne ke liye.
+
+// 166. sudo dmesg -T                        -----> Kernel boot events aur newly plugged USB/Hardware detection logs human timestamp ke sath dekhne ke liye.
+
+// 167. uptime -p                            -----> System kitne ghante ya dino se bina kisi reboot/restart ke continuously chal raha hai dekhne ke liye.
+
+// 168. who                                  -----> Current session me kaun-kaun se users active terminal par logged in hain dekhne ke liye.
+
+// 169. w                                    -----> Logged in users kaun sa process ya command execute kar rahe hain live monitor karne ke liye.
+
+// 170. last -n 10                           -----> Server par huye pichle 10 logins, logouts aur reboot events ka audit record dekhne ke liye.
+
+// 171. last reboot                          -----> System pichli baar kab-kab reboot hua tha uski date aur time history dekhne ke liye.
+
+// 172. sudo shutdown -h now                 -----> System ko turant safely turn OFF (power off) karne ke liye.
+
+// 173. sudo shutdown -r +15 "Rebooting"     -----> 15 minute baad automatic reboot schedule karke connected users ko broadcast warning message bhejne ke liye.
+
+// 174. sudo shutdown -c                     -----> Scheduled pending shutdown ya reboot ko cancel karne ke liye.
+
+
+// ================================================================================
+
+
+// ========================================= 18. Critical Linux File System Paths =============================== //
+// ================================================================================
+
+// 175. /etc                           -----> System aur applications ki configuration files ka folder (e.g. /etc/hosts, /etc/passwd).
+
+// 176. /etc/hosts                     -----> Local DNS mapping file (IP se hostname manually map karne ke liye).
+
+// 177. /etc/resolv.conf               -----> System ke active DNS nameservers ki configuration file.
+
+// 178. /var/log                       -----> Operating system aur services ke crash aur event logs ka main folder.
+
+// 179. /home                          -----> Standard users ka personal data, documents aur desktop files store karne ki jagah.
+
+// 180. /tmp                           -----> Temporary files ka folder (System reboot hone par automatically delete ho jata hai).
+
+// 181. /opt                           -----> Third-party enterprise applications aur custom software store karne ka folder.
+
+
+// ================================================================================
+
+
+// ========================================= 19. Windows vs Linux Commands Comparison (Complete Farq) ============ //
 // ================================================================================
 
 // --- NETWORKING ---
@@ -321,9 +512,9 @@
 // 2. Default Route / Gateway   -----> Linux: ip route                         | Windows: route print (ya Get-NetRoute)
 // 3. DNS Cache Clear           -----> Linux: sudo resolvectl flush-caches     | Windows: ipconfig /flushdns (ya Clear-DnsClientCache)
 // 4. Route Path Trace          -----> Linux: traceroute google.com            | Windows: tracert google.com
-// 5. Open Listening Ports      -----> Linux: ss -tulnp                        | Windows: netstat -ano
+// 5. Open Listening Ports      -----> Linux: ss -tulnp                        | Windows: netstat -ano (ya Get-NetTCPConnection)
 // 6. Specific Port Test        -----> Linux: nc -zv <IP> <Port>               | Windows: Test-NetConnection -ComputerName <IP> -Port <P>
-// 7. ARP Table (IP se MAC)     -----> Linux: ip neigh                         | Windows: arp -a
+// 7. ARP Table (IP se MAC)     -----> Linux: ip neigh                         | Windows: arp -a (ya Get-NetNeighbor)
 
 // --- SYSTEM & PROCESSES ---
 // 8. Service Status Check      -----> Linux: systemctl status <service>       | Windows: Get-Service -Name <service> (ya sc query)
@@ -334,18 +525,19 @@
 
 // --- BASIC TERMINAL & FILES ---
 // 13. Files / Folders List     -----> Linux: ls -la                           | Windows: dir (ya Get-ChildItem)
-// 14. Terminal Screen Clear    -----> Linux: clear (Ctrl + L)                 | Windows: cls (ya Clear-Host)
+// 14. Terminal Screen Clear    -----> Linux: clear (Ctrl + L)                 | Windows: cls (ya Clear-Host / Ctrl + L)
 // 15. System Reboot / Restart  -----> Linux: sudo reboot                      | Windows: Restart-Computer -Force
 // 16. Search Inside File (Grep)-----> Linux: grep                             | Windows: Select-String
 // 17. Live Log Follow (Tail)   -----> Linux: tail -f                          | Windows: Get-Content -Wait
 // 18. Empty File Create        -----> Linux: touch <file>                     | Windows: New-Item -ItemType File
-// 19. Deep Clean Trash / Cache -----> Linux: rm -rf ~/.cache/* ~/.local/share/Trash/* | Windows: Clear-RecycleBin -Force
+// 19. Empty Trash / Cache      -----> Linux: rm -rf ~/.cache/* ~/.local/share/Trash/* | Windows: Clear-RecycleBin -Force
+// 20. Package Install / Update -----> Linux: sudo apt update && sudo apt upgrade -y | Windows: winget upgrade --all / winget install
 
 
 // ================================================================================
 
 
-// ========================================= 13. Dono Me Technically Kya Farq Hai? ============================== //
+// ========================================= 20. Dono Me Technically Kya Farq Hai? =============================== //
 // ================================================================================
 
 // 1. Output Format   -----> Linux plain text string stream deta hai (jisme grep, awk, sed lagana padta hai). Windows PowerShell '.NET Objects' return karta hai.
@@ -361,3 +553,4 @@
 // ================================================================================
 // Note created for Tausif Qureshi | Universal IT Support & Systems Engineer Blueprint
 // ================================================================================
+
