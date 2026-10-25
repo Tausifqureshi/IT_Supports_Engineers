@@ -34,7 +34,8 @@ IT_Supports_Engineers/
     ├── 📄 Cloud_Identity_Entra_Intune.js       # Microsoft Entra ID (Azure AD), Intune MDM, Teams & SharePoint
     ├── 📄 Security_VPN_Patching.js             # BitLocker Recovery Loop Fix, WSUS, Antivirus, VPN SSL/IPsec, Phishing
     ├── 📄 Virtualization_ESXi_HyperV.js        # VMware ESXi, Hyper-V Manager, Thin/Thick Disks, vSwitch, Snapshots, HA
-    └── 📄 Wireshark_NOC_Monitoring.js          # Wireshark DORA/DNS/TCP analysis, L2 PowerShell, PRTG/Zabbix NOC
+    ├── 📄 Wireshark_NOC_Monitoring.js          # Wireshark DORA/DNS/TCP analysis, L2 PowerShell, PRTG/Zabbix NOC
+    └── 📄 Interviewer_Floor_Concepts.js        # Real Floor Secrets: PXE Boot, Profile Migration, VoIP PoE, Ransomware, Top 5 Q&A
 ```
 
 ---
@@ -135,6 +136,12 @@ IT_Supports_Engineers/
   * Wireshark Filters: `bootp` (DHCP DORA), `dns`, `icmp`, `tcp.analysis.retransmission`.
   * L2 PowerShell Forensics: `Get-ADUser`, `Search-ADAccount -LockedOut`, `Get-WinEvent` (Event ID 4625), `Get-Service`.
   * NOC Infrastructure Monitoring: PRTG & Zabbix core sensors (Ping, SNMP bandwidth, WMI disk space, SSL expiry), alert thresholds.
+* **Senior Desk & Interviewer Secrets (`Interviewer_Floor_Concepts.js`)**:
+  * **Concept A (OS Imaging & PXE Boot)**: F12 Network Boot, DHCP Option 66/67, WDS/MDT mass deployment.
+  * **Concept B (Profile Migration)**: Transwiz, OneDrive Known Folder Move (KFM), Outlook PST transfer.
+  * **Concept C (VoIP & PoE)**: Power over Ethernet (802.3af/at), Dual-Port daisy chaining, Voice vs Data VLAN.
+  * **Concept D (Ransomware First Response)**: Immediate physical network isolation (LAN pull & Wi-Fi disable).
+  * **Top 5 Tricky Q&A**: Internet down bottom-up triage, APIPA 169.254 fix, Outlook credential loop, AD repeat lockouts, BSOD dump analysis.
 
 ---
 
