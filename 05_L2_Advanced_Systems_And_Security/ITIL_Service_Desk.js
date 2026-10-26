@@ -30,8 +30,8 @@
 
 // 4. Change Management (Change Enablement):
 //    - Definition: Production infrastructure me koi bhi naya update, server reboot, ya firewall rule apply karne se pehle CAB (Change Advisory Board) se approval lena.
-//    - Standard Change  -----> Low risk, pre-approved (e.g. monthly patch update).
-//    - Normal Change    -----> Requires CAB review & testing plan (e.g. core switch replacement).
+//    - Standard Change -----> Low risk, pre-approved (e.g. monthly patch update).
+//    - Normal Change -----> Requires CAB review & testing plan (e.g. core switch replacement).
 //    - Emergency Change -----> Critical outage fix approved by ECAB (e.g. ransomware recovery).
 
 
@@ -86,11 +86,11 @@
 //    - Central technical documentation portal (ServiceNow Knowledge / Confluence) jahan har problem ka step-by-step verified solution likha hota hai.
 
 // 2. Standard KB Article Structure:
-//    - Title           -----> Clear search keyword (e.g. "How to fix Outlook Send/Receive Error 0x8004010F").
-//    - Symptoms        -----> User ko kya error dikhti hai.
-//    - Root Cause      -----> Issue kyun aata hai.
-//    - Step-by-Step Fix-----> Screenshots aur exact commands ke sath solution.
-//    - Verification    -----> Check kaise karein ki solve ho gaya.
+//    - Title -----> Clear search keyword (e.g. "How to fix Outlook Send/Receive Error 0x8004010F").
+//    - Symptoms -----> User ko kya error dikhti hai.
+//    - Root Cause -----> Issue kyun aata hai.
+//    - Step-by-Step Fix -----> Screenshots aur exact commands ke sath solution.
+//    - Verification -----> Check kaise karein ki solve ho gaya.
 
 // ================================================================================
 // Note created for Tausif Qureshi | Universal IT Support & Systems Engineer Blueprint

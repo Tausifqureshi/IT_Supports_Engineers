@@ -68,7 +68,7 @@
 // 2. Dual-Port Daisy Chaining (Desk Cable Management):
 //    - IP phone ke peeche 2 RJ45 ports hote hain:
 //      - Port 1 (LAN / Network) -----> Switch wall socket se connect hota hai.
-//      - Port 2 (PC)           -----> Phone se ek choti patch cable nikal kar user ke laptop/desktop me lagti hai (Ek hi wall port se Phone aur PC dono chal jate hain!).
+//      - Port 2 (PC) -----> Phone se ek choti patch cable nikal kar user ke laptop/desktop me lagti hai (Ek hi wall port se Phone aur PC dono chal jate hain!).
 
 // 3. Voice VLAN vs Data VLAN (QoS):
 //    - Phone traffic 'Voice VLAN' me tag hota hai aur PC traffic 'Data VLAN' me.

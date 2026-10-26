@@ -57,8 +57,8 @@
 // 2. Port Groups & VLAN Tagging:
 //    - Ek hi physical server par chal rahi VMs ko alag-alag VLAN me divide kiya jata hai:
 //      - Port Group "Production_Servers" -----> VLAN ID: 10
-//      - Port Group "DMZ_Web_Facing"     -----> VLAN ID: 20
-//      - Port Group "Management_VMkernel"-----> VLAN ID: 99 (ESXi web access).
+//      - Port Group "DMZ_Web_Facing" -----> VLAN ID: 20
+//      - Port Group "Management_VMkernel" -----> VLAN ID: 99 (ESXi web access).
 
 
 // ================================================================================

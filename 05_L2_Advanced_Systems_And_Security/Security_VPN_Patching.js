@@ -79,7 +79,7 @@
 //    - IPsec / IKEv2 -----> UDP Port 500 / 4500 use karta hai (High speed site-to-site branch connection).
 
 // 2. Split Tunneling vs Full Tunneling:
-//    - Full Tunneling  -----> User ka 100% traffic (even YouTube) company firewall se hokar jata hai (High security, high bandwidth use).
+//    - Full Tunneling -----> User ka 100% traffic (even YouTube) company firewall se hokar jata hai (High security, high bandwidth use).
 //    - Split Tunneling -----> Sirf company ke internal servers (10.x.x.x) VPN se jate hain, baaki personal internet user ke home Wi-Fi se nikalta hai (Best performance).
 
 // 3. Top 3 VPN Support Issues & Fixes:
@@ -108,7 +108,7 @@
 //    - Three Core Email Security Protocols:
 //      - SPF (Sender Policy Framework) -----> Pass hona chahiye (Verify karta hai ki sending IP domain owner ka authorized mail server hai).
 //      - DKIM (DomainKeys Identified Mail)--> Pass hona chahiye (Digital signature tampering check).
-//      - DMARC                          -----> Policy "Reject" ya "Quarantine" honi chahiye (Spoofed fake emails ko rokne ke liye).
+//      - DMARC -----> Policy "Reject" ya "Quarantine" honi chahiye (Spoofed fake emails ko rokne ke liye).
 
 // ================================================================================
 // Note created for Tausif Qureshi | Universal IT Support & Systems Engineer Blueprint

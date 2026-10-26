@@ -20,10 +20,10 @@
 //    - Password options: "Automatically create a password" aur "Require this user to change their password when they first sign in" (Security policy).
 
 // 2. Product Licenses Assignment (Understanding Enterprise License Tiers):
-//    - Microsoft 365 Business Basic   -----> Sirf Web Apps (Word/Excel web) + Exchange Email (50GB) + Teams + OneDrive.
-//    - Microsoft 365 Business Standard-----> Desktop Office Apps (Word, Excel, Outlook desktop install on 5 PCs) + Cloud services.
+//    - Microsoft 365 Business Basic -----> Sirf Web Apps (Word/Excel web) + Exchange Email (50GB) + Teams + OneDrive.
+//    - Microsoft 365 Business Standard -----> Desktop Office Apps (Word, Excel, Outlook desktop install on 5 PCs) + Cloud services.
 //    - Microsoft 365 Business Premium -----> Business Standard + Intune MDM + Azure AD P1 Security + Defender for Business.
-//    - Microsoft 365 E3 / E5           -----> Badi MNCs/Airports ke liye: Unlimited archive, advanced compliance, DLP, Defender for Endpoint, Cloud App Security.
+//    - Microsoft 365 E3 / E5 -----> Badi MNCs/Airports ke liye: Unlimited archive, advanced compliance, DLP, Defender for Endpoint, Cloud App Security.
 
 // 3. User Offboarding (Employee Exit Checklist):
 //    - Step 1: User par click karo -> "Block sign-in" (Instant access revoke).
@@ -52,7 +52,7 @@
 
 // 4. Device Identity in Entra ID (Interview Question):
 //    - Azure AD Registered -----> User ka personal BYOD laptop/phone (Company portal se sirf apps manage hoti hain).
-//    - Azure AD Joined     -----> Company ka official laptop (Poora device cloud se manage hota hai, local domain controller nahi chahiye).
+//    - Azure AD Joined -----> Company ka official laptop (Poora device cloud se manage hota hai, local domain controller nahi chahiye).
 //    - Hybrid Azure AD Joined -> On-premises Domain Controller + Azure AD dono se connected corporate PC.
 
 
@@ -77,11 +77,11 @@
 //    - Impact: Non-compliant device corporate email ya OneDrive access nahi kar sakta!
 
 // 3. Remote Actions (Lost / Stolen Laptop Support):
-//    - Sync        -----> Device par instant policy refresh push karna.
-//    - Quick Scan  -----> Remote Defender antivirus scan trigger karna.
+//    - Sync -----> Device par instant policy refresh push karna.
+//    - Quick Scan -----> Remote Defender antivirus scan trigger karna.
 //    - Remote Lock -----> Laptop screen ko turant lock karna.
-//    - Wipe        -----> Laptop chori hone par poori hard drive ko factory reset (erase) kar dena!
-//    - Retire      -----> Sirf company ka data aur emails delete karna (user ka personal data safe rehta hai).
+//    - Wipe -----> Laptop chori hone par poori hard drive ko factory reset (erase) kar dena!
+//    - Retire -----> Sirf company ka data aur emails delete karna (user ka personal data safe rehta hai).
 
 
 // ================================================================================

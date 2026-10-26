@@ -78,7 +78,7 @@
 //   Action in Exchange Admin Center (admin.exchange.microsoft.com):
 //   Mail flow -> Message trace -> Start a trace -> Sender aur Recipient email daalo -> Search.
 //   Results inspect karo:
-//   - Delivered     -----> Mail successfully inbox ya Junk folder me deliver ho chuki hai.
+//   - Delivered -----> Mail successfully inbox ya Junk folder me deliver ho chuki hai.
 //   - FilteredAsSpam-> Corporate Spam filter ne quarantine me daal diya hai.
 //   - Failed / Drop -----> MX record, SPF/DKIM validation ya attachment size limit (e.g. >25MB) ki wajah se bounce ho gayi.
 

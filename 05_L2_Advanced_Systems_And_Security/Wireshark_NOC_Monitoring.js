@@ -23,10 +23,10 @@
 // 1. DHCP DORA Process Tracing:
 //    - Display Filter: `bootp` (ya `dhcp`)
 //    - Real Floor Issue: PC ko 169.254.x.x IP mil raha hai. Wireshark chalao aur dekho:
-//      - DHCP Discover  -----> PC ne broadcast kiya "Koi DHCP server hai kya?"
-//      - DHCP Offer     -----> Agar Offer nahi aa raha: Matlab DHCP server down hai ya switch port par DHCP Snooping ne block kiya hai.
-//      - DHCP Request   -----> Client ne IP accept karne ke liye maanga.
-//      - DHCP ACK       -----> Server ne confirmation diya (IP assigned!).
+//      - DHCP Discover -----> PC ne broadcast kiya "Koi DHCP server hai kya?"
+//      - DHCP Offer -----> Agar Offer nahi aa raha: Matlab DHCP server down hai ya switch port par DHCP Snooping ne block kiya hai.
+//      - DHCP Request -----> Client ne IP accept karne ke liye maanga.
+//      - DHCP ACK -----> Server ne confirmation diya (IP assigned!).
 
 // 2. DNS Query & Resolution Failures:
 //    - Display Filter: `dns`
@@ -55,21 +55,21 @@
 
 // 1. Get-ADUser — Active Directory Account Forensics:
 //    - Command: `Get-ADUser -Identity "john" -Properties * | Select-Object Name, Enabled, LockedOut, PasswordLastSet, AccountExpirationDate`
-//      -----> User ka exact account status, last password change date aur locked-out state 1 second me dekhne ke liye.
+// -----> User ka exact account status, last password change date aur locked-out state 1 second me dekhne ke liye.
 //    - Command: `Search-ADAccount -LockedOut | Select-Object Name, SamAccountName`
-//      -----> Poore domain me jitne bhi users is waqt locked-out hain unki list filter karne ke liye.
+// -----> Poore domain me jitne bhi users is waqt locked-out hain unki list filter karne ke liye.
 //    - Command: `Unlock-ADAccount -Identity "john"`
-//      -----> Locked-out user ko CLI se turant unlock karne ke liye.
+// -----> Locked-out user ko CLI se turant unlock karne ke liye.
 
 // 2. Get-WinEvent / Get-EventLog — System & Security Log Auditing:
 //    - Command: `Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625} -MaxEvents 10`
-//      -----> Machine par aakhri 10 Failed Logon attempts (Event ID 4625) filter karne ke liye.
+// -----> Machine par aakhri 10 Failed Logon attempts (Event ID 4625) filter karne ke liye.
 //    - Command: `Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5`
-//      -----> System log ke aakhri 5 Critical Errors filter karne ke liye (Level 2 = Error).
+// -----> System log ke aakhri 5 Critical Errors filter karne ke liye (Level 2 = Error).
 
 // 3. Get-Service — L2 Health Audit:
 //    - Command: `Get-Service | Where-Object { $_.StartType -eq "Automatic" -and $_.Status -eq "Stopped" }`
-//      -----> Sabhi crash hui automatic services ko 1 click me pakadne ke liye.
+// -----> Sabhi crash hui automatic services ko 1 click me pakadne ke liye.
 
 
 // ================================================================================
@@ -82,14 +82,14 @@
 //    - Role: 24/7 video wall monitoring jisme network switches, firewalls, core servers aur WAN links ki live telemetry track hoti hai.
 
 // 2. PRTG Network Monitor Core Sensors:
-//    - Ping Sensor (ICMP)       -----> Uptime check. Agar 3 consecutive pings drop ho jayein -> State: DOWN (Red).
-//    - SNMP Traffic Sensor      -----> Switch port bandwidth utilization (Inbound/Outbound traffic Mbps me).
-//    - WMI Free Disk Space      -----> Server C: drive par jab free space < 10% reh jaye -> Warning Alert (Yellow).
-//    - SSL Certificate Sensor   -----> Company portal ke SSL certificate expiry se 30 din pehle automatic alert generate karna.
+//    - Ping Sensor (ICMP) -----> Uptime check. Agar 3 consecutive pings drop ho jayein -> State: DOWN (Red).
+//    - SNMP Traffic Sensor -----> Switch port bandwidth utilization (Inbound/Outbound traffic Mbps me).
+//    - WMI Free Disk Space -----> Server C: drive par jab free space < 10% reh jaye -> Warning Alert (Yellow).
+//    - SSL Certificate Sensor -----> Company portal ke SSL certificate expiry se 30 din pehle automatic alert generate karna.
 
 // 3. Zabbix Enterprise Monitoring:
-//    - Zabbix Agent (Port 10050)-----> Linux aur Windows servers par lightweight agent install hota hai jo CPU load, active sessions aur service health server ko bhejta hai.
-//    - Trigger Actions          -----> Threshold breach hone par automatic email, Slack notification ya ServiceNow Incident ticket auto-create karna.
+//    - Zabbix Agent (Port 10050) -----> Linux aur Windows servers par lightweight agent install hota hai jo CPU load, active sessions aur service health server ko bhejta hai.
+//    - Trigger Actions -----> Threshold breach hone par automatic email, Slack notification ya ServiceNow Incident ticket auto-create karna.
 
 // ================================================================================
 // Note created for Tausif Qureshi | Universal IT Support & Systems Engineer Blueprint

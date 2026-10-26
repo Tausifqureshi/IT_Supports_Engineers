@@ -17,10 +17,10 @@
 
 // [ CONCEPT: Users, OUs, Security Groups & Domain Hierarchy ]
 // ADUC ke andar 4 core objects hote hain:
-// 1. User Account      -----> Employee ki digital identity (Username, Password, Department).
-// 2. Computer Account  -----> Office ka laptop/desktop jo domain se juda (joined) hai.
-// 3. OU (Org Unit)     -----> Virtual folders jisme users/computers ko department wise (HR, Finance, IT) divide kiya jata hai taaki policies lag sakein.
-// 4. Security Group    -----> Users ka group jisse shared folders ya softwares ka access diya jata hai.
+// 1. User Account -----> Employee ki digital identity (Username, Password, Department).
+// 2. Computer Account -----> Office ka laptop/desktop jo domain se juda (joined) hai.
+// 3. OU (Org Unit) -----> Virtual folders jisme users/computers ko department wise (HR, Finance, IT) divide kiya jata hai taaki policies lag sakein.
+// 4. Security Group -----> Users ka group jisse shared folders ya softwares ka access diya jata hai.
 
 
 // * 1. L1 ENGINEER KA KAAM (Daily Floor Operations & Fast Ticket Resolution):
@@ -53,7 +53,7 @@
 // - Step 1: "Trust Relationship Failed" Ka Permanent Fix (Bina PC domain se hataye)
 //   Root Cause: Client PC aur Domain Controller ke beech ka machine account secure channel password out-of-sync ho gaya hai.
 //   Fix via PowerShell (Admin):
-//   Test-ComputerSecureChannel -Verbose                      -----> Agar False aaye toh trust toot chuka hai.
+//   Test-ComputerSecureChannel -Verbose -----> Agar False aaye toh trust toot chuka hai.
 //   Reset-ComputerSecureChannel -Credential (Get-Credential) -----> Domain admin credentials daal kar 5 second me trust repair!
 
 // - Step 2: Account Bar-Bar Lockout Hone Ka Root Cause Pakadna
@@ -63,7 +63,7 @@
 //   Caller Computer Name check karo: Pata chal jata hai kis specific PC ya mobile IP se lock signal aaya.
 
 // - Step 3: Security Groups vs Distribution Lists Ka Fark (Interview Favorite):
-//   - Security Group     -----> Iska use NTFS permissions, shared folders aur VPN access dene ke liye hota hai (Is par email bhi enable ho sakti hai).
+//   - Security Group -----> Iska use NTFS permissions, shared folders aur VPN access dene ke liye hota hai (Is par email bhi enable ho sakti hai).
 //   - Distribution Group -----> Iska use sirf aur sirf mass emails (Email Broadcast) bhejne ke liye hota hai, isse koi folder permission nahi di ja sakti.
 
 
@@ -76,7 +76,7 @@
 // [ CONCEPT: Share Permissions vs NTFS (Security) Permissions ]
 // Network par folder share karte waqt 2 alag-alag darwaze (gates) hote hain:
 // 1. Share Permission (Outer Gate) -----> Network cable se aane wale traffic ko control karta hai.
-// 2. NTFS Permission (Inner Gate)  -----> Local disk level par file/folder access control karta hai.
+// 2. NTFS Permission (Inner Gate) -----> Local disk level par file/folder access control karta hai.
 
 // Golden Rule (Most Restrictive Wins):
 // Agar Share me "Full Control" hai lekin NTFS me "Read Only" hai, toh user ko sirf "READ ONLY" access hi milega!

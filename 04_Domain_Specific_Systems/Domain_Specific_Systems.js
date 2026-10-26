@@ -18,7 +18,7 @@
 // Ek modern international airport par hazaron check-in counters aur boarding gates hote hain jahan alag-alag airlines (Emirates, Flydubai, Qatar, British Airways) operate karti hain.
 
 // 1. CUPPS & CUTE (Common Use Systems):
-//    - CUTE  -----> Common Use Terminal Equipment (Legacy platform).
+//    - CUTE -----> Common Use Terminal Equipment (Legacy platform).
 //    - CUPPS -----> Common Use Passenger Processing System (Modern IATA international standard).
 //    - Role: Ek hi physical check-in counter par subah Emirates baithti hai, dopahar me Indigo, aur raat me Lufthansa. CUPPS platform sabhi airlines ko unke respective server se connect karwata hai bina computer hardware badle.
 //    - Floor Issue: Agar counter par airline ka application load na ho, toh CUPPS Client Daemon ko restart kiya jata hai.
@@ -32,9 +32,9 @@
 
 // 4. Boarding Gate & Check-in Peripherals (Specialized Hardware):
 //    - ATB (Automated Ticket & Boarding Pass Printer) -----> Heavy-duty thermal printer jo mota boarding pass print karta hai (e.g. IER, Custom, VidTronic).
-//    - BTP (Baggage Tag Printer)                     -----> Sticky thermal roll printer jo suitcase par lagne wala barcode bag tag print karta hai.
-//    - BGR (Boarding Gate Reader)                     -----> Boarding gate par laga barcode scanner/turnstile jo passenger ke boarding pass ko scan karke gate open karta hai.
-//    - OCR / Passport Reader                          -----> Check-in counter par MRZ (Machine Readable Zone) passport swipe reader.
+//    - BTP (Baggage Tag Printer) -----> Sticky thermal roll printer jo suitcase par lagne wala barcode bag tag print karta hai.
+//    - BGR (Boarding Gate Reader) -----> Boarding gate par laga barcode scanner/turnstile jo passenger ke boarding pass ko scan karke gate open karta hai.
+//    - OCR / Passport Reader -----> Check-in counter par MRZ (Machine Readable Zone) passport swipe reader.
 
 // * Practical Airport Support Workflow (Paper Jam & Driver Freeze):
 // - Problem: Counter 15 par BTP Bag-tag printer red light blink kar raha hai aur bag tag print nahi nikal raha (Flight check-in ruki hui hai - High Pressure!)

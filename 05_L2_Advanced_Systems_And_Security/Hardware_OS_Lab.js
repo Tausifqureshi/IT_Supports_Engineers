@@ -18,7 +18,7 @@
 //    - Symptoms: System achanak Blue Screen (BSOD: MEMORY_MANAGEMENT / PAGE_FAULT_IN_NONPAGED_AREA), continuous beeping sound, ya restart loop me chala jata hai.
 //    - Motherboard BEEP Codes:
 //      - 1 Long Beep + 2 Short Beeps -----> Display / Graphics card loose ya damaged.
-//      - Continuous Rapid Beeps       -----> RAM loose hai, missing hai, ya slot me carbon/dust aa gayi hai.
+//      - Continuous Rapid Beeps -----> RAM loose hai, missing hai, ya slot me carbon/dust aa gayi hai.
 //    - Support Fix Workflow:
 //      Step 1: Power cable nikalo, RAM stick ko side clips press karke bahar nikalo.
 //      Step 2: Golden contacts ko school eraser (rubber) se clean karo (carbon/oxidation hatane ke liye).
@@ -59,7 +59,7 @@
 
 // 1. Legacy BIOS vs Modern UEFI:
 //    - Legacy BIOS -----> Puraana 16-bit blue screen system, MBR (Master Boot Record) partition use karta hai, max 2TB disk support.
-//    - UEFI        -----> Modern 64-bit GUI system (mouse support), GPT (GUID Partition Table) use karta hai, 128 partitions aur >2TB support.
+//    - UEFI -----> Modern 64-bit GUI system (mouse support), GPT (GUID Partition Table) use karta hai, 128 partitions aur >2TB support.
 
 // 2. Secure Boot (Security Requirement):
 //    - Role: Boot sector me malware, rootkits ya unauthorized operating systems ko load hone se rokta hai.
@@ -110,9 +110,9 @@
 //    - Step 5: Storage -> Controller IDE/SATA -> Empty CD icon par ISO file mount karo -> Start!
 
 // 2. VirtualBox Network Modes (Interview Core Question):
-//    - NAT (Default)        -----> VM ko internet milta hai, lekin office network ke doosre computer VM ko ping ya access nahi kar sakte (Private sandbox).
-//    - Bridged Adapter      -----> VM direct office router/DHCP se ek independent IP address leta hai (jaise ek real physical computer ho).
-//    - Host-Only Adapter    -----> Sirf Host laptop aur Virtual Machine aapas me baat kar sakte hain (Zero internet, highly isolated testing).
+//    - NAT (Default) -----> VM ko internet milta hai, lekin office network ke doosre computer VM ko ping ya access nahi kar sakte (Private sandbox).
+//    - Bridged Adapter -----> VM direct office router/DHCP se ek independent IP address leta hai (jaise ek real physical computer ho).
+//    - Host-Only Adapter -----> Sirf Host laptop aur Virtual Machine aapas me baat kar sakte hain (Zero internet, highly isolated testing).
 
 // 3. Snapshots (The Power of Virtualization):
 //    - VM par koi bhi naya software ya risky update install karne se pehle "Take Snapshot" par click karo.
