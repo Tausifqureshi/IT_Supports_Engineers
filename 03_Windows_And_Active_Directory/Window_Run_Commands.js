@@ -91,10 +91,24 @@
 //   Command: `Win + R` -> type `ncpa.cpl` -> Enter.
 //   Kaam: Adapter details me jakar DHCP Discover fail hone ka root cause pakadna.
 //   Andar jaakar: Adapter par double-click -> "Details..." me 169.254.x.x dekh kar samajh jata hai ki DHCP Offer nahi aaya (Switch port ka VLAN check karta hai ya DHCP pool full hone par scope extend karta hai).
-// - Step 2: Static IP & DNS Hardcoding (Kiosk/Counter PC):
+// - Step 2: Static IP & DNS Hardcoding (Kiosk/Counter PC & Printers):
 //   Command: `Win + R` -> type `ncpa.cpl` -> Enter.
-//   Kaam: Fixed IP aur enterprise DNS assign karne ke liye.
-//   Andar jaakar: Adapter par RIGHT-CLICK -> "Properties" -> "Internet Protocol Version 4 (TCP/IPv4)" par double-click -> "Use the following IP address" select karke Static IP, Subnet Mask (/24), Gateway aur Company DNS enter karta hai.
+//   Kaam: Fixed IP, Subnet Mask, Gateway aur DNS manually bind karne ke liye.
+//   Andar jaakar (Step-by-Step Entry Rules):
+//     1. Adapter par RIGHT-CLICK -> "Properties" -> "Internet Protocol Version 4 (TCP/IPv4)" par DOUBLE-CLICK.
+//     2. "Use the following IP address" radio button select karta hai:
+//        - Pehle CMD me `ipconfig` se default gateway check karta hai (Example Gateway: 192.168.1.1).
+//        - Free IP Verify Karna: CMD me `ping 192.168.1.50` karke dekhta hai; jab "Request timed out" aaye (koi use nahi kar raha), tabhi wo IP assign karta hai.
+//        - IP Address: [ 192 . 168 . 1 . 50 ]  -> (Gateway ki same series ka number, aakhri octet 2 se 254 tak).
+//        - Subnet Mask: [ 255 . 255 . 255 . 0 ] -> (Class C /24 standard pool).
+//        - Default Gateway: [ 192 . 168 . 1 . 1 ] -> (Local switch ya router ka address).
+//     3. "Use the following DNS server addresses" enter karta hai:
+//        - Preferred DNS: [ 192 . 168 . 1 . 10 ] -> (Enterprise local Domain Controller / AD DS server IP).
+//        - Alternate DNS: [ 8 . 8 . 8 . 8 ] -> (Google public DNS backup).
+//     4. Invalid Values Warning (Jo kabhi enter nahi karna):
+//        - Kisi block me 255 se bada number (e.g. 192.168.1.300) nahi dalte.
+//        - Aakhri digit .0 (Network ID) ya .255 (Broadcast) nahi daal sakte.
+//        - Gateway ki series badal kar IP nahi daal sakte (e.g. Gateway 192.168.1.1 ho aur IP 10.0.0.50 nahi de sakte).
 // - Step 3: Speed & Duplex Negotiation Mismatch Fix:
 //   Command: `Win + R` -> type `ncpa.cpl` -> Enter.
 //   Kaam: Switch port aur NIC negotiation mismatch hone par speed force karna.
