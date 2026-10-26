@@ -317,24 +317,37 @@
 // Windows management instrumentation (WMI/CIM), object-based pipelines, aur system recovery ka advanced CLI engine.
 
 // * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
-// Target: Basic CLI commands aur service status dekhna.
-// - Problem 1: Print service status check karna -> `Get-Service Spooler`
-// - Problem 2: Basic script run karna.
-// - L1 Ki Limit: Execution policy block (`Restricted`) ya pipeline filtering aane par L2 ko escalate karna.
+// Target: Basic status check aur daily quick commands chalana.
+// - Command 1: `Get-Service -Name Spooler`
+//   Kaam: Print Spooler service ka live status check karna (Running hai ya Stopped).
+// - Command 2: `Restart-Service -Name Spooler`
+//   Kaam: Stuck print jobs ke waqt printer service ko quick restart (bounce) karna.
+// - Command 3: `Get-Process -Name chrome`
+//   Kaam: Chrome ya specific application kitni memory aur CPU le raha hai status dekhna.
+// - Command 4: `.\DailyCheck.ps1`
+//   Kaam: Pre-configured daily maintenance script ko terminal par execute karna.
+// - L1 Ki Limit: Jab script chalane par red error aaye ("ExecutionPolicy Restricted") ya remote PC par command chalani ho toh L2 ko escalate karta hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
-// Target: Script unblocking, deep port telemetry, aur remote management.
+// Target: Script unblocking, deep port telemetry, heavy process kill, aur remote management.
 // - Step 1: Execution Policy Unblock Karna
-//   Script run na hone par process scope me bypass lagata hai:
-//   `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`
-// - Step 2: Advanced Port & Trace Diagnostics
-//   `Test-NetConnection -ComputerName <IP> -Port <Port> -InformationLevel Detailed` se route hops aur TCP handshake trace karta hai.
-// - Step 3: Top CPU Consuming Processes Filter
-//   `Get-Process | Sort-Object CPU -Descending | Select-Object -First 5` run karke top heavy application ka exact PID nikalta hai.
-// - Step 4: Forceful Service Bouncing
-//   `Restart-Service -Name <service> -Force` (Dependent services ke sath cleanly reload karta hai).
-// - Step 5: Remote Execution via PSRemoting
-//   `Invoke-Command -ComputerName <PC> -ScriptBlock { Restart-Service Spooler }` se user ke desk par jaye bina remotely fix karta hai.
+//   Command: `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`
+//   Kaam: System ki global security policy ko tode bina sirf current window ke liye script execution allow karna.
+// - Step 2: Advanced Network Port & Latency Diagnostics
+//   Command: `Test-NetConnection -ComputerName 192.168.1.50 -Port 3389 -InformationLevel Detailed`
+//   Kaam: Server ka IP aur port check karke route hops aur TCP handshake trace karna (Pata lagana ki RDP ya ERP traffic kahan block hua).
+// - Step 3: Top Heavy CPU Applications Filter Karna
+//   Command: `Get-Process | Sort-Object CPU -Descending | Select-Object -First 5`
+//   Kaam: PC hang hone par top 5 heavy applications ka exact Process ID (PID) nikalna.
+// - Step 4: Hanging Process Ko Forcefully Kill Karna
+//   Command: `Stop-Process -Id <PID> -Force`
+//   Kaam: User ka PC bina reboot kiye sirf hanging program ko turant background me kill karna.
+// - Step 5: Forceful Service Bouncing With Dependencies
+//   Command: `Restart-Service -Name <service> -Force`
+//   Kaam: Service aur uske sath judi saari dependent background services ko ek sath safely reload karna.
+// - Step 6: Remote Execution via PSRemoting (WinRM)
+//   Command: `Invoke-Command -ComputerName <CounterPC01> -ScriptBlock { Restart-Service Spooler -Force }`
+//   Kaam: User ke desk par jaye bina apni seat se remote computer par terminal command chala kar issue fix karna.
 
 
 // ================================================================================
@@ -344,23 +357,36 @@
 // [ CONCEPT: Windows Win32 Administrative Control Engine ]
 // System hardware abstraction, security credentials, mail profiles, aur storage encryption ka master control console.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
-// Target: Basic settings aur layout adjust karna.
-// - Problem 1: Classic view kholna -> "View by: Small icons" select karna.
-// - Problem 2: Sound playback device set karna -> Sound applet me default speaker choose karna.
-// - Problem 3: Basic mouse pointer ya keyboard language change karna.
+// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Settings):
+// Target: Standard hardware settings, default printers, aur sound test karna.
+// - Kaam 1 (Printers & Queue Check):
+//   Direct Command: `control printers`
+//   Andar jaakar: Office ke network printer par RIGHT-CLICK karke "Set as default printer" select karta hai; stuck printing queue dekhne ke liye "See what's printing" khol kar error documents cancel karta hai.
+// - Kaam 2 (Sound & Microphone Fix):
+//   Direct Command: `mmsys.cpl`
+//   Andar jaakar: User bole "Teams call me aawaz nahi aa rahi" toh "Playback" tab me headset par RIGHT-CLICK karke "Set as Default Device" karta hai; "Recording" tab me mic input level test karta hai.
+// - Kaam 3 (Programs Install/Uninstall):
+//   Direct Command: `appwiz.cpl`
+//   Andar jaakar: Corrupt application par click karke "Uninstall" ya "Repair" karta hai.
+// - Kaam 4 (Network Adapter Reset):
+//   Direct Command: `ncpa.cpl`
+//   Andar jaakar: Wi-Fi ya Ethernet card par RIGHT-CLICK karke "Disable" fir 5 second baad "Enable" karke connection restart karta hai.
 // - L1 Ki Limit: Corrupt Outlook profiles, BitLocker recovery prompt, ya domain credential mismatch par L2 ko escalate karte hain.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
-// Target: Corrupt Outlook profiles, cached domain credentials aur BitLocker audit.
+// Target: Corrupt Outlook profiles, cached domain credentials, BitLocker audit, aur counter sleep prevention.
 // - Step 1: Rebuilding Corrupted Outlook Profile (Mail Applet)
-//   Control Panel > "Mail (Microsoft Outlook)" > "Show Profiles..." > "Add..." naya fresh profile create karke default set karta hai (bina Outlook khole profile crash fix karna).
+//   Direct Command: `control mlcfg32.cpl` (bina Outlook khole direct Mail Configuration console kholta hai)
+//   Andar jaakar: "Show Profiles..." button par click -> "Add..." click karke naya profile name daalta hai -> Office 365 email configure karta hai -> "Always use this profile" me naya profile select karke "OK" karta hai. (Result: Outlook opening freeze/crash permanent solve).
 // - Step 2: Stale Domain Credentials Cleanup (Credential Manager)
-//   Run: `control keymgr.dll` (Credential Manager) > Windows Credentials me jakar expired domain passwords wipe karta hai taaki user account bar-bar lock na ho.
-// - Step 3: BitLocker Drive Encryption Audit
-//   Control Panel > BitLocker Drive Encryption me jakar TPM chip status aur Recovery Key backup verify karta hai.
+//   Direct Command: `control keymgr.dll`
+//   Andar jaakar: "Windows Credentials" tab par click -> "Generic Credentials" ke andar purane expired password wali entries (e.g. `MicrosoftOffice16_Data`, shared network drive passwords) ko expand karke "Remove" karta hai. (Result: Wrong cached password ki wajah se user account baar-baar lock hona band ho jata hai).
+// - Step 3: BitLocker Drive Encryption & TPM Audit
+//   Direct Command: `control /name Microsoft.BitLockerDriveEncryption`
+//   Andar jaakar: C: drive par check karta hai "BitLocker on", TPM 2.0 status verify karta hai, aur "Back up your recovery key" se key ko Active Directory ya secure drive par backup karta hai.
 // - Step 4: Kiosk / 24x7 Counter Sleep Prevention (Power Options)
-//   "High performance" plan force karke hard disk sleep aur PCI Express Link State power management ko "Off/Never" par set karta hai.
+//   Direct Command: `powercfg.cpl`
+//   Andar jaakar: "High performance" plan select karta hai -> "Change plan settings" -> "Put the computer to sleep: Never" aur "Turn off hard disk after: 0 (Never)" set karta hai taaki night shift me airport/hotel counter PC sleep mode me jaakar freeze na ho.
 
 
 // ================================================================================
@@ -371,15 +397,40 @@
 // ================================================================================
 
 
-// 12. compmgmt.msc
-// * Naam: Computer Management (All-in-One Master Console)
-// * Kaam: Device Manager, Disk Management, Event Viewer, Shared Folders aur Local Users ko ek hi window se control karna.
-// * STEP 1: PEHLA TAREEQA (Quick Multi-Tool Navigation):
-// Step 1: [Win + R] -> type "compmgmt.msc" -> Enter.
-// Step 2: Left sidebar se "System Tools" ya "Storage" expand karo aur desired utility par click karo.
-// * STEP 2: DOOSRA TAREEQA (Shared Folders & Active Sessions Check):
-// Step A: Left pane mein System Tools > "Shared Folders" expand karo.
-// Step B: "Shares" par click karke shared folder path dekho; "Sessions" par click karke connected users trace karo.
+// 12. compmgmt.msc — Computer Management (All-in-One Master Console)
+// --------------------------------------------------------------------------------
+// [ CONCEPT: Master Consolidation Management Console ]
+// Device Manager, Disk Management, Event Viewer, Shared Folders, aur Local Users ko ek hi administrative dashboard se control karne ka master tool.
+
+// * 1. L1 ENGINEER KA KAAM (Surface Level & Daily User Admin):
+// Target: Quick user unlock, driver visual check, aur basic storage verification.
+// - Step 1 (Console Open Karna):
+//   Command: `Win + R` -> type `compmgmt.msc` -> Enter.
+// - Step 2 (Missing Drivers Check - Device Manager):
+//   Andar jaakar: Left pane se `System Tools` > `Device Manager` par click karta hai -> dekhta hai kisi hardware (printer, scanner, network card) par Yellow Exclamation Mark (`!`) ya Red Cross toh nahi hai.
+// - Step 3 (Local User Password Reset - Local Users and Groups):
+//   Andar jaakar: Left pane se `System Tools` > `Local Users and Groups` > `Users` me jata hai -> Local user account par RIGHT-CLICK karke "Set Password..." karta hai; agar account locked ho toh "Properties" me jakar "Account is locked out" uncheck karke "Apply" karta hai.
+// - Step 4 (Services Status Quick Check):
+//   Andar jaakar: Left pane se `Services and Applications` > `Services` khol kar Print Spooler ya Windows Update service check karta hai.
+// - L1 Ki Limit: Shared folder locks todna, active server sessions disconnect karna, disk initialization (GPT), ya Event ID deep audit L2 ko escalate karta hai.
+
+// * 2. L2 ENGINEER KA KAAM (Root Cause, Storage Architecture & Audit):
+// Target: Shared folders file locks release, disk GPT conversion, aur forensic crash analysis.
+// - Step 1 (Locked Files Release & Active Sessions Disconnect):
+//   Andar jaakar: Left pane se `System Tools` > `Shared Folders` expand karta hai:
+//   * "Sessions": Dekhta hai kaun-kaun se users is waqt network shared folder se connected hain (Unwanted user par RIGHT-CLICK -> "Close Session").
+//   * "Open Files": Jab user bole "File lock hai, koi doosra edit kar raha hai", toh yahan locked file dhoondh kar RIGHT-CLICK -> "Close Open File" karta hai (bina server restart kiye file lock release ho jata hai).
+// - Step 2 (Disk Initialization & Volume Health - Disk Management):
+//   Andar jaakar: Left pane se `Storage` > `Disk Management` par click karta hai:
+//   * Nayi unallocated hard drive/SSD par RIGHT-CLICK -> "Initialize Disk" select karke modern GPT partition style apply karta hai.
+//   * Unallocated space par RIGHT-CLICK -> "New Simple Volume" banakar NTFS format aur drive letter (D:, E:) assign karta hai.
+//   * Agar disk "Offline" dikhe toh RIGHT-CLICK karke "Online" karta hai.
+// - Step 3 (Event Viewer Deep System & Security Log Audit):
+//   Andar jaakar: Left pane se `System Tools` > `Event Viewer` > `Windows Logs`:
+//   * "System" log me Event ID 7034 (Service Crash) aur Event ID 41 (Kernel Power / Sudden Shutdown) trace karta hai.
+//   * "Security" log me Event ID 4625 (Failed Logon / Brute Force Attack) trace karke IP aur attacker workstation pakadta hai.
+// - Step 4 (Automated Task Schedules Audit):
+//   Andar jaakar: Left pane se `System Tools` > `Task Scheduler` > `Task Scheduler Library` me jakar check karta hai ki company ka automatic night backup ya log cleanup script successfully run hua ya fail hua.
 
 
 // 13. lusrmgr.msc
