@@ -18,7 +18,7 @@ IT_Supports_Engineers/
 │   └── 📄 Networking0Commd.js                  # TCP/IP, Subnetting /24, Ports, DHCP Reservation, VLAN, T568B
 │
 ├── 📁 03_Windows_And_Active_Directory/
-│   ├── 📄 Window_Run_Commands.js               # Top 11 Run Consoles (L1 Surface vs L2 Root Cause fixes)
+│   ├── 📄 Window_Run_Commands.js               # 28 Run Commands (Top 11 Core Consoles + 17 Specialized Tools: L1 vs L2)
 │   ├── 📄 PowerShell_Commands.js               # CLI Diagnostics, .NET Objects, WinRM & Linux Comparisons
 │   ├── 📄 Active_Directory_GPO.js              # ADUC, User Unlock, Password Reset, NTFS vs Share, GPO Deployment
 │   ├── 📄 M365_Outlook_Support.js              # Safe Mode, OST Rebuild, Shared Mailbox, Exchange Message Trace
@@ -75,7 +75,7 @@ IT_Supports_Engineers/
 ---
 
 ### 🪟 Module 03: Windows, Active Directory & IT Operations (`03_Windows_And_Active_Directory/`)
-* **Windows Run Shortcuts (`Window_Run_Commands.js`)**: Top 11 consoles (`services.msc`, `ncpa.cpl`, `devmgmt.msc`, `eventvwr.msc`, `appwiz.cpl`, `diskmgmt.msc`, etc.) structured into L1 Surface vs L2 Root Cause fixes.
+* **Windows Run Shortcuts (`Window_Run_Commands.js`)**: 28 enterprise run commands (Top 11 core consoles + 17 specialized situational tools) structured into L1 Surface vs L2 Root Cause fixes and Interview Scenarios.
 * **PowerShell Diagnostics (`PowerShell_Commands.js`)**: 123 commands across 18 enterprise categories:
   * Package Management (`winget`), Deep Clean (`Clear-RecycleBin`), Directory Navigation & Shortcuts.
   * Live Log Following (`Get-Content -Wait`), Pattern Searching (`Select-String`), Network Testing (`Test-NetConnection`).
