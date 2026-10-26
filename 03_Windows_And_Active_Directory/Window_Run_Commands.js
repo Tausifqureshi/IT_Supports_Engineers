@@ -21,108 +21,131 @@
 
 // 1. services.msc — Services Management Console
 // --------------------------------------------------------------------------------
-// [ CONCEPT: Print Spooler & Services Hota Kya Hai? ]
-// Windows ke andar background process ka naam hota hai spoolsv.exe. Iska kaam user ke print document ko memory/disk par hold karna aur printer ko step-by-step deliver karna hota hai taaki application hang na ho.
+// [ CONCEPT: Print Spooler & Background Services ]
+// Windows ke background daemons (services) ko manage karne ka master console. Print Spooler (spoolsv.exe) user ke document ko memory/disk par hold karta hai aur printer ko step-by-step deliver karta hai taaki application hang na ho.
 
 // * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
-// Target: 5–10 minute ke andar user ka atka hua print nikalna.
-// - Problem 1: Queue me print atka hai ("Deleting..." ya "Error" status)
-//   Step 1: [Win + R] dabakar services.msc kholta hai.
-//   Step 2: Print Spooler service par right-click karke "Restart" karta hai.
-// - Problem 2: GUI se document cancel nahi ho raha (Queue lock ho chuki hai)
-//   Step 1: services.msc me jakar Print Spooler ko "Stop" karta hai.
-//   Step 2: File Explorer me is folder par jata hai: C:\Windows\System32\spool\PRINTERS
-//   Step 3: Wahan maujood sabhi .SPL (print data) aur .SHD (shadow settings) files ko [Shift + Delete] se permanently delete karta hai.
-//   Step 4: Wapas services.msc me aakar Print Spooler ko "Start" karta hai.
-// - Problem 3: Basic Hardware check
-//   USB cable nikal ke wapas lagana, LAN cable me light blink check karna, paper jam ya red light error dekhna.
-// - L1 Ki Limit: Agar service restart karne ke thodi der baad Spooler fir ruk gaya, ya driver install nahi ho raha, toh L1 engineer ticket L2 ko escalate kar deta hai.
+// Target: 5 minute ke andar user ka atka hua print nikalna aur status dekhna.
+// - Problem 1: Print Queue Me Document Atka Hai ("Deleting..." ya "Error" Status):
+//   Command: `Win + R` -> type `services.msc` -> Enter.
+//   Kaam: Services console khol kar Print Spooler service restart karne ke liye.
+//   Andar jaakar: List me se "Print Spooler" par RIGHT-CLICK -> "Restart" select karta hai.
+// - Problem 2: Queue Lock Ho Chuki Hai (Document GUI Se Cancel Nahi Ho Raha):
+//   Step A (Service Stop): `services.msc` me jakar "Print Spooler" par RIGHT-CLICK -> "Stop" karta hai.
+//   Step B (Queue Clear): `Win + R` -> type `C:\Windows\System32\spool\PRINTERS` -> Enter.
+//   Kaam: Folder khol kar corrupt print buffer files permanently clean karne ke liye.
+//   Andar jaakar: Sabhi `.SPL` (print data) aur `.SHD` (shadow settings) files ko [Shift + Delete] se delete karta hai.
+//   Step C (Service Start): Wapas `services.msc` me aakar "Print Spooler" par RIGHT-CLICK -> "Start" karta hai.
+// - Problem 3: Basic Hardware Check:
+//   Kaam: USB cable reconnect karna, network printer me green link blink dekhna, aur paper jam/toner check karna.
+// - L1 Ki Limit: Agar service restart karne ke thodi der baad Spooler fir se ruk jaye ya driver crash ho, toh L1 engineer ticket L2 ko escalate kar deta hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Print Spooler baar-baar crash kyun ho raha hai, usko jad se khatam karna.
-// - Step 1: Crash Ka Root Cause Pakadna (eventvwr.msc)
-//   L2 engineer seedha Event Viewer kholta hai -> Windows Logs -> Application me jata hai aur Event ID 1000 (Application Error) check karta hai:
-//   Faulting Application: spoolsv.exe | Faulting Module Name: <Corrupt_Driver>.dll (Exact pata chal jata hai kis driver ne crash kiya).
-//   Applications and Services Logs -> Microsoft -> Windows -> PrintService -> Admin me jakar check karta hai kis user ya job se crash hua.
-// - Step 2: Corrupt Driver Ko Root Se Hatana (printmanagement.msc)
-//   L1 sirf Settings se icon delete karta hai jisse driver reh jata hai. L2 driver ko system se complete wipe karta hai:
-//   [Win + R] -> printmanagement.msc -> Custom Filters -> All Drivers me jata hai.
-//   Crash karne wale driver par right-click karke "Remove Driver Package" chunta hai (DLL aur registry entries clean hoti hain).
-//   Vendor (HP, Canon, Zebra) ki official site se fresh certified driver install karta hai.
-// - Step 3: Network Port Configuration Fix Karna (Printer "Offline" Issue)
-//   Printer Properties -> Ports tab -> "Configure Port" kholta hai.
-//   Check karta hai ki port ka IP printer ke live IP se match karta hai ya nahi.
-//   "SNMP Status Enabled" checkbox ko UNCHECK (disable) karta hai (Firewall SNMP drop kare toh printer fake offline dikhata hai, disable karte hi online aa jata hai).
-// - Step 4: Automatic Service Recovery Set Karna
-//   services.msc -> Print Spooler Properties -> "Recovery" tab me: First failure: "Restart the Service" | Second failure: "Restart the Service".
-// - Step 5: Driver Isolation Mode (Crash Prevention)
-//   printmanagement.msc me driver par right-click karke "Set Driver Isolation" -> "Isolated" set karta hai (Driver PrintIsolationHost.exe me chalta hai, driver crash ho tab bhi Spooler safe rehta hai).
+// - Step 1: Crash Ka Root Cause Pakadna (Event Viewer):
+//   Command: `Win + R` -> type `eventvwr.msc` -> Enter.
+//   Kaam: Event Viewer khol kar spoolsv.exe crash ka exact faulting driver package pakadne ke liye.
+//   Andar jaakar: "Windows Logs" > "Application" me Event ID 1000 check karta hai (`Faulting Module: <Corrupt_Driver>.dll`). Aur "Applications and Services Logs" > "Microsoft" > "Windows" > "PrintService" > "Admin" me jakar crash karne wala user aur document trace karta hai.
+// - Step 2: Corrupt Driver Ko Root Se Wipe Karna (Print Management):
+//   Command: `Win + R` -> type `printmanagement.msc` -> Enter.
+//   Kaam: Print Management console khol kar corrupt driver package registry samet complete delete karne ke liye.
+//   Andar jaakar: "Custom Filters" > "All Drivers" me jata hai -> crash karne wale driver par RIGHT-CLICK -> "Remove Driver Package..." select karke clean wipe karta hai, fir vendor site se fresh driver install karta hai.
+// - Step 3: Network Printer Port Fix (Printer "Offline" Glitch):
+//   Command: `Win + R` -> type `control printers` -> Enter.
+//   Kaam: Printer properties khol kar port IP aur SNMP verification ke liye.
+//   Andar jaakar: Printer par RIGHT-CLICK -> "Printer Properties" > "Ports" tab > "Configure Port..." me jakar "SNMP Status Enabled" ko UNCHECK karta hai (Firewall SNMP block kare toh printer fake offline dikhata hai).
+// - Step 4: Automatic Service Recovery Rules Set Karna:
+//   Command: `Win + R` -> type `services.msc` -> Enter.
+//   Kaam: Background me service crash hone par automatic restart automate karna.
+//   Andar jaakar: "Print Spooler" par RIGHT-CLICK -> "Properties" > "Recovery" tab me First failure aur Second failure dono par "Restart the Service" set karta hai.
+// - Step 5: Driver Isolation Mode Set Karna (Spooler Crash Protection):
+//   Command: `Win + R` -> type `printmanagement.msc` -> Enter.
+//   Kaam: Printer driver ko separate sandbox process me chalane ke liye.
+//   Andar jaakar: Driver par RIGHT-CLICK -> "Set Driver Isolation" -> "Isolated" chunta hai (Agar driver dubara crash bhi ho, toh Spooler aur poore floor ki printing band nahi hogi).
 
 
 // ================================================================================
 
 // 2. ncpa.cpl — Network Connections (Network Control Panel Applet)
 // --------------------------------------------------------------------------------
-// [ CONCEPT: Network Adapter & NDIS Subsystem Hota Kya Hai? ]
+// [ CONCEPT: Network Adapter & NDIS Subsystem ]
 // Windows ka network interface controller (NIC) configuration engine (netman.dll). Physical Ethernet, Wi-Fi aur virtual NICs ke IP, Subnet, Gateway aur DNS ko bind karta hai.
 
 // * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
-// Target: Basic connectivity aur disconnected cable ka alert solve karna.
-// - Problem 1: No Internet ya Unidentified Network error aana
-//   Step 1: [Win + R] -> ncpa.cpl kholna -> Ethernet adapter par right-click karke "Disable" karna.
-//   Step 2: 5 second intezar karke wapas right-click -> "Enable" karna (80% network freeze solve ho jata hai).
-// - Problem 2: Stuck network cache refresh karna
-//   CMD me jakar `ipconfig /release` -> `ipconfig /renew` aur `ipconfig /flushdns` chalana.
-// - Problem 3: Physical layer check
-//   RJ45 LAN cable nikal kar reconnect karna aur port par Green/Amber link LED blink check karna.
-// - L1 Ki Limit: Agar IPv4 me 169.254.x.x (APIPA) aa raha ho ya network driver crash ho, toh L1 ticket L2 ko bhej deta hai.
+// Target: Basic connectivity freeze aur cable disconnect issues resolve karna.
+// - Problem 1: "No Internet" Ya "Unidentified Network" Error Aana:
+//   Command: `Win + R` -> type `ncpa.cpl` -> Enter.
+//   Kaam: Network card adapter ko power cycle (restart) karne ke liye.
+//   Andar jaakar: "Ethernet" ya "Wi-Fi" adapter par RIGHT-CLICK -> "Disable" karta hai, fir 5 second baad RIGHT-CLICK -> "Enable" karta hai (80% network freeze solve).
+// - Problem 2: Stuck Network Cache & DNS Refresh:
+//   Command: `Win + R` -> type `cmd` -> Enter.
+//   Kaam: IP configuration renew aur local DNS cache flush karne ke liye.
+//   Andar jaakar: Sequential commands chalata hai: `ipconfig /release` -> `ipconfig /renew` -> `ipconfig /flushdns`.
+// - Problem 3: Physical Layer Check:
+//   Kaam: RJ45 LAN cable reconnect karna aur port par Green/Amber link LED blink check karna.
+// - L1 Ki Limit: Agar IPv4 me 169.254.x.x (APIPA) aa raha ho ya network driver crash ho, toh L1 engineer ticket L2 ko escalate kar deta hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
-// Target: IP conflict, VLAN issue, DHCP server failure aur packet drops ko solve karna.
-// - Step 1: APIPA & DHCP DORA Failure Diagnosis
-//   Status -> Details me 169.254.x.x dekh kar samajh jata hai ki DHCP Discover packet ka Offer nahi aaya (VLAN mismatch ya DHCP pool full hai).
-// - Step 2: Static IP & DNS Hardcoding (Kiosk/Counter PC)
-//   Adapter Properties -> IPv4 Properties me jakar accurate Static IP, Subnet Mask (255.255.255.0), Default Gateway aur Internal DNS hardcode karta hai.
-// - Step 3: Speed & Duplex Mismatch Fix
-//   Configure -> Advanced tab -> "Speed & Duplex" me jata hai. Agar switch port ke sath Auto-Negotiation fail ho rahi ho, toh use force karke "1.0 Gbps Full Duplex" set karta hai.
-// - Step 4: Corrupt TCP/IP Stack & Winsock Reset
-//   CMD Admin mode me deep stack repair commands run karta hai:
-//   `netsh int ip reset`  aur  `netsh winsock reset` (fir PC reboot karta hai).
-// - Step 5: NIC Power Management Fix
-//   Configure -> "Power Management" tab me "Allow the computer to turn off this device to save power" ko UNCHECK karta hai taaki idle counter PC disconnect na ho.
+// Target: IP conflict, VLAN mismatch, DHCP server failure aur packet drop fix karna.
+// - Step 1: APIPA & DHCP DORA Failure Diagnosis:
+//   Command: `Win + R` -> type `ncpa.cpl` -> Enter.
+//   Kaam: Adapter details me jakar DHCP Discover fail hone ka root cause pakadna.
+//   Andar jaakar: Adapter par double-click -> "Details..." me 169.254.x.x dekh kar samajh jata hai ki DHCP Offer nahi aaya (Switch port ka VLAN check karta hai ya DHCP pool full hone par scope extend karta hai).
+// - Step 2: Static IP & DNS Hardcoding (Kiosk/Counter PC):
+//   Command: `Win + R` -> type `ncpa.cpl` -> Enter.
+//   Kaam: Fixed IP aur enterprise DNS assign karne ke liye.
+//   Andar jaakar: Adapter par RIGHT-CLICK -> "Properties" -> "Internet Protocol Version 4 (TCP/IPv4)" par double-click -> "Use the following IP address" select karke Static IP, Subnet Mask (/24), Gateway aur Company DNS enter karta hai.
+// - Step 3: Speed & Duplex Negotiation Mismatch Fix:
+//   Command: `Win + R` -> type `ncpa.cpl` -> Enter.
+//   Kaam: Switch port aur NIC negotiation mismatch hone par speed force karna.
+//   Andar jaakar: Adapter Properties -> "Configure..." button -> "Advanced" tab -> "Speed & Duplex" property me jakar Auto-Negotiation ko force karke "1.0 Gbps Full Duplex" set karta hai.
+// - Step 4: Corrupt TCP/IP Stack & Winsock Reset:
+//   Command: `Win + R` -> type `cmd` (Run as Administrator) -> Enter.
+//   Kaam: Broken network protocol stack aur winsock catalog ko factory default par restore karna.
+//   Andar jaakar: `netsh int ip reset` aur `netsh winsock reset` run karta hai, fir PC reboot karta hai.
+// - Step 5: NIC Power Management Fix (Kiosk Sleep Protection):
+//   Command: `Win + R` -> type `ncpa.cpl` -> Enter.
+//   Kaam: Idle PC ka network disconnect hone se rokna.
+//   Andar jaakar: Adapter Properties -> "Configure..." -> "Power Management" tab me "Allow the computer to turn off this device to save power" ko UNCHECK karta hai.
 
 
 // ================================================================================
 
 // 3. devmgmt.msc — Device Manager
 // --------------------------------------------------------------------------------
-// [ CONCEPT: Plug and Play (PnP) & Hardware Driver Tree Hota Kya Hai? ]
+// [ CONCEPT: Plug and Play (PnP) & Hardware Driver Tree ]
 // Windows hardware enumeration console. Motherboard chipset, USB controllers, biometric scanners, printers aur external peripherals ke hardware drivers ko manage karta hai.
 
 // * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
-// Target: Peripheral (Scanner, Reader, Printer) ko jaldi se detect karwana.
-// - Problem 1: USB device attach kiya lekin PC me response nahi aaya
-//   Step 1: [Win + R] -> devmgmt.msc kholna -> Top menu se Action -> "Scan for hardware changes" par click karna.
-//   Step 2: USB cable nikal kar PC ke doosre (back panel) USB 3.0 port par lagana.
-// - Problem 2: Device par Yellow Exclamation mark (!) dikhna
-//   Device par right-click karke "Update driver" -> "Search automatically for drivers" chuno.
+// Target: Peripheral (Scanner, Reader, Printer) ko detect karwana.
+// - Problem 1: USB Device Attach Kiya Lekin PC Me Response Nahi Aaya:
+//   Command: `Win + R` -> type `devmgmt.msc` -> Enter.
+//   Kaam: Hardware bus par naye plugged devices scan karne ke liye.
+//   Andar jaakar: Top menu bar se "Action" > "Scan for hardware changes" par click karta hai.
+// - Problem 2: Device Par Yellow Exclamation Mark (!) Dikhna:
+//   Command: `Win + R` -> type `devmgmt.msc` -> Enter.
+//   Kaam: Basic driver update wizard chalane ke liye.
+//   Andar jaakar: Yellow mark wale device par RIGHT-CLICK -> "Update driver" -> "Search automatically for drivers" chunta hai.
 // - L1 Ki Limit: Agar driver online na mile ya Code 10 / Code 43 error aaye, toh ticket L2 ko escalate hoti hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Hardware ID se compatible OEM driver dhoondna aur power suspension rokna.
-// - Step 1: Device Error Code Diagnosis
-//   Device Properties -> General tab me Status padhna:
-//   Code 10: Device cannot start (corrupt firmware/incompatible driver).
-//   Code 43: Windows has stopped this device because it reported problems (hardware communication fail).
-// - Step 2: Hardware ID Se Exact OEM Driver Dhoondna
-//   Properties -> Details tab -> Property dropdown se "Hardware Ids" select karta hai.
-//   Value (e.g. VEN_8086&DEV_15F3) copy karke OEM vendor site se certified .INF driver package download karke "Have Disk..." se load karta hai.
-// - Step 3: Clean Driver Package Uninstall
-//   Device par right-click -> "Uninstall device" -> "Attempt to remove the driver for this device" checkbox tick karke pura corrupt cache wipe karta hai.
-// - Step 4: USB Root Hub Selective Suspend Disable
-//   Universal Serial Bus controllers -> USB Root Hub -> Properties -> Power Management -> "Allow computer to turn off this device to save power" disable karta hai.
-// - Step 5: Ghost / Hidden Phantom Devices Cleanup
-//   CMD Admin me command chalata hai: `set devmgr_show_nonpresent_devices=1` aur Device Manager me View -> "Show hidden devices" enable karke puraane disconnected phantom drivers delete karta hai.
+// - Step 1: Hardware Error Code Diagnosis:
+//   Command: `Win + R` -> type `devmgmt.msc` -> Enter.
+//   Kaam: Device fail hone ka exact system error code padhna.
+//   Andar jaakar: Device par RIGHT-CLICK -> "Properties" -> "General" tab me Device status padhta hai: Code 10 (Driver incompatible) ya Code 43 (Hardware communication fail).
+// - Step 2: Hardware ID Se Exact OEM Driver Dhoondna:
+//   Command: `Win + R` -> type `devmgmt.msc` -> Enter.
+//   Kaam: Vendor ID (VEN) aur Device ID (DEV) nikal kar official INF driver download karna.
+//   Andar jaakar: Device Properties -> "Details" tab -> Property drop-down se "Hardware Ids" select karta hai -> Value (e.g. `VEN_8086&DEV_15F3`) copy karke vendor site se certified driver package laata hai -> "Browse my computer for drivers" > "Have Disk..." se manual force-install karta hai.
+// - Step 3: Corrupt Driver Package Clean Wipe:
+//   Command: `Win + R` -> type `devmgmt.msc` -> Enter.
+//   Kaam: Corrupted driver files ko driver store cache se delete karna.
+//   Andar jaakar: Device par RIGHT-CLICK -> "Uninstall device" -> "Attempt to remove the driver for this device" checkbox TICK karke uninstall karta hai.
+// - Step 4: USB Root Hub Power Suspend Disable:
+//   Command: `Win + R` -> type `devmgmt.msc` -> Enter.
+//   Kaam: Barcode scanner ya gate reader USB disconnect hone se rokna.
+//   Andar jaakar: "Universal Serial Bus controllers" > "USB Root Hub" par RIGHT-CLICK -> "Properties" > "Power Management" me "Allow the computer to turn off this device to save power" ko UNCHECK karta hai.
 
 
 // ================================================================================
@@ -133,26 +156,31 @@
 // Operating system ka black box forensic repository (.evtx files). Application crashes, security audits, kernel panics aur hardware failure ka timestamped record rakhta hai.
 
 // * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
-// Target: User ke complaint time par system me red error dekhna.
-// - Problem 1: User kehta hai PC achanak freeze hokar restart hua
-//   Step 1: [Win + R] -> eventvwr.msc kholna.
-//   Step 2: Windows Logs -> System me jakar Red color ka "Error" icon dekhna.
-// - L1 Ki Limit: Log me technical hexadecimal codes (e.g. 0xc0000005) dekh kar L1 engineer samajh nahi pata aur ticket L2 ko bhej deta hai.
+// Target: User ke crash/freeze time par system me red error dekhna.
+// - Problem 1: PC Achanak Freeze Hua Ya App Crash Hui:
+//   Command: `Win + R` -> type `eventvwr.msc` -> Enter.
+//   Kaam: System logs khol kar user ke bataye huye exact time par error identify karna.
+//   Andar jaakar: Left pane se "Windows Logs" > "Application" ya "System" par click karta hai -> Red color ka "Error" icon check karta hai.
+// - L1 Ki Limit: Log me technical hexadecimal codes (e.g. 0xc0000005) ya Event ID 4625 aane par L1 engineer ticket L2 ko escalate kar deta hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
-// Target: Crash karne wale exact DLL module, BSOD bugcheck aur service failure ko identify karna.
-// - Step 1: Application Crash Root Cause (Event ID 1000)
-//   Windows Logs -> Application me Filter Current Log lagata hai Event ID "1000":
-//   Faulting Application Name: (e.g. chrome.exe ya custom ERP)
-//   Faulting Module Name: (e.g. ntdll.dll ya ucrtbase.dll) note karke root crash point nikalta hai.
-// - Step 2: Unexpected Shutdown & BSOD Diagnosis (Event ID 41)
-//   Windows Logs -> System me Event ID "41" (Kernel-Power) check karta hai. BugcheckCode (e.g. 0x0000009F Driver Power State ya 0x0000000A IRQL Not Less or Equal) se hardware/driver fault trace karta hai.
-// - Step 3: Service Dependency Failure (Event ID 7000 / 7001)
-//   System log me trace karta hai ki kis dependent background service ke fail hone par main system service crash hui.
-// - Step 4: Custom Diagnostic View Banana
-//   Action -> "Create Custom View" banata hai jisme Critical aur Error select karke Last 12 Hours ke events filter karta hai.
-// - Step 5: Exporting Forensic Logs (.evtx)
-//   Target log par right-click -> "Save All Events As..." karke escalation packet banakar vendor ya L3 support ko bhejta hai.
+// Target: Crash karne wale exact DLL module, BSOD bugcheck aur brute-force logins identify karna.
+// - Step 1: Application Crash Root Cause (Event ID 1000):
+//   Command: `Win + R` -> type `eventvwr.msc` -> Enter.
+//   Kaam: Crash hone wali software ka faulting module aur exact DLL file pakadna.
+//   Andar jaakar: "Windows Logs" > "Application" par RIGHT-CLICK -> "Filter Current Log..." -> Event ID box me type karta hai: `1000` -> Result me `Faulting Application: chrome.exe` aur `Faulting Module Name: ntdll.dll` note karke issue solve karta hai.
+// - Step 2: BSOD & Kernel Power Crash Analysis (Event ID 41):
+//   Command: `Win + R` -> type `eventvwr.msc` -> Enter.
+//   Kaam: Blue Screen of Death ka BugCheck code decode karna.
+//   Andar jaakar: "Windows Logs" > "System" -> "Filter Current Log..." -> Event ID daalta hai: `41` -> BugcheckCode (e.g. `0x0000009F` Driver Power State Failure) se hardware/driver crash point trace karta hai.
+// - Step 3: Account Lockout & Brute-Force Audit (Event ID 4625):
+//   Command: `Win + R` -> type `eventvwr.msc` -> Enter.
+//   Kaam: User account kis remote IP ya machine se baar-baar galat password dal kar lock kiya ja raha hai trace karna.
+//   Andar jaakar: "Windows Logs" > "Security" -> "Filter Current Log..." -> Event ID: `4625` (Failed Logon) filter karta hai -> "Source Network Address" aur "Workstation Name" se attacker machine pakadta hai.
+// - Step 4: Diagnostic Logs Export Karna (.evtx):
+//   Command: `Win + R` -> type `eventvwr.msc` -> Enter.
+//   Kaam: Senior team ya vendor escalation ke liye clean log packet banana.
+//   Andar jaakar: Target log par RIGHT-CLICK -> "Save All Events As..." select karke `.evtx` file save karke ticket me attach karta hai.
 
 
 // ================================================================================
@@ -163,30 +191,31 @@
 // System par installed applications, runtimes (Visual C++, .NET), aur software updates ka central control console.
 
 // * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
-// Target: Corrupted software ko repair karna ya clean reinstall wizard chalana.
-// - Problem 1: Software open hone par error de raha hai
-//   Step 1: [Win + R] -> appwiz.cpl kholna -> List se software select karna.
-//   Step 2: Top bar se "Repair" button par click karke repair wizard chalana.
-// - Problem 2: Standard application uninstall karna
-//   Software select karke "Uninstall" click karna aur popup accept karna.
-// - L1 Ki Limit: Agar uninstall me "Another installation is already in progress" ya "Error 1603 / Access Denied" aaye, toh ticket L2 ko escalate hoti hai.
+// Target: Corrupted software uninstall karna ya repair wizard chalana.
+// - Problem 1: Software Open Hone Par Error De Raha Hai:
+//   Command: `Win + R` -> type `appwiz.cpl` -> Enter.
+//   Kaam: Application list khol kar software repair ya reinstall karne ke liye.
+//   Andar jaakar: Software select karta hai -> Top bar se "Repair" ya "Change" par click karke wizard chala deta hai.
+// - Problem 2: Standard Application Uninstall Karna:
+//   Command: `Win + R` -> type `appwiz.cpl` -> Enter.
+//   Kaam: Software remove karne ke liye.
+//   Andar jaakar: Software par click karke "Uninstall" dabata hai aur prompts follow karta hai.
+// - L1 Ki Limit: Agar uninstall me "Another installation is in progress" ya "Error 1603 / Access Denied" aaye, toh ticket L2 ko escalate hoti hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
-// Target: Stuck installer locks break karna aur residual registry keys wipe karna.
-// - Step 1: Stuck Installer Kill & MSI Service Reset
-//   Task Manager me background me phanse hue `msiexec.exe` processes ko End Task karta hai, aur CMD Admin me MSI service restart karta hai:
-//   `net stop msiserver` && `net start msiserver`
-// - Step 2: Residual Files & Registry Deep Wipe
-//   Corrupt software ka uninstaller fail hone par `C:\Program Files` aur `C:\ProgramData` se folders manually delete karta hai.
-//   Registry Editor (`regedit`) me jakar:
-//   `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall` se software ki specific GUID key delete karta hai.
-// - Step 3: Microsoft Program Install and Uninstall Troubleshooter
-//   Official Microsoft utility run karke corrupted registry keys aur blocked MSI install tags ko automatically clear karta hai.
-// - Step 4: Silent CLI Uninstall via GUID
-//   CMD Admin me silent removal command chalata hai:
-//   `msiexec /x {PRODUCT-GUID} /qn /norestart`
-// - Step 5: Dependency Runtime Rebuild
-//   Crashing application ke required Microsoft Visual C++ Redistributable (2015-2022 x86/x64) runtimes ko clean download karke reinstall karta hai.
+// Target: Stuck installer locks break karna aur leftover registry keys wipe karna.
+// - Step 1: Stuck MSI Windows Installer Process Force-Kill:
+//   Command: `Win + R` -> type `cmd` (Run as Administrator) -> Enter.
+//   Kaam: Background me atke huye MSI installer ko unlock karna.
+//   Andar jaakar: Command chalata hai: `taskkill /F /IM msiexec.exe` aur service restart karta hai: `net stop msiserver && net start msiserver`.
+// - Step 2: Residual Files & Registry Deep Wipe:
+//   Command: `Win + R` -> type `regedit` -> Enter.
+//   Kaam: Corrupted app ki residual uninstall keys delete karna taaki fresh install block na ho.
+//   Andar jaakar: `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall` me jakar app ki leftover GUID key ko delete karta hai.
+// - Step 3: Turn Windows Features On/Off (.NET / SMB):
+//   Command: `Win + R` -> type `appwiz.cpl` -> Enter.
+//   Kaam: System ke internal enterprise features enable/disable karna.
+//   Andar jaakar: Left sidebar se "Turn Windows features on or off" par click karta hai -> `.NET Framework 3.5` ya `SMB 1.0` enable karke legacy application chalata hai.
 
 
 // ================================================================================
@@ -197,26 +226,31 @@
 // Physical drives (HDD, NVMe SSD), partitions (MBR/GPT), file systems (NTFS/FAT32), aur drive letters ka management console.
 
 // * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
-// Target: Missing partition ko visible karna aur flash drive verify karna.
-// - Problem 1: Flash drive ya second partition 'This PC' me show nahi ho raha
-//   Step 1: [Win + R] -> diskmgmt.msc kholna.
-//   Step 2: Lower pane me healthy blue partition par right-click -> "Change Drive Letter and Paths...".
-//   Step 3: "Add..." par click karke letter D: ya E: assign karna.
+// Target: Missing partition ko visible karna aur drive letter assign karna.
+// - Problem 1: Second Partition Ya External Drive 'This PC' Me Dikh Nahi Rahi:
+//   Command: `Win + R` -> type `diskmgmt.msc` -> Enter.
+//   Kaam: Partition list khol kar missing drive letter assign karne ke liye.
+//   Andar jaakar: Healthy blue partition par RIGHT-CLICK -> "Change Drive Letter and Paths..." -> "Add..." -> Letter (e.g. D: ya E:) choose karke "OK" karta hai.
 // - L1 Ki Limit: Agar disk "Offline", "Not Initialized", ya "RAW" show kare, toh data loss ke darr se ticket L2 ko escalate kar di jaati hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Disk policy conflicts, file system corruption aur GPT initialization solve karna.
-// - Step 1: Policy Conflict Offline Disk Online Karna
-//   Agar disk grey box par "Offline (Policy Conflict)" dikhaye: Right-click -> "Online" par click karke disk activate karta hai.
-// - Step 2: Disk Initialization (GPT vs MBR)
-//   New unallocated disk par right-click -> "Initialize Disk" -> Modern UEFI systems ke liye **GPT (GUID Partition Table)** select karta hai (MBR 2TB se upar fail hota hai).
-// - Step 3: Read-Only Attribute Clear via DISKPART
-//   CMD Admin me jakar disk lock hatata hai:
-//   `diskpart` -> `list disk` -> `select disk X` -> `attributes disk clear readonly`
-// - Step 4: File System Corruption Fix via CHKDSK
-//   Agar drive RAW show kare: CMD Admin me `chkdsk D: /f /r` run karke corrupted Master File Table (MFT) aur bad sectors recover karta hai.
-// - Step 5: Virtual Disk Service Glitch Reset
-//   Agar console "Connecting to Virtual Disk Service..." par freeze ho jaye: `services.msc` me jakar "Virtual Disk" service ko Restart karta hai.
+// - Step 1: Policy Conflict Offline Disk Online Karna:
+//   Command: `Win + R` -> type `diskmgmt.msc` -> Enter.
+//   Kaam: SAN/Storage policy conflict se offline hui disk ko activate karna.
+//   Andar jaakar: Disk ke grey box (Disk 1) par RIGHT-CLICK -> "Online" par click karta hai.
+// - Step 2: Raw Disk Initialization (GPT vs MBR):
+//   Command: `Win + R` -> type `diskmgmt.msc` -> Enter.
+//   Kaam: Nayi hard drive/SSD ko modern partition table me initialize karna.
+//   Andar jaakar: Nayi unallocated disk par RIGHT-CLICK -> "Initialize Disk" -> Modern UEFI systems ke liye **GPT (GUID Partition Table)** select karta hai.
+// - Step 3: Read-Only Attribute Clear Karna (DISKPART):
+//   Command: `Win + R` -> type `cmd` (Run as Administrator) -> Enter.
+//   Kaam: Write-protected hard drive ka lock hatana.
+//   Andar jaakar: Sequential commands chalata hai: `diskpart` -> `list disk` -> `select disk 1` -> `attributes disk clear readonly`.
+// - Step 4: RAW File System Corruption Recovery (CHKDSK):
+//   Command: `Win + R` -> type `cmd` (Run as Administrator) -> Enter.
+//   Kaam: Corrupted Master File Table (MFT) aur bad sectors repair karna.
+//   Andar jaakar: Command chalata hai: `chkdsk D: /f /r` taaki file system NTFS me wapas recover ho sake.
 
 
 // ================================================================================
@@ -228,25 +262,32 @@
 
 // * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Frozen software ko close karna aur general resource load dekhna.
-// - Problem 1: Application par "Not Responding" aa gaya
-//   Step 1: Keyboard par [Ctrl + Shift + Esc] dabana.
-//   Step 2: Frozen app par right-click karke "End task" chuna.
-// - Problem 2: PC hang ho raha hai
-//   Processes tab me CPU aur Memory column par click karke top application dekhna.
-// - L1 Ki Limit: Agar End task karne par "Access is Denied" aaye ya process turant dobara start ho jaye, toh L1 escalate karta hai.
+// - Problem 1: Application Par "Not Responding" Aa Gaya:
+//   Command: `Win + R` -> type `taskmgr` -> Enter (ya `Ctrl + Shift + Esc`).
+//   Kaam: Task Manager khol kar hang software ko terminate karne ke liye.
+//   Andar jaakar: "Processes" tab me frozen app par RIGHT-CLICK -> "End task" select karta hai.
+// - Problem 2: PC Slow Ya Hang Ho Raha Hai:
+//   Andar jaakar: "Processes" tab me "CPU" aur "Memory" columns par click karke dekhta hai kaun sa app resources consume kar raha hai.
+// - L1 Ki Limit: Agar End task karne par "Access is Denied" aaye ya process turant dobara spawn ho jaye, toh L1 escalate karta hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
-// Target: Rogue worker threads kill karna, memory leak trace karna aur locked files release karna.
-// - Step 1: Kill Entire Process Tree
-//   Details tab me jakar targeted process par right-click -> **"End process tree"** select karta hai taaki background child threads bhi kill hon.
-// - Step 2: Memory Leak (Non-Paged Pool) Diagnosis
-//   Performance -> Memory me "Non-paged pool" check karta hai; agar ye 2-4GB+ cross kar raha ho toh faulty hardware driver memory leak kar raha hai.
-// - Step 3: Locked File Resource Monitor Handle Trace
-//   Performance -> "Open Resource Monitor" (resmon) -> CPU tab -> "Associated Handles" me locked file ka naam search karke handle hold karne wale process ko kill karta hai.
-// - Step 4: Creating Process Crash Dump File
-//   Details tab me process par right-click -> "Create dump file" (.DMP) banakar bug analysis ke liye preserve karta hai.
-// - Step 5: Startup Impact Audit
-//   Startup Apps me unnecessary heavy programs ko "Disable" karta hai aur Task Scheduler audit karta hai.
+// Target: Rogue worker threads kill karna, memory leak trace karna aur startup bloatware eliminate karna.
+// - Step 1: Kill Entire Process Tree (Child Threads Elimination):
+//   Command: `Win + R` -> type `taskmgr` -> Enter.
+//   Kaam: Background hidden worker processes samet poore software tree ko terminate karna.
+//   Andar jaakar: "Details" tab me jata hai -> main process par RIGHT-CLICK -> **"End process tree"** select karta hai.
+// - Step 2: Memory Leak (Non-Paged Pool) Diagnosis:
+//   Command: `Win + R` -> type `taskmgr` -> Enter.
+//   Kaam: Faulty hardware driver memory leak pakadna.
+//   Andar jaakar: "Performance" tab > "Memory" me "Non-paged pool" check karta hai; agar ye 2-4GB+ cross kar raha ho toh faulty NIC ya graphics driver leak pakadta hai.
+// - Step 3: Startup Impact Optimization (Boot Time 3x Fast):
+//   Command: `Win + R` -> type `taskmgr` -> Enter.
+//   Kaam: Slow boot time theek karna.
+//   Andar jaakar: "Startup Apps" tab me jakar "High" Startup Impact wale faltu background updaters par RIGHT-CLICK -> "Disable" karta hai.
+// - Step 4: Creating Process Crash Dump (.DMP):
+//   Command: `Win + R` -> type `taskmgr` -> Enter.
+//   Kaam: Software crash analysis ke liye dump file create karna.
+//   Andar jaakar: "Details" tab me process par RIGHT-CLICK -> "Create dump file" karke developer escalation packet banata hai.
 
 
 // ================================================================================
@@ -257,26 +298,34 @@
 // Remote Desktop Protocol (mstsc.exe). Network ke through remote Windows machine ka GUI session lene ke liye use hota hai.
 
 // * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
-// Target: User ke remote desktop ka quick session lena.
-// - Problem 1: Remote counter PC ko login karna
-//   Step 1: [Win + R] -> mstsc -> IP address enter karna -> "Connect" dabana.
-//   Step 2: Domain credentials daalna (`DOMAIN\username`).
+// Target: Remote counter PC ya server ka quick session lena.
+// - Problem 1: Remote Counter PC Ko Login Karna:
+//   Command: `Win + R` -> type `mstsc` -> Enter.
+//   Kaam: Remote Desktop Connection launcher kholne ke liye.
+//   Andar jaakar: Remote PC ka IP address enter karta hai -> "Connect" dabata hai -> Domain credentials daalta hai (`DOMAIN\username`).
 // - L1 Ki Limit: "Remote Desktop cannot connect to the remote computer" error aane par L1 engineer ticket L2 ko escalate kar deta hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
-// Target: Firewall blockage, NLA mismatch, aur remote registry fix karna.
-// - Step 1: CLI Port 3389 Reachability Test
-//   PowerShell me verify karta hai: `Test-NetConnection -ComputerName <IP> -Port 3389` (Agar False aaye toh firewall ya routing issue hai).
-// - Step 2: Remote Machine Par RDP Force Enable Karna (Remote Registry)
-//   Remote machine ki registry connect karta hai:
-//   `HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server` me jakar `fDenyTSConnections` ko `0` set karta hai.
-// - Step 3: Network Level Authentication (NLA) Mismatch Fix
-//   Agar client NLA verify na kar sake: Remote PC me `UserAuthentication` ko `0` set karke connect karta hai.
-// - Step 4: Restart Remote Desktop Service Remotely
-//   PowerShell Admin se remote service restart karta hai:
-//   `Restart-Service -ComputerName <RemotePC> -Name TermService -Force`
-// - Step 5: Admin Console Session Access
-//   Run dialog me command chalata hai: `mstsc /v:<IP> /admin` taaki server session 0 ka physical console access ho sake.
+// Target: Firewall blockage, NLA mismatch, aur remote registry RDP enabling.
+// - Step 1: CLI Port 3389 Reachability & Handshake Test:
+//   Command: `Win + R` -> type `powershell` -> Enter.
+//   Kaam: Verify karna ki remote machine par RDP port listening hai ya firewall me blocked hai.
+//   Andar jaakar: Command chalata hai: `Test-NetConnection -ComputerName 192.168.1.50 -Port 3389` (Agar TcpTestSucceeded: False aaye toh firewall/port blocked hai).
+// - Step 2: Remote Machine Par RDP Force-Enable Karna (Remote Registry):
+//   Command: `Win + R` -> type `regedit` -> Enter.
+//   Kaam: Desk par jaye bina remote machine ka RDP access ON karna.
+//   Andar jaakar: "File" > "Connect Network Registry..." -> Remote PC ka naam daalta hai -> `HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server` me jakar `fDenyTSConnections` ko `0` set karta hai.
+// - Step 3: Network Level Authentication (NLA) Mismatch Fix:
+//   Command: `Win + R` -> type `sysdm.cpl` -> Enter.
+//   Kaam: Purane clients ke liye NLA mismatch bypass karna.
+//   Andar jaakar: "Remote" tab me "Allow connections only from computers running Remote Desktop with Network Level Authentication" ko untick karke test karta hai.
+// - Step 4: Remote Terminal Service Force-Restart:
+//   Command: `Win + R` -> type `powershell` -> Enter.
+//   Kaam: Stuck RDP session daemon ko remotely reload karna.
+//   Andar jaakar: `Restart-Service -ComputerName <RemotePC> -Name TermService -Force` chalata hai.
+// - Step 5: Admin Physical Console Session Connect Karna:
+//   Command: `Win + R` -> type `mstsc /v:<IP> /admin` -> Enter.
+//   Kaam: Server Session 0 ka direct physical console access lene ke liye.
 
 
 // ================================================================================
@@ -287,26 +336,39 @@
 // System management routines, batch scripts, network diagnostic utilities, aur administrative repair commands ka execution shell.
 
 // * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
-// Target: Basic connectivity aur DNS cache clear karna.
-// - Problem 1: Internet check karna -> `ping google.com`
-// - Problem 2: DNS refresh karna -> `ipconfig /flushdns`
-// - Problem 3: IP address check karna -> `ipconfig`
-// - L1 Ki Limit: Deep system corruption ya network stack fail hone par ticket L2 ko di jaati hai.
+// Target: Basic network connectivity aur DNS cache clear karna.
+// - Command 1 (Internet Stability Test):
+//   Command: `Win + R` -> type `cmd` -> Enter.
+//   Command: `ping -t 8.8.8.8`
+//   Kaam: Google public IP par continuous packets bhej kar connection drop monitor karna.
+// - Command 2 (DNS Cache Flush):
+//   Command: `ipconfig /flushdns`
+//   Kaam: System me jam gaye corrupt ya purane DNS cache ko saaf karna.
+// - Command 3 (IP & MAC Address Verification):
+//   Command: `ipconfig /all`
+//   Kaam: Network card ka physical MAC address, Subnet Mask, Gateway aur DHCP server verify karna.
+// - L1 Ki Limit: Deep system file corruption ya complex network stack failure aane par ticket L2 ko di jaati hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: System integrity repair, network stack reset aur Group Policy audit.
-// - Step 1: System File Integrity Repair (DISM & SFC)
-//   CMD Admin mode me sequence chalata hai:
-//   1. `DISM /Online /Cleanup-Image /RestoreHealth` (Windows Component Store online repair karta hai).
-//   2. `sfc /scannow` (Corrupt OS system files ko fresh copy se replace karta hai).
-// - Step 2: Complete Network Stack Reset
-//   Bina internet ke stubborn issue par: `netsh int ip reset` aur `netsh winsock reset` chalakar reboot karta hai.
-// - Step 3: Domain Group Policy Audit
-//   `gpupdate /force` ke baad policy audit karta hai: `gpresult /r` ya HTML report generate karta hai: `gpresult /h C:\policy.html`.
-// - Step 4: Active Network Connection Port Audit
-//   `netstat -ano | findstr :3389` se dekhta hai ki port kis Process ID (PID) par listening state me hai.
-// - Step 5: Boot-time Disk Repair
-//   `chkdsk C: /f /r` schedule karke bad clusters repair karta hai.
+// - Step 1: System File Checker & Component Store Repair (DISM & SFC):
+//   Command: `Win + R` -> type `cmd` (Press Ctrl + Shift + Enter for Run as Administrator).
+//   Kaam: Corrupted Windows operating system files ko fresh copies se repair karna.
+//   Andar jaakar: Sequence chalata hai:
+//   1. `DISM /Online /Cleanup-Image /RestoreHealth` (Windows component store online repair karta hai).
+//   2. `sfc /scannow` (Corrupted system DLLs ko verify aur replace karta hai).
+// - Step 2: Complete Network Stack Reset (Master Repair):
+//   Command: `netsh int ip reset` aur `netsh winsock reset`
+//   Kaam: Corrupt TCP/IP network protocol aur winsock catalog ko factory default par restore karke PC reboot karta hai.
+// - Step 3: Domain Group Policy Force & Result Audit:
+//   Command: `gpupdate /force` aur `gpresult /r`
+//   Kaam: Active Directory GPO instantly fetch karna aur user par kaun-kaun se security policies aur groups apply huye hain unki detail audit nikalna.
+// - Step 4: Active Network Connection Port Audit:
+//   Command: `netstat -ano | findstr :3389`
+//   Kaam: Specific port kis Process ID (PID) par bind hai dekhna.
+// - Step 5: Boot-time Disk & Bad Sector Repair:
+//   Command: `chkdsk C: /f /r`
+//   Kaam: Agle reboot par disk bad clusters aur NTFS file table verify karta hai.
 
 
 // ================================================================================
