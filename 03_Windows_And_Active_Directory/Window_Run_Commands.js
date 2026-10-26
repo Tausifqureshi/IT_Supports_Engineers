@@ -38,7 +38,11 @@
 //   Step C (Service Start): Wapas `services.msc` me aakar "Print Spooler" par RIGHT-CLICK -> "Start" karta hai.
 // - Problem 3: Basic Hardware Check:
 //   Kaam: USB cable reconnect karna, network printer me green link blink dekhna, aur paper jam/toner check karna.
-// - L1 Ki Limit: Agar service restart karne ke thodi der baad Spooler fir se ruk jaye ya driver crash ho, toh L1 engineer ticket L2 ko escalate kar deta hai.
+// - Problem 4: Printer Status "Offline" Dikh Raha Hai (User Misclick):
+//   Command: `Win + R` -> type `control printers` -> Enter.
+//   Kaam: Print queue khol kar offline mode disable karne ke liye.
+//   Andar jaakar: Target printer par DOUBLE-CLICK karo -> top menu me "Printer" par click karo -> "Use Printer Offline" par agar TICK (✔) laga ho, toh click karke UNCHECK karta hai (printer instantly online aa jata hai).
+// - L1 Ki Limit: Agar service restart karne ke thodi der baad Spooler fir se ruk jaye, ya "Use Printer Offline" uncheck karne par bhi printer offline hi dikhaye, toh issue corrupt driver ya network SNMP port block ka hota hai, jise L2 engineer root cause se fix karta hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Print Spooler baar-baar crash kyun ho raha hai, usko jad se khatam karna.
@@ -439,11 +443,14 @@
 
 // * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Settings):
 // Target: Standard hardware settings, default printer, sound device aur network adapter quick fix karna.
-// - Kaam 1 (Printers & Queue Check):
+// - Kaam 1 (Printers, Offline Toggle & Queue Check):
 //   Command: `Win + R` -> type `control` -> Enter -> "Devices and Printers" par CLICK karo.
 //   (Direct Shortcut: `Win + R` -> type `control printers` -> Enter).
-//   Kaam: Default printer set karna aur atki hui printing queue clear karna.
-//   Andar jaakar: Office ke target printer par RIGHT-CLICK karo -> "Set as default printer" par click karta hai; printer par RIGHT-CLICK -> "See what's printing" par click -> Top menu bar se "Printer" > "Cancel All Documents" par click karke stuck jobs delete karta hai.
+//   Kaam: Default printer set karna, stuck print queue clear karna, aur offline status toggle theek karna.
+//   Andar jaakar:
+//   * Step A (Offline Mode Check): Target printer par DOUBLE-CLICK karo -> Top menu me "Printer" par click karo -> "Use Printer Offline" par agar TICK (✔) laga ho, toh click karke UNCHECK karta hai (printer instantly online aa jata hai).
+//   * Step B (Queue Clear): Printer par RIGHT-CLICK -> "See what's printing" par click -> Top menu bar se "Printer" > "Cancel All Documents" par click karke stuck jobs delete karta hai.
+//   * Step C (Default Printer): Printer par RIGHT-CLICK -> "Set as default printer" par click karta hai (Green checkmark aayega).
 // - Kaam 2 (Sound & Microphone Fix):
 //   Command: `Win + R` -> type `control` -> Enter -> "Sound" par CLICK karo.
 //   (Direct Shortcut: `Win + R` -> type `mmsys.cpl` -> Enter).
@@ -883,24 +890,57 @@
 // Enterprise network printers, raw spool queues, page description languages (PCL/PostScript), aur printer port sockets ka management interface.
 
 // * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
-// Target: Default printer assign karna aur queue me atke huye documents cancel karna.
+// Target: Default printer assign karna, queue clear karna, aur offline status toggle theek karna.
 // - Step 1: Stuck Print Queue Clear & Set Default:
 //   Command: `Win + R` -> type `control printers` -> Enter.
 //   Kaam: Paper print stuck hone par queue clear karna aur right printer default banana.
 //   Andar jaakar:
 //   * Step A (Queue Clear): Target printer par RIGHT-CLICK -> "See what's printing" par click -> Top menu "Printer" > "Cancel All Documents" -> "Yes" confirm karta hai.
 //   * Step B (Set Default): Printer par RIGHT-CLICK -> "Set as default printer" par click karta hai (Green checkmark aayega).
-// - L1 Ki Limit: Printer properties me TCP/IP port IP badalna, SNMP communication timeout fix karna, ya driver isolation L2 ko di jaati hai.
+// - Step 2: Printer Status "Offline" Misclick Fix (Use Printer Offline Uncheck):
+//   Command: `Win + R` -> type `control printers` -> Enter.
+//   Kaam: User misclick se offline huye printer ko wapas Online toggle karne ke liye.
+//   Andar jaakar: Target printer par DOUBLE-CLICK karo -> Top menu me "Printer" par click karo -> "Use Printer Offline" par agar TICK (✔) laga ho, toh click karke UNCHECK karta hai (printer instantly online aa jata hai).
+// - L1 Ki Limit: Agar "Use Printer Offline" uncheck karne ke baad bhi status offline hi show kare, toh issue printer ke network port ya firewall SNMP block ka hota hai, jise L2 engineer Step 1 me root cause se fix karta hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
-// Target: Network printer ka static IP port verify karna aur "Printer Offline" false status bug fix karna.
-// - Step 1: TCP/IP Port & SNMP Bug Fix (Printer "Offline" Glitch):
+// Target: Network printer ka static IP port verify karna, fake "Offline" glitches jad se khatam karna, WSD sleep disconnects eliminate karna, corrupt print processor reset karna, aur network diagnostics execute karna.
+// - Step 1: TCP/IP Port & SNMP Bug Fix (Printer Fake "Offline" Glitch):
 //   Command: `Win + R` -> type `control printers` -> Enter.
-//   Kaam: Network printer physically online hone ke baad bhi PC par offline dikhne ka bug fix karna.
-//   Andar jaakar:
-//   * Step A: Printer par RIGHT-CLICK -> "Printer properties" par CLICK -> "Ports" tab par click -> Selected Standard TCP/IP Port ko highlight karke "Configure Port..." button par click karta hai.
-//   * Step B (The SNMP Fix): "SNMP Status Enabled" checkbox ko UNCHECK (untick) karta hai! (Jab enterprise firewall ya switch SNMP port 161 block karta hai, toh Windows printer ko fake "Offline" show karta hai — ise uncheck karte hi printer instantly Online aa jata hai!).
-//   * Step C (Physical Verification): "General" tab par aakar "Print Test Page" button par CLICK karta hai aur physical tray se page verify karta hai.
+//   Kaam: Network printer physically online aur pingable hone ke bawajood Windows me "Offline" dikhne ka SNMP firewall bug fix karna.
+//   Andar jaakar (Step-by-Step Entry Rules):
+//   * Step A: Printer par RIGHT-CLICK -> "Printer properties" par CLICK (Dhyan rahe: simple "Properties" nahi, "Printer properties" select karna hai).
+//   * Step B: "Ports" tab par click karo -> List me active checkmarked port (e.g. `IP_192.168.1.200` ya Standard TCP/IP Port) ko highlight karke "Configure Port..." button par CLICK karo.
+//   * Step C (The SNMP Fix): Sabse neeche bane "SNMP Status Enabled" checkbox ko UNCHECK (untick) karta hai!
+//     - Root Cause Rationale: Enterprise firewall ya network switch UDP port 161 (SNMP) ko block karte hain. Jab Windows printer se SNMP response nahi paata, toh printer online hone par bhi fake "Offline" status show karta hai — ise uncheck karte hi printer instantly "Ready / Online" aa jata hai!
+//   * Step D: "OK" -> "Apply" par click karo.
+// - Step 2: WSD to Standard TCP/IP Port Conversion (Fixing Sleep & Wakeup Offline Drops):
+//   Command: `Win + R` -> type `control printers` -> Enter.
+//   Kaam: Windows 10/11 ke default WSD (Web Services for Devices) ghost port ko permanent Standard TCP/IP port me migrate karna.
+//   Andar jaakar (Step-by-Step Entry Rules):
+//   * Step A (Issue Identification): Agar port type `WSD-xxxx` dikhe, toh printer sleep mode me jate hi offline ho jata hai aur PC dubara reconnect nahi kar paata.
+//   * Step B: Printer par RIGHT-CLICK -> "Printer properties" -> "Ports" tab -> "Add Port..." button par CLICK karo.
+//   * Step C: "Standard TCP/IP Port" select karo -> "New Port..." par click karo -> Wizard khulega, "Next" dabao.
+//   * Step D: "Printer Name or IP Address" field me printer ka static IP address daalo (e.g. `192.168.1.200`) -> "Next" -> "Finish" -> "Close" dabao.
+//   * Step E: Naya IP port auto-tick ho jayega -> "Apply" -> "OK" click karo (Ab printer sleep hone par bhi kabhi offline nahi hoga).
+// - Step 3: Print Processor & Spool Datatype Reset (Fixing 0-Byte Frozen Jobs):
+//   Command: `Win + R` -> type `control printers` -> Enter.
+//   Kaam: Corrupt EMF/RAW print data crash ko rokna aur direct hardware bypass test karna.
+//   Andar jaakar (Step-by-Step Entry Rules):
+//   * Step A: Printer par RIGHT-CLICK -> "Printer properties" -> "Advanced" tab par CLICK karo -> "Print Processor..." button par CLICK karo.
+//   * Step B: "Print processor" me `winprint` select karo, aur "Default data type" me `RAW` select karo -> "OK" dabao (agar custom vendor EMF format par atka ho, toh jobs queue me freeze ho jati hain).
+//   * Step C (Bypass Spooler Diagnostic): Agar queue baar-baar corrupt ho rahi ho, toh diagnostic ke liye "Print directly to the printer" select karo -> "Apply". Isse print data Spooler me save huye bina seedha printer ko transfer hota hai.
+// - Step 4: Web Management Console (EWS) & Network Socket Audit:
+//   Command: `Win + R` -> type `cmd` -> Enter.
+//   Kaam: Physical link, raw print port 9100 socket listening, aur printer internal sensors audit karna.
+//   Andar jaakar (Step-by-Step CLI & Web Rules):
+//   * Step A (Continuous Ping): `ping 192.168.1.200 -t` (0% packet loss aur <2ms response time verify karta hai).
+//   * Step B (Port 9100 Socket Test via PowerShell): `powershell Test-NetConnection -ComputerName 192.168.1.200 -Port 9100` -> Result me `TcpTestSucceeded : True` confirm karta hai (raw print port open hai).
+//   * Step C (EWS Web Console): Web browser khol kar URL me type karo `http://192.168.1.200` -> Printer ka web console khulega -> Real-time Paper Jam sensors, Door open status, aur Toner percentage verify karta hai.
+// - Step 5: Test Page & End-to-End Functional Verification:
+//   Command: `Win + R` -> type `control printers` -> Enter.
+//   Kaam: Changes confirm karne ke liye physical test print nikalna.
+//   Andar jaakar: Printer par RIGHT-CLICK -> "Printer properties" -> "General" tab par CLICK -> "Print Test Page" button par CLICK karta hai aur physical tray se page verify karta hai.
 
 
 // ================================================================================
