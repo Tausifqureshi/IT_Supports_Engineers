@@ -42,7 +42,22 @@
 //   Command: `Win + R` -> type `control printers` -> Enter.
 //   Kaam: Print queue khol kar offline mode disable karne ke liye.
 //   Andar jaakar: Target printer par DOUBLE-CLICK karo -> top menu me "Printer" par click karo -> "Use Printer Offline" par agar TICK (✔) laga ho, toh click karke UNCHECK karta hai (printer instantly online aa jata hai).
-// - L1 Ki Limit: Agar service restart karne ke thodi der baad Spooler fir se ruk jaye, ya "Use Printer Offline" uncheck karne par bhi printer offline hi dikhaye, toh issue corrupt driver ya network SNMP port block ka hota hai, jise L2 engineer root cause se fix karta hai.
+// - Problem 5: Laptop Wi-Fi Scan Nahi Kar Raha / "No Wi-Fi Networks Found" (WLAN AutoConfig Stopped):
+//   Command: `Win + R` -> type `services.msc` -> Enter.
+//   Kaam: Wireless LAN background management service ko start/restart karne ke liye.
+//   Andar jaakar: List me se "WLAN AutoConfig" (WlanSvc) par RIGHT-CLICK -> "Restart" select karta hai; agar Stopped ho toh RIGHT-CLICK -> "Properties" -> Startup type me "Automatic" set karke "Start" button dabata hai -> "Apply" -> "OK" (Turant available Wi-Fi networks scan hona start ho jate hain).
+// - Problem 6: Speaker Icon Par Red Cross 'X' / Sound Output Gayab (Windows Audio Stopped):
+//   Command: `Win + R` -> type `services.msc` -> Enter.
+//   Kaam: Audio engine buffer ko restart karne ke liye.
+//   Andar jaakar: "Windows Audio" (AudioSrv) par RIGHT-CLICK -> "Restart" karta hai -> Popup aayega "Windows Audio Endpoint Builder will also restart", "Yes" confirm karta hai (Audio turant normal ho jata hai).
+// - Problem 7: Windows Update 0% Par Atka Hai (wuauserv & BITS Stuck Download):
+//   Command: `Win + R` -> type `services.msc` -> Enter.
+//   Kaam: Stuck update downloading buffer ko flush karke fresh download trigger karna.
+//   Andar jaakar:
+//   * Step A: "Windows Update" par RIGHT-CLICK -> "Stop" karta hai; "Background Intelligent Transfer Service" (BITS) par RIGHT-CLICK -> "Stop" karta hai.
+//   * Step B: `Win + R` -> type `C:\Windows\SoftwareDistribution\Download` -> Enter -> saari temporary download files [Shift + Delete] se delete karta hai.
+//   * Step C: Wapas services console me dono services ("Windows Update" aur "BITS") par RIGHT-CLICK -> "Start" select karta hai.
+// - L1 Ki Limit: Agar service restart karne ke thodi der baad Spooler fir se ruk jaye, "Use Printer Offline" uncheck karne par bhi printer offline hi dikhaye, ya service crash loop me chali jaye, toh issue corrupt driver, registry lock ya network SNMP port block ka hota hai, jise L2 engineer root cause se fix karta hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Print Spooler baar-baar crash kyun ho raha hai, usko jad se khatam karna.
@@ -144,6 +159,14 @@
 //   Command: `Win + R` -> type `devmgmt.msc` -> Enter.
 //   Kaam: Basic driver update wizard chalane ke liye.
 //   Andar jaakar: Yellow mark wale device par RIGHT-CLICK -> "Update driver" -> "Search automatically for drivers" chunta hai.
+// - Problem 3: Bad Driver Update Ke Baad Glitch (Roll Back Driver):
+//   Command: `Win + R` -> type `devmgmt.msc` -> Enter.
+//   Kaam: Windows update ke baad display flicker ya sound band hone par previous working driver par lautna.
+//   Andar jaakar: Affected device par RIGHT-CLICK -> "Properties" -> "Driver" tab par CLICK -> "Roll Back Driver" button par click karta hai -> Reason choose karke "Yes" dabata hai (Driver pichle safe version par revert ho jata hai).
+// - Problem 4: Device Icon Par Downward Black Arrow (↓) Dikhna (Disabled Device):
+//   Command: `Win + R` -> type `devmgmt.msc` -> Enter.
+//   Kaam: Accidentally disabled network card, Bluetooth ya audio controller ko activate karna.
+//   Andar jaakar: Disabled device par RIGHT-CLICK -> "Enable device" par click karta hai.
 // - L1 Ki Limit: Agar driver online na mile ya Code 10 / Code 43 error aaye, toh ticket L2 ko escalate hoti hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
@@ -321,6 +344,13 @@
 //   Command: `Win + R` -> type `mstsc` -> Enter.
 //   Kaam: Remote Desktop Connection launcher kholne ke liye.
 //   Andar jaakar: Remote PC ka IP address enter karta hai -> "Connect" dabata hai -> Domain credentials daalta hai (`DOMAIN\username`).
+// - Problem 2: Screen Resolution, Dual-Monitor & Clipboard Setup:
+//   Command: `Win + R` -> type `mstsc` -> Enter.
+//   Kaam: Remote session me commands copy-paste enable karna aur multi-monitor screen configure karna.
+//   Andar jaakar:
+//   * Step A: "Show Options" dropdown par CLICK karo -> "Local Resources" tab me "Clipboard" checkbox TICK karo (text/scripts copy-paste allow karne ke liye).
+//   * Step B: "Display" tab me "Display configuration" slider ko Full Screen par set karo (agar user ko dual screens chahiye toh "Use all my monitors for the remote session" TICK karo).
+//   * Tip: Remote session me Full Screen aur Window mode switch karne ka keyboard shortcut: `Ctrl + Alt + Break` (ya `Ctrl + Alt + Pause`).
 // - L1 Ki Limit: "Remote Desktop cannot connect to the remote computer" error aane par L1 engineer ticket L2 ko escalate kar deta hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
@@ -551,6 +581,10 @@
 //   Command: `Win + R` -> type `lusrmgr.msc` -> Enter.
 //   Kaam: Local computer par naya secure password assign karna.
 //   Andar jaakar: "Users" folder me target user par RIGHT-CLICK -> "Set Password..." -> "Proceed" button par click -> Naya password enter karo -> "OK".
+// - Problem 3: Kiosk / Billing PC Ke Liye "Password Never Expires" Set Karna:
+//   Command: `Win + R` -> type `lusrmgr.msc` -> Enter.
+//   Kaam: Unattended counter machine par har month password change hone ka interrupt prompt rokna.
+//   Andar jaakar: "Users" folder me user par RIGHT-CLICK -> "Properties" -> "Password never expires" checkbox TICK karo -> "User must change password at next logon" UNCHECK karo -> "Apply" -> "OK".
 // - L1 Ki Limit: Agar user domain account ka ho (ADUC me hona chahiye) ya machine par domain user ko local administrative rights dene hon, toh L2 ko escalate hota hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
@@ -647,6 +681,10 @@
 //   Command: `Win + R` -> type `secpol.msc` -> Enter.
 //   Kaam: Pata lagana ki user kitni baar galat password daalega toh account freeze hoga.
 //   Andar jaakar: Left pane me `Security Settings` > `Account Policies` > `Account Lockout Policy` par CLICK -> dekhta hai "Account lockout threshold" (e.g. 5 invalid attempts) aur "Account lockout duration" (e.g. 15 ya 30 minutes) kitna configured hai.
+// - Step 2: Password Complexity & Expiry Policy Check:
+//   Command: `Win + R` -> type `secpol.msc` -> Enter.
+//   Kaam: Check karna ki company password policy me minimum characters aur expiry rules kya hain.
+//   Andar jaakar: Left pane me `Security Settings` > `Account Policies` > `Password Policy` par CLICK -> inspect karta hai: "Minimum password length" (e.g. 8-12 characters), "Password must meet complexity requirements" (Enabled), aur "Maximum password age" (e.g. 42 ya 90 days).
 // - L1 Ki Limit: Advanced audit failure logging enable karna, SMB signing enforce karna, ya UAC administrative rules setup karna L2 ko escalate hota hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
@@ -694,6 +732,10 @@
 //   Command: `Win + R` -> type `wf.msc` -> Enter.
 //   Kaam: Har kisi ke liye port khula chhodne ke bajaye sirf official application server ko allow karna.
 //   Andar jaakar: Banaye gaye rule par DOUBLE-CLICK -> "Scope" tab me jao -> "Remote IP address" me "These IP addresses" radio button choose karo -> "Add..." click karke application server ka exact IP daal kar "OK" -> "Apply" karta hai.
+// - Step 3: Inbound ICMPv4 Echo Allow Karna (Ping Response Enable Karna):
+//   Command: `Win + R` -> type `wf.msc` -> Enter.
+//   Kaam: Network switch ya support desk se PC ping karne par "Request timed out" aane par ICMP reply enable karna.
+//   Andar jaakar: "Inbound Rules" par CLICK -> List me scroll karke "File and Printer Sharing (Echo Request - ICMPv4-In)" rule dhoondo -> Us par RIGHT-CLICK -> "Enable Rule" select karta hai (Client machine instantly pingable ho jati hai!).
 
 
 // ================================================================================

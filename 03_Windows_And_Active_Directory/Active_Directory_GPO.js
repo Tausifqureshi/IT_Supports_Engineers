@@ -43,6 +43,10 @@
 //   Andar jaakar: User par DOUBLE-CLICK -> "Member Of" tab par CLICK -> "Add..." button par click -> Group ka naam search karo (e.g. "Finance_Share_RW") -> "Check Names" button par click (underlined hoga) -> "OK" -> "Apply" -> "OK".
 //   Important Note: User ko bolo: "PC ko ek baar Sign-out karke dobara login karein", kyunki Windows login ke waqt naye Kerberos security token load karta hai!
 
+// - Problem 4: Employee Resignation / Long Leave (Disable & Enable Account):
+//   Command: `Win + R` -> type `dsa.msc` -> Enter.
+//   Kaam: Security compliance ke liye unapproved domain login freeze karna ya employee return hone par access restore karna.
+//   Andar jaakar: User search karke us par RIGHT-CLICK -> "Disable Account" select karta hai -> "Object has been disabled" popup aayega (User icon par chhota downward black arrow aa jata hai). Rejoin karne par: RIGHT-CLICK -> "Enable Account" select karta hai.
 // - L1 Ki Limit: Agar user login karne par bole "The trust relationship between this workstation and the primary domain failed", repeated lockout caller PC audit, ya OU restructure L2 ko di jaati hai.
 
 
