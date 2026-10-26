@@ -712,28 +712,22 @@
 // --------------------------------------------------------------------------------
 // [ CONCEPT: Hardware Abstraction & Firmware Architecture Engine ]
 // Windows hardware components, BIOS/UEFI firmware architecture, Secure Boot cryptography, aur driver resource sharing ka master diagnostic viewer.
+// (Note: Yeh ek direct inspection tool hai — isme L1/L2 ka artificial split nahi balki standard hardware aur firmware audit hota hai).
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
-// Target: PC ke hardware specs, serial number, processor aur RAM capacity audit karna.
-// - Step 1: System Specs Note Karna (Hardware Audit):
+// * STEP 1: Quick Hardware Specs & Asset Audit:
 //   Command: `Win + R` -> type `msinfo32` -> Enter.
-//   Kaam: IT Asset Management ke liye machine configuration report nikalna.
-//   Andar jaakar: Left pane me "System Summary" par CLICK karta hai -> Right pane me note karta hai: OS Name, System Manufacturer/Model (e.g. HP EliteDesk 800 G6), Processor (e.g. Intel Core i7-10700), aur Total Physical Memory (RAM 16.0 GB).
-// - L1 Ki Limit: BIOS mode mismatch (Legacy vs UEFI), BitLocker PCR validation failure, ya hardware IRQ conflict analysis L2 ko escalate hota hai.
+//   Kaam: IT Asset Management ke liye PC ke physical specs, model number, processor aur RAM note karna.
+//   Andar jaakar: Left pane me "System Summary" par CLICK karo -> Right pane me note karo: OS Name, System Model (e.g. HP EliteDesk 800 G6), Processor (e.g. Intel Core i7-10700), aur Total Physical Memory (RAM 16.0 GB).
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
-// Target: UEFI vs Legacy boot check, Secure Boot State audit, Kernel DMA protection, aur IRQ sharing conflicts audit.
-// - Step 1: Modern Security & Firmware Compliance Audit:
+// * STEP 2: Modern UEFI, Secure Boot & Hardware Conflict Audit (Advanced):
 //   Command: `Win + R` -> type `msinfo32` -> Enter.
-//   Kaam: Machine corporate security compliance me pass ho rahi hai ya nahi check karna.
-//   Andar jaakar: "System Summary" me inspect karta hai:
-//   * "BIOS Mode": `UEFI` hona zaroori hai (agar Legacy hai toh Windows 11 upgrade fail hoga).
-//   * "Secure Boot State": `On` hona chahiye (Rootkit boot virus protection ke liye).
-//   * "Virtualization-based security": `Running` hona chahiye (Credential Guard protection).
-// - Step 2: Hardware Resource Conflict Analysis:
-//   Command: `Win + R` -> type `msinfo32` -> Enter.
-//   Kaam: Blue Screen (BSOD) crashes aane par hardware IRQ channel overlaps pakadna.
-//   Andar jaakar: Left pane se `Hardware Resources` > `Conflicts/Sharing` expand karta hai -> Check karta hai do alag PCIe cards (jaise dedicated GPU aur Network NIC) same IRQ channel par collision toh nahi kar rahe.
+//   Kaam: Machine corporate security compliance (UEFI, Secure Boot) aur hardware device conflicts trace karna.
+//   Andar jaakar:
+//   * "System Summary" me inspect karo:
+//     - "BIOS Mode": `UEFI` hona zaroori hai (agar Legacy hai toh Windows 11 upgrade fail hoga).
+//     - "Secure Boot State": `On` hona chahiye (Rootkit boot virus protection ke liye).
+//     - "Virtualization-based security": `Running` hona chahiye (Credential Guard protection).
+//   * Hardware Resource Conflict Analysis: Left pane se `Hardware Resources` > `Conflicts/Sharing` expand karo -> Check karo do alag PCIe cards (jaise dedicated GPU aur Network NIC) same IRQ channel par collision toh nahi kar rahe.
 
 
 // ================================================================================
@@ -826,27 +820,23 @@
 // --------------------------------------------------------------------------------
 // [ CONCEPT: Graphics Pipeline & Multimedia Acceleration Subsystem ]
 // Windows display driver model (WDDM), Direct3D hardware acceleration, monitor refresh rates, aur GPU VRAM ka hardware verification utility.
+// (Note: Yeh ek direct display diagnostic tool hai — isme L1/L2 ka artificial split nahi balki GPU hardware aur Direct3D acceleration check hoti hai).
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
-// Target: Monitor resolution, GPU model aur dedicated VRAM verify karna.
-// - Step 1: Display Specs Verification:
+// * STEP 1: Display Specs & Driver Verification:
 //   Command: `Win + R` -> type `dxdiag` -> Enter.
-//   Kaam: Graphics hardware details check karna.
-//   Andar jaakar: "Display" tab par CLICK -> Device Name (e.g. Intel UHD Graphics / NVIDIA GeForce), Display Memory (VRAM), aur Current Display Mode (1920 x 1080 60Hz) verify karta hai.
-// - L1 Ki Limit: Display flickering, multiple monitor rendering failures, ya DirectX hardware acceleration crashes L2 ko escalate hote hain.
+//   Kaam: Graphics card model, dedicated VRAM, aur display resolution verify karna.
+//   Andar jaakar: "Display" tab par CLICK karo -> Device Name (e.g. Intel UHD Graphics / NVIDIA GeForce), Display Memory (VRAM), aur Current Display Mode (1920 x 1080 60Hz) note karo.
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
-// Target: Direct3D hardware acceleration engine verify karna aur WDDM driver version crash audit.
-// - Step 1: Hardware Acceleration Verification:
+// * STEP 2: Direct3D Hardware Acceleration & Crash Audit:
 //   Command: `Win + R` -> type `dxdiag` -> Enter.
-//   Kaam: GPU graphics acceleration broken hone par identify karna.
+//   Kaam: GPU acceleration broken hone par verify karna aur display driver crashes inspect karna.
 //   Andar jaakar:
-//   * "Display" tab me ensure karta hai:
+//   * "Display" tab me ensure karo:
 //     - "DirectDraw Acceleration": `Enabled`
 //     - "Direct3D Acceleration": `Enabled`
 //     - "AGP Texture Acceleration": `Enabled`
 //     (Agar ye Disabled hain, toh graphics driver corrupt ho chuka hai, clean reinstall zaroori hai).
-//   * Notes Box Inspection: Neeche "Notes" box me padhta hai: "No problems found" likha hai ya display driver crash ka event logged hai.
+//   * Notes Box Inspection: Neeche "Notes" box me padho: "No problems found" likha hai ya display driver crash ka event logged hai.
 
 
 // ================================================================================
@@ -855,30 +845,20 @@
 // --------------------------------------------------------------------------------
 // [ CONCEPT: Volatile Application Caches & Kernel Temporary Buffers ]
 // Windows operating system aur 3rd party applications ka temporary runtime swap space jo crash hone par purge na hone ki wajah se disk space consume karta hai.
+// (Note: Yeh direct cache cleanup task hai — user profile cache aur system kernel cache dono clear karna).
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
-// Target: Current user profile ka local application temp cache clean karna jab PC/Office slow chale.
-// - Step 1: User Temp Folder Purge:
+// * STEP 1: User-Level Temporary Cache Clear (%temp%):
 //   Command: `Win + R` -> type `%temp%` -> Enter.
-//   Kaam: User-level cache aur stuck temp files delete karna.
-//   Andar jaakar: Folder khulne par keyboard par `Ctrl + A` dabakar sab select karta hai -> `Shift + Delete` dabakar permanently delete karta hai -> Agar "File In Use" popup aaye toh "Do this for all current items" checkbox TICK karke "Skip" par click karta hai.
-// - L1 Ki Limit: System-wide temp locks aur C: drive root OS temp clean karna L2 ko escalate hota hai.
+//   Kaam: Current logged-in user profile ka application temp cache clean karna jab PC ya browser slow chale.
+//   Andar jaakar: Folder khulne par keyboard par `Ctrl + A` dabakar sab select karo -> `Shift + Delete` dabakar permanently delete karo -> Agar "File In Use" popup aaye toh "Do this for all current items" checkbox TICK karke "Skip" par click karo.
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
-// Target: System kernel temp, Prefetch index files, aur broken Windows update download cache wipe karna.
-// - Step 1: System-Level Temp Purge:
+// * STEP 2: System-Level Kernel Temp & Broken Update Cache Wipe (temp):
 //   Command: `Win + R` -> type `temp` -> Enter.
-//   Kaam: OS level temporary swap buffers delete karna.
-//   Andar jaakar: Admin permission prompt aane par "Continue" click -> `Ctrl + A` -> `Shift + Delete` -> in-use files par "Skip" karta hai.
-// - Step 2: Corrupted Application Prefetch Reset:
-//   Command: `Win + R` -> type `prefetch` -> Enter.
-//   Kaam: Corrupted application launch cache reset karna.
-//   Andar jaakar: `Ctrl + A` -> `Delete` karta hai.
-// - Step 3: Windows Update Broken Download Cache Wipe:
-//   Command: `Win + R` -> type `cmd` (Run as Administrator) -> Enter.
-//   Kaam: Windows update 0x80070002 errors fix karna.
-//   Andar jaakar: Sequential commands chalata hai:
-//   `net stop wuauserv` -> `Win + R` -> type `C:\Windows\SoftwareDistribution\Download` -> sab delete -> `net start wuauserv`.
+//   Kaam: Operating system level temporary buffers aur corrupted Windows Update download cache clean karna.
+//   Andar jaakar:
+//   * System Temp: Admin permission prompt aane par "Continue" click -> `Ctrl + A` -> `Shift + Delete` -> in-use files par "Skip" karo.
+//   * Broken Update Download Cache: CMD Admin me sequence chalao:
+//     `net stop wuauserv` -> `Win + R` -> type `C:\Windows\SoftwareDistribution\Download` -> sab delete karo -> `net start wuauserv`.
 
 
 // ================================================================================
@@ -915,25 +895,17 @@
 // --------------------------------------------------------------------------------
 // [ CONCEPT: Windows Shell User/Machine Autorun Profiles ]
 // Windows login session initialization ke waqt automated application launchers ko execute karne ka shell folder architecture.
+// (Note: Single user shortcut vs machine-wide multi-user kiosk setup ka direct standard).
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
-// Target: Specific user ke login hote hi required application auto-launch karana.
-// - Step 1: User-Level Startup App Add Karna:
+// * STEP 1: Current User Ke Liye App Auto-Start (shell:startup):
 //   Command: `Win + R` -> type `shell:startup` -> Enter.
-//   Kaam: Current user ke login hone par customized software open karana.
-//   Andar jaakar: Required application ke shortcut file ko is folder ke andar Copy -> Paste kar deta hai.
-// - L1 Ki Limit: Machine-wide sabhi users (kiosk, multi-shift) ke liye auto-start configure karna ya registry startup audit L2 ko di jaati hai.
+//   Kaam: Specific user ke login hote hi required application shortcut auto-launch karana.
+//   Andar jaakar: Target application ke shortcut file ko is folder me Copy -> Paste kar do.
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
-// Target: All Users (Machine-wide) ke liye software auto-run karana aur malicious autorun entries inspect karna.
-// - Step 1: Machine-Wide (All Users) Auto-Start Setup:
+// * STEP 2: Machine-Wide (All Users) Kiosk Auto-Start (shell:common startup):
 //   Command: `Win + R` -> type `shell:common startup` -> Enter.
-//   Kaam: Computer par login karne wale har domain user ke liye software launch karna.
-//   Andar jaakar: Folder khulne par application shortcut paste karta hai -> Admin prompt par "Continue" click karta hai.
-// - Step 2: Registry Startup Security Audit:
-//   Command: `Win + R` -> type `regedit` -> Enter.
-//   Kaam: Unauthorized persistence scripts inspect karna.
-//   Andar jaakar: `HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run` me inspect karta hai koi unauthorized script ya background malware boot par inject toh nahi ho raha.
+//   Kaam: Computer par login karne wale har domain user / shift worker ke liye software auto-run karana.
+//   Andar jaakar: Application shortcut paste karo -> Admin prompt par "Continue" click karo. Registry audit ke liye: `Win + R` -> type `regedit` -> Enter -> `HKLM\Software\Microsoft\Windows\CurrentVersion\Run` me inspect karo unauthorized scripts toh nahi hain.
 
 
 // ================================================================================
@@ -942,28 +914,22 @@
 // --------------------------------------------------------------------------------
 // [ CONCEPT: Local Credential Cache & Automated Interactive Logon ]
 // Windows logon architecture jisme automatic authentication credentials store kiye jate hain taaki unattended computers bina password boot ho sakein.
+// (Note: Kiosk / FIDS display auto-logon aur user role management ka direct operational tool).
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
-// Target: Unattended kiosk, airport FIDS display, ya hotel lobby PC par boot hote hi bina password auto-login configure karna.
-// - Step 1: Kiosk Auto-Login Setup:
+// * STEP 1: Kiosk & Airport FIDS Display Auto-Logon Setup (Without Password):
 //   Command: `Win + R` -> type `netplwiz` -> Enter.
-//   Kaam: PC reboot hote hi automated interactive session open karwana.
+//   Kaam: Unattended kiosk, FIDS screen, ya hotel lobby PC par boot hote hi bina password auto-login karana.
 //   Andar jaakar:
 //   * Step A: List se target user account select karo (e.g. `Kiosk_User` ya `FIDS_Term`).
 //   * Step B: Upar bane checkbox "Users must enter a user name and password to use this computer" ko UNCHECK (untick) karo -> "Apply" par click karo.
-//   * Step C: Popup window me user ka Password aur Confirm Password type karo -> "OK" -> "OK". (Reboot karne par bina password maange direct desktop open ho jayega).
-// - L1 Ki Limit: Group membership elevation (Domain user ko local admin banana) ya Secure Sign-in policy audit L2 ko di jaati hai.
+//   * Step C: Popup window me user ka Password aur Confirm Password type karo -> "OK" -> "OK". (Reboot karne par bina password maange direct desktop open hoga).
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
-// Target: User ki local security group role elevate/demote karna aur Ctrl+Alt+Del mandatory login enforce karna.
-// - Step 1: Local Group Membership Elevation:
+// * STEP 2: User Group Membership & Secure Sign-in (Advanced):
 //   Command: `Win + R` -> type `netplwiz` -> Enter.
-//   Kaam: Local access privileges calibrate karna.
-//   Andar jaakar: User select -> "Properties" button par CLICK -> "Group Membership" tab par CLICK -> "Administrator" ya "Standard user" radio button select karke "Apply" -> "OK" karta hai.
-// - Step 2: Secure Sign-in (Ctrl + Alt + Del) Enforcement:
-//   Command: `Win + R` -> type `netplwiz` -> Enter.
-//   Kaam: Phishing lockscreen overlay attacks se user credentials protect karna.
-//   Andar jaakar: "Advanced" tab par CLICK -> Neeche "Secure sign-in" section me "Require users to press Ctrl + Alt + Delete" checkbox TICK karta hai.
+//   Kaam: User ko Administrator ya Standard role assign karna aur secure login enforce karna.
+//   Andar jaakar:
+//   * Group Role: User select karo -> "Properties" button -> "Group Membership" tab -> "Administrator" ya "Standard user" choose karke "Apply" -> "OK" karo.
+//   * Secure Sign-in: "Advanced" tab par CLICK karo -> "Require users to press Ctrl + Alt + Delete" checkbox TICK karke phishing screen attacks prevent karo.
 
 
 // ================================================================================
