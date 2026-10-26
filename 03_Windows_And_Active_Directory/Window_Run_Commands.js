@@ -102,6 +102,10 @@
 //   Andar jaakar: Sequential commands chalata hai: `ipconfig /release` -> `ipconfig /renew` -> `ipconfig /flushdns`.
 // - Problem 3: Physical Layer Check:
 //   Kaam: RJ45 LAN cable reconnect karna aur port par Green/Amber link LED blink check karna.
+// - Problem 4: Windows Built-in Network Troubleshooter (Auto Diagnose):
+//   Command: `Win + R` -> type `ncpa.cpl` -> Enter.
+//   Kaam: Windows automatic troubleshooter run karke gateway reset aur virtual socket glitches fix karne ke liye.
+//   Andar jaakar: Adapter par RIGHT-CLICK -> "Diagnose" par click karta hai. Windows automatic gateway reset aur virtual socket glitches khud fix kar deta hai bina adapter disable kiye.
 // - L1 Ki Limit: Agar IPv4 me 169.254.x.x (APIPA) aa raha ho ya network driver crash ho, toh L1 engineer ticket L2 ko escalate kar deta hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
@@ -159,11 +163,7 @@
 //   Command: `Win + R` -> type `devmgmt.msc` -> Enter.
 //   Kaam: Basic driver update wizard chalane ke liye.
 //   Andar jaakar: Yellow mark wale device par RIGHT-CLICK -> "Update driver" -> "Search automatically for drivers" chunta hai.
-// - Problem 3: Bad Driver Update Ke Baad Glitch (Roll Back Driver):
-//   Command: `Win + R` -> type `devmgmt.msc` -> Enter.
-//   Kaam: Windows update ke baad display flicker ya sound band hone par previous working driver par lautna.
-//   Andar jaakar: Affected device par RIGHT-CLICK -> "Properties" -> "Driver" tab par CLICK -> "Roll Back Driver" button par click karta hai -> Reason choose karke "Yes" dabata hai (Driver pichle safe version par revert ho jata hai).
-// - Problem 4: Device Icon Par Downward Black Arrow (↓) Dikhna (Disabled Device):
+// - Problem 3: Device Icon Par Downward Black Arrow (↓) Dikhna (Disabled Device):
 //   Command: `Win + R` -> type `devmgmt.msc` -> Enter.
 //   Kaam: Accidentally disabled network card, Bluetooth ya audio controller ko activate karna.
 //   Andar jaakar: Disabled device par RIGHT-CLICK -> "Enable device" par click karta hai.
@@ -187,6 +187,10 @@
 //   Command: `Win + R` -> type `devmgmt.msc` -> Enter.
 //   Kaam: Barcode scanner ya gate reader USB disconnect hone se rokna.
 //   Andar jaakar: "Universal Serial Bus controllers" > "USB Root Hub" par RIGHT-CLICK -> "Properties" > "Power Management" me "Allow the computer to turn off this device to save power" ko UNCHECK karta hai.
+// - Step 5: Faulty Driver Roll Back (Recent Update Fix):
+//   Command: `Win + R` -> type `devmgmt.msc` -> Enter.
+//   Kaam: Naye Windows update se crash huye driver ko pichle stable version par revert karna.
+//   Andar jaakar: Device par RIGHT-CLICK -> "Properties" -> "Driver" tab -> "Roll Back Driver" button par click karta hai. (Isse bina internet ke purana working driver turant restore ho jata hai).
 
 
 // ================================================================================
@@ -202,6 +206,10 @@
 //   Command: `Win + R` -> type `eventvwr.msc` -> Enter.
 //   Kaam: System logs khol kar user ke bataye huye exact time par error identify karna.
 //   Andar jaakar: Left pane se "Windows Logs" > "Application" ya "System" par click karta hai -> Red color ka "Error" icon check karta hai.
+// - Problem 2: Error Severity Filter (Surface Quick View):
+//   Command: `Win + R` -> type `eventvwr.msc` -> Enter.
+//   Kaam: Hazaron "Information" logs ko hata kar sirf Red Critical/Error dekhna.
+//   Andar jaakar: Right pane me "Filter Current Log..." par click karta hai -> Event level me sirf "Critical" aur "Error" checkboxes ko TICK karke OK karta hai. Isse faltu logs hat jaate hain aur samne sirf system crash errors dikhte hain.
 // - L1 Ki Limit: Log me technical hexadecimal codes (e.g. 0xc0000005) ya Event ID 4625 aane par L1 engineer ticket L2 ko escalate kar deta hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
