@@ -419,36 +419,56 @@
 // [ CONCEPT: Windows Win32 Administrative Control Engine ]
 // System hardware abstraction, security credentials, mail profiles, aur storage encryption ka master control console.
 
+// * MASTER NAVIGATION (Control Panel Kaise Kholna Aur Use Karna Hai):
+// Command: `Win + R` -> type `control` -> Enter.
+// View Mode Setup: Control Panel khulne par top-right corner me "View by: Category" dropdown par CLICK karo -> "Large icons" select karo (isse saare administrative applets ek saath visible ho jate hain).
+
 // * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Settings):
-// Target: Standard hardware settings, default printers, aur sound test karna.
+// Target: Standard hardware settings, default printer, sound device aur network adapter quick fix karna.
 // - Kaam 1 (Printers & Queue Check):
-//   Direct Command: `control printers`
-//   Andar jaakar: Office ke network printer par RIGHT-CLICK karke "Set as default printer" select karta hai; stuck printing queue dekhne ke liye "See what's printing" khol kar error documents cancel karta hai.
+//   Command: `Win + R` -> type `control` -> Enter -> "Devices and Printers" par CLICK karo.
+//   (Direct Shortcut: `Win + R` -> type `control printers` -> Enter).
+//   Kaam: Default printer set karna aur atki hui printing queue clear karna.
+//   Andar jaakar: Office ke target printer par RIGHT-CLICK karo -> "Set as default printer" par click karta hai; printer par RIGHT-CLICK -> "See what's printing" par click -> Top menu bar se "Printer" > "Cancel All Documents" par click karke stuck jobs delete karta hai.
 // - Kaam 2 (Sound & Microphone Fix):
-//   Direct Command: `mmsys.cpl`
-//   Andar jaakar: User bole "Teams call me aawaz nahi aa rahi" toh "Playback" tab me headset par RIGHT-CLICK karke "Set as Default Device" karta hai; "Recording" tab me mic input level test karta hai.
+//   Command: `Win + R` -> type `control` -> Enter -> "Sound" par CLICK karo.
+//   (Direct Shortcut: `Win + R` -> type `mmsys.cpl` -> Enter).
+//   Kaam: Headset sound output aur mic input testing.
+//   Andar jaakar: "Playback" tab me user ke headset par RIGHT-CLICK -> "Set as Default Device" aur "Set as Default Communication Device" select karta hai; "Recording" tab me Microphone par RIGHT-CLICK -> "Properties" -> "Levels" tab me slider 100% check karke bolne par green bars check karta hai.
 // - Kaam 3 (Programs Install/Uninstall):
-//   Direct Command: `appwiz.cpl`
-//   Andar jaakar: Corrupt application par click karke "Uninstall" ya "Repair" karta hai.
-// - Kaam 4 (Network Adapter Reset):
-//   Direct Command: `ncpa.cpl`
-//   Andar jaakar: Wi-Fi ya Ethernet card par RIGHT-CLICK karke "Disable" fir 5 second baad "Enable" karke connection restart karta hai.
-// - L1 Ki Limit: Corrupt Outlook profiles, BitLocker recovery prompt, ya domain credential mismatch par L2 ko escalate karte hain.
+//   Command: `Win + R` -> type `control` -> Enter -> "Programs and Features" par CLICK karo.
+//   (Direct Shortcut: `Win + R` -> type `appwiz.cpl` -> Enter).
+//   Kaam: Corrupt application uninstall ya repair karna.
+//   Andar jaakar: Installed apps ki list me crashing software par LEFT-CLICK karke select karta hai -> Upar bar se "Uninstall" ya "Repair" button par click karta hai.
+// - Kaam 4 (Network Adapter Quick Reset):
+//   Command: `Win + R` -> type `control` -> Enter -> "Network and Sharing Center" par CLICK karo -> Left sidebar me "Change adapter settings" par CLICK karo.
+//   (Direct Shortcut: `Win + R` -> type `ncpa.cpl` -> Enter).
+//   Kaam: Freeze network card ko power cycle karna.
+//   Andar jaakar: "Ethernet" ya "Wi-Fi" card par RIGHT-CLICK -> "Disable" karta hai, fir 5 second wait karke RIGHT-CLICK -> "Enable" karta hai.
+// - L1 Ki Limit: Stale domain credentials remove karna, corrupt Outlook profiles rebuild karna, BitLocker recovery keys audit karna, ya system sleep power plans tweak karna L2 ko escalate karta hai.
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
-// Target: Corrupt Outlook profiles, cached domain credentials, BitLocker audit, aur counter sleep prevention.
-// - Step 1: Rebuilding Corrupted Outlook Profile (Mail Applet)
-//   Direct Command: `control mlcfg32.cpl` (bina Outlook khole direct Mail Configuration console kholta hai)
-//   Andar jaakar: "Show Profiles..." button par click -> "Add..." click karke naya profile name daalta hai -> Office 365 email configure karta hai -> "Always use this profile" me naya profile select karke "OK" karta hai. (Result: Outlook opening freeze/crash permanent solve).
+// Target: Corrupt Outlook profiles rebuild karna, cached domain passwords wipe karna, BitLocker audit, aur 24x7 counter sleep prevention.
+// - Step 1: Corrupted Outlook Profile Rebuild (Mail Applet)
+//   Command: `Win + R` -> type `control` -> Enter -> "Mail (Microsoft Outlook)" par CLICK karo.
+//   (Direct Shortcut: `Win + R` -> type `control mlcfg32.cpl` -> Enter).
+//   Kaam: Bina Outlook open kiye corrupt mailbox profile ko clean naye profile se replace karna.
+//   Andar jaakar: "Show Profiles..." button par CLICK -> "Add..." button par CLICK -> Profile Name type karo (e.g. Outlook_New) -> "OK" -> User ka Office 365 email/password verify karo -> "Always use this profile" dropdown me "Outlook_New" select karo -> "Apply" -> "OK".
 // - Step 2: Stale Domain Credentials Cleanup (Credential Manager)
-//   Direct Command: `control keymgr.dll`
-//   Andar jaakar: "Windows Credentials" tab par click -> "Generic Credentials" ke andar purane expired password wali entries (e.g. `MicrosoftOffice16_Data`, shared network drive passwords) ko expand karke "Remove" karta hai. (Result: Wrong cached password ki wajah se user account baar-baar lock hona band ho jata hai).
+//   Command: `Win + R` -> type `control` -> Enter -> "Credential Manager" par CLICK karo.
+//   (Direct Shortcut: `Win + R` -> type `control keymgr.dll` -> Enter).
+//   Kaam: Password change hone ke baad purane cached credentials delete karna (User account bar-bar lockout hone ka #1 reason).
+//   Andar jaakar: "Windows Credentials" tab par CLICK karo -> Neeche "Generic Credentials" section me purane expired passwords wali entries (jaise MicrosoftOffice16_Data ya network shared drive credentials) ke aage bane Dropdown Arrow par CLICK karo -> "Remove" button par CLICK -> "Yes" confirm karo.
 // - Step 3: BitLocker Drive Encryption & TPM Audit
-//   Direct Command: `control /name Microsoft.BitLockerDriveEncryption`
-//   Andar jaakar: C: drive par check karta hai "BitLocker on", TPM 2.0 status verify karta hai, aur "Back up your recovery key" se key ko Active Directory ya secure drive par backup karta hai.
+//   Command: `Win + R` -> type `control` -> Enter -> "BitLocker Drive Encryption" par CLICK karo.
+//   (Direct Shortcut: `Win + R` -> type `control /name Microsoft.BitLockerDriveEncryption` -> Enter).
+//   Kaam: Corporate disk encryption status verify karna aur recovery key backup lena.
+//   Andar jaakar: OS Drive (C:) ke aage dekhta hai: "BitLocker on". Agar key backup leni ho toh "Back up your recovery key" link par CLICK -> "Save to your cloud domain account" ya "Save to a file" select karke Active Directory/USB par safe backup karta hai.
 // - Step 4: Kiosk / 24x7 Counter Sleep Prevention (Power Options)
-//   Direct Command: `powercfg.cpl`
-//   Andar jaakar: "High performance" plan select karta hai -> "Change plan settings" -> "Put the computer to sleep: Never" aur "Turn off hard disk after: 0 (Never)" set karta hai taaki night shift me airport/hotel counter PC sleep mode me jaakar freeze na ho.
+//   Command: `Win + R` -> type `control` -> Enter -> "Power Options" par CLICK karo.
+//   (Direct Shortcut: `Win + R` -> type `powercfg.cpl` -> Enter).
+//   Kaam: 24x7 chalne wale airport counters, hotel reception aur hospital kiosks ko sleep mode me freeze hone se bachana.
+//   Andar jaakar: "High performance" radio button par CLICK karo -> Uske aage "Change plan settings" link par CLICK -> "Turn off the display: Never" aur "Put the computer to sleep: Never" dropdown select karta hai -> Neeche "Change advanced power settings" par CLICK -> "Hard disk" > "Turn off hard disk after: 0 (Never)" daal kar "Apply" -> "OK" karta hai.
 
 
 // ================================================================================
@@ -495,216 +515,485 @@
 //   Andar jaakar: Left pane se `System Tools` > `Task Scheduler` > `Task Scheduler Library` me jakar check karta hai ki company ka automatic night backup ya log cleanup script successfully run hua ya fail hua.
 
 
-// 13. lusrmgr.msc
-// * Naam: Local Users and Groups
-// * Kaam: Computer ke local user accounts, local passwords, aur local security groups manage karna.
-// * Airport Use Case: Local Administrator password reset karna ya domain user ko PC par local administrative rights dena.
+// 13. lusrmgr.msc — Local Users and Groups
+// --------------------------------------------------------------------------------
+// [ CONCEPT: Local Security Authority & SAM Database ]
+// Local computer ke Security Account Manager (SAM) database ke users aur built-in groups ko manage karne ka master console.
 
-// * STEP 1: PEHLA TAREEQA (Local User Password Reset / Unlock):
-// Step 1: [Win + R] -> type "lusrmgr.msc" -> Enter.
-// Step 2: "Users" folder par double-click karo -> targeted user (e.g. Administrator) par RIGHT-CLICK karo -> "Set Password..." -> "Proceed" -> Naya password enter karo -> "OK".
-// Step 3 (Unlock): User par RIGHT-CLICK -> "Properties" -> "Account is locked out" untick karo -> "Apply" -> "OK".
+// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// Target: Local user password reset aur locked account release karna.
+// - Problem 1: Local Account Lock Ho Gaya Hai ("The referenced account is currently locked out"):
+//   Command: `Win + R` -> type `lusrmgr.msc` -> Enter.
+//   Kaam: Local SAM database khol kar lockout flag hatana.
+//   Andar jaakar: Left pane me "Users" folder par DOUBLE-CLICK karta hai -> Locked user (jaise Administrator ya Cashier) par RIGHT-CLICK -> "Properties" -> "Account is locked out" checkbox UNCHECK (untick) karta hai -> "Apply" -> "OK".
+// - Problem 2: User Password Bhool Gaya (Local Password Reset):
+//   Command: `Win + R` -> type `lusrmgr.msc` -> Enter.
+//   Kaam: Local computer par naya secure password assign karna.
+//   Andar jaakar: "Users" folder me target user par RIGHT-CLICK -> "Set Password..." -> "Proceed" button par click -> Naya password enter karo -> "OK".
+// - L1 Ki Limit: Agar user domain account ka ho (ADUC me hona chahiye) ya machine par domain user ko local administrative rights dene hon, toh L2 ko escalate hota hai.
 
-// * STEP 2: DOOSRA TAREEQA (Domain User ko Local Administrator Banane Ka Process):
-// Step A: Left pane se "Groups" folder par click karo -> Center pane mein "Administrators" group par DOUBLE-CLICK karo.
-// Step B: "Add..." button par click karo -> domain format mein ID type karo (e.g. AIRPORT\tausif.admin) -> "Check Names" click karo (underlined hoga) -> "OK" -> "Apply" -> "OK".
-
-// * Interview Question & Answer:
-// Q: "Local user aur Domain user mein kya difference hai?"
-// Ans: "Local user sirf usi local PC par exist karta hai (SAM database). Domain user Active Directory Domain Controller par store hota hai aur pure network/domain mein authorized computers par login kar sakta hai."
-
-
-// 14. sysdm.cpl
-// * Naam: System Properties
-// * Kaam: Computer Name change karna, Workgroup se Domain join karna, Environment Variables set karna.
-// * Airport Use Case: Naye counter PC ko airport domain (e.g. airport.local) mein join karana.
-
-// * STEP 1: PEHLA TAREEQA (Computer Name Change & Domain Join):
-// Step 1: [Win + R] -> type "sysdm.cpl" -> Enter (Computer Name tab khulega).
-// Step 2: "Change..." button par click karo.
-// Step 3: "Computer name:" box mein standard hostname daalo (e.g. DXB-T3-CHK-014).
-// Step 4: "Member of" mein "Domain" choose karo -> domain name type karo (e.g. airport.local) -> "OK".
-// Step 5: Domain Admin credentials maangne par Username/Password enter karo -> "Welcome to domain" popup aayega -> "OK" -> "Restart Now".
-
-// * STEP 2: DOOSRA TAREEQA (Advanced Performance & Environment Variables):
-// Step A: "Advanced" tab par click karo -> "Performance" ke andar "Settings..." button par click karo.
-// Step B: "Adjust for best performance" select karo (sab visual effects band ho jayenge) -> "Apply" -> "OK".
-// Step C: "Environment Variables..." button par click karke System Variables mein Path verify karo.
+// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// Target: Domain user ko local admin banana aur built-in attack surface harden karna.
+// - Step 1: Domain User Ko Local Administrator Banane Ka Process:
+//   Command: `Win + R` -> type `lusrmgr.msc` -> Enter.
+//   Kaam: Specific domain engineer ya technical account ko local PC par admin rights dena.
+//   Andar jaakar: Left pane se "Groups" folder par CLICK -> Center pane me "Administrators" group par DOUBLE-CLICK -> "Add..." button par click -> domain format me account daalo (e.g. `AIRPORT\tausif.admin` ya `COMPANY\ITSupport`) -> "Check Names" button par click (name underline hoga) -> "OK" -> "Apply" -> "OK".
+// - Step 2: Unused Accounts Security Lockdown:
+//   Command: `Win + R` -> type `lusrmgr.msc` -> Enter.
+//   Kaam: Hacker backdoor attack surface band karna.
+//   Andar jaakar: Built-in "Guest" account par RIGHT-CLICK -> "Properties" -> "Account is disabled" ensure karta hai; default built-in "Administrator" account ko rename karke company policy follow karta hai.
 
 
-// 15. gpedit.msc
-// * Naam: Local Group Policy Editor
-// * Kaam: Windows OS ke local security policies, restrictions, USB blocking, aur auto-updates control karna.
-// * STEP 1: PEHLA TAREEQA (Local Restriction Apply Karna - USB Port Block):
-// Step 1: [Win + R] -> type "gpedit.msc" -> Enter.
-// Step 2: Navigate: Computer Configuration > Administrative Templates > System > Removable Storage Access.
-// Step 3: "All Removable Storage classes: Deny all access" par double-click karo -> "Enabled" select karo -> "Apply" -> "OK".
-// * STEP 2: DOOSRA TAREEQA (Policy Force Refresh Karna):
-// Step A: Policy change karne ke baad [Win + R] dabao -> type karo "cmd" -> Enter.
-// Step B: Command chalao: `gpupdate /force` taaki nayi policy instantly apply ho jaye.
+// ================================================================================
+
+// 14. sysdm.cpl — System Properties
+// --------------------------------------------------------------------------------
+// [ CONCEPT: Windows Core Identity, Domain Membership & Subsystem Tuning ]
+// Computer ka unique hostname, Active Directory domain trust membership, virtual paging memory aur user environment variables configure karne ka master engine.
+
+// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// Target: Computer Name set karna aur Workgroup se Active Directory Domain me join karana.
+// - Step 1: Computer Name Change & Domain Join:
+//   Command: `Win + R` -> type `sysdm.cpl` -> Enter.
+//   Kaam: Machine ki corporate identity register karna aur domain server se bind karna.
+//   Andar jaakar: "Computer Name" tab par "Change..." button par CLICK -> "Computer name:" box me company standard name daalo (e.g. `DXB-T3-CHK-014`) -> "Member of" me "Domain" radio button choose karo -> Domain Name type karo (e.g. `airport.local` ya `company.corp`) -> "OK" -> Domain Admin credentials prompt aane par Username/Password daalo -> "Welcome to the domain" popup -> "OK" -> "Restart Now" par click.
+// - L1 Ki Limit: Virtual memory paging size tuning, BSOD crash dump configuration, ya Remote Desktop NLA rules L2 ko escalate hote hain.
+
+// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// Target: OS visual performance boost, Pagefile virtual memory fix, aur Environment variables setup.
+// - Step 1: Visual Performance Optimization (Slow PC Boost):
+//   Command: `Win + R` -> type `sysdm.cpl` -> Enter.
+//   Kaam: Unnecessary visual animations band karke low-spec PC ko superfast banana.
+//   Andar jaakar: "Advanced" tab par CLICK -> "Performance" section me "Settings..." button par click -> "Visual Effects" me "Adjust for best performance" radio button select karta hai -> "Apply" -> "OK".
+// - Step 2: Virtual Memory / Paging File Sizing (Out of Memory Crashes Fix):
+//   Command: `Win + R` -> type `sysdm.cpl` -> Enter.
+//   Kaam: Physical RAM bharne par Windows commit charge crash hone se rokna.
+//   Andar jaakar: "Advanced" tab -> "Performance" Settings -> "Advanced" tab -> "Virtual memory" section me "Change..." button par click -> "Automatically manage paging file size" UNCHECK karo -> "Custom size" select karke Initial size (RAM x 1.5) aur Maximum size (RAM x 3) daal kar "Set" -> "OK" karta hai.
+// - Step 3: Environment Variables Path Setup:
+//   Command: `Win + R` -> type `sysdm.cpl` -> Enter.
+//   Kaam: Scripts aur software binary execution paths configure karna.
+//   Andar jaakar: "Advanced" tab -> "Environment Variables..." button -> "System variables" box me `Path` select karke "Edit..." click karke company scripts ya tools ka folder path add karta hai.
+// - Step 4: Remote Desktop NLA Enforcement:
+//   Command: `Win + R` -> type `sysdm.cpl` -> Enter.
+//   Kaam: Secure RDP connection allow karna.
+//   Andar jaakar: "Remote" tab par CLICK -> "Allow remote connections to this computer" TICK karta hai aur "Allow connections only from computers running Remote Desktop with Network Level Authentication" mandatory check karta hai.
 
 
-// 16. secpol.msc
-// * Naam: Local Security Policy
-// * Kaam: Password complexity rules, Account Lockout policies (e.g., 5 invalid attempts ke baad lockout duration), aur Audit logs configure karna.
-// * STEP 1: PEHLA TAREEQA (Account Lockout Policy Setup):
-// Step 1: [Win + R] -> type "secpol.msc" -> Enter.
-// Step 2: Security Settings > Account Policies > Account Lockout Policy par click karo.
-// Step 3: "Account lockout threshold" par double-click karke invalid attempts (e.g. 5) set karo -> "OK".
-// * STEP 2: DOOSRA TAREEQA (Password Complexity & Expiration Rules):
-// Step A: Security Settings > Account Policies > Password Policy par click karo.
-// Step B: "Password must meet complexity requirements" ko "Enabled" karo aur "Maximum password age" (e.g. 90 days) set karo.
+// ================================================================================
+
+// 15. gpedit.msc — Local Group Policy Editor
+// --------------------------------------------------------------------------------
+// [ CONCEPT: Local Policy Registry Enforcement Engine ]
+// Standalone Windows PC par operating system features, USB ports, Windows updates aur user restrictions enforce karne ka local management tool.
+
+// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// Target: Local restrictions verify karna aur policies ko manually force-refresh karna.
+// - Step 1: Policy Enforcement Check:
+//   Command: `Win + R` -> type `gpedit.msc` -> Enter.
+//   Kaam: Check karna ki local PC par koi specific restriction lagi hai ya nahi.
+//   Andar jaakar: Left pane me navigate karta hai: `Computer Configuration` > `Administrative Templates` > `System` > `Removable Storage Access` -> dekhta hai USB blocking rule Enabled hai ya Not Configured.
+// - Step 2: Policy Force Update:
+//   Command: `Win + R` -> type `cmd` -> Enter -> type `gpupdate /force` -> Enter.
+//   Kaam: Nayi policy ko bina reboot kiye turant active karna.
+// - L1 Ki Limit: Enterprise security baseline design karna, automatic update policies configure karna, ya User Rights Assignment L2 ko di jaati hai.
+
+// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// Target: Data leak prevention (USB block), update reboot prevention, aur local hardening.
+// - Step 1: USB Mass Storage Devices Block Karna (Data Leak Prevention):
+//   Command: `Win + R` -> type `gpedit.msc` -> Enter.
+//   Kaam: Kisi bhi user ya employee ko unauthorized pendrive/external HDD use karne se rokna.
+//   Andar jaakar: `Computer Configuration` > `Administrative Templates` > `System` > `Removable Storage Access` -> "All Removable Storage classes: Deny all access" par DOUBLE-CLICK -> "Enabled" radio button select karo -> "Apply" -> "OK".
+// - Step 2: Operational Shift Me Auto-Restart Disable Karna (Windows Update Freeze Protection):
+//   Command: `Win + R` -> type `gpedit.msc` -> Enter.
+//   Kaam: Live counter par kaam chalte waqt achanak Windows auto-reboot hone se rokna.
+//   Andar jaakar: `Computer Configuration` > `Administrative Templates` > `Windows Components` > `Windows Update` -> "No auto-restart with logged on users for scheduled automatic updates installations" par DOUBLE-CLICK -> "Enabled" select karo -> "Apply" -> "OK".
+// - Step 3: User Rights Assignment Security Audit:
+//   Command: `Win + R` -> type `gpedit.msc` -> Enter.
+//   Kaam: Sirf authorized IT groups ko logon aur RDP permission restrict karna.
+//   Andar jaakar: `Computer Configuration` > `Windows Settings` > `Security Settings` > `Local Policies` > `User Rights Assignment` -> "Allow log on through Remote Desktop Services" me jakar verify karta hai unauthorized users list me na hon.
 
 
-// 17. firewall.cpl  &  wf.msc
-// * firewall.cpl: Basic Windows Defender Firewall Control Panel.
-// * wf.msc: Windows Defender Firewall with Advanced Security.
-// * Airport Use Case: Check-in client DCS server ke saath communicate nahi kar pa raha kyunki port 8080 block hai.
+// ================================================================================
 
-// * STEP 1: PEHLA TAREEQA (Basic Firewall Status & Quick App Allow):
-// Step 1: [Win + R] -> type "firewall.cpl" -> Enter.
-// Step 2: Left sidebar se "Allow an app or feature through Windows Defender Firewall" par click karo.
-// Step 3: "Change settings" par click karo -> Application ke samne Domain/Private boxes par tick lagao -> "OK".
+// 16. secpol.msc — Local Security Policy
+// --------------------------------------------------------------------------------
+// [ CONCEPT: Local Security Hardening & Audit Infrastructure ]
+// Password complexity, account lockout thresholds, Kerberos security policies, aur security audit logs ka master security console.
 
-// * STEP 2: DOOSRA TAREEQA (wf.msc se Custom Port Open Karna — Inbound Rule):
-// Step A: [Win + R] -> type "wf.msc" -> Enter.
-// Step B: Left pane mein "Inbound Rules" par click karo -> Right pane mein "New Rule..." par click karo.
-// Step C: "Port" select karo -> Next -> "TCP" select karke "Specific local ports" mein port daalo (e.g. 8080) -> Next.
-// Step D: "Allow the connection" select karo -> Next -> Domain/Private/Public tick rehne do -> Next -> Rule Name daalo -> "Finish".
+// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// Target: Account lockout rules aur password complexity policies inspect karna.
+// - Step 1: Account Lockout Settings Check:
+//   Command: `Win + R` -> type `secpol.msc` -> Enter.
+//   Kaam: Pata lagana ki user kitni baar galat password daalega toh account freeze hoga.
+//   Andar jaakar: Left pane me `Security Settings` > `Account Policies` > `Account Lockout Policy` par CLICK -> dekhta hai "Account lockout threshold" (e.g. 5 invalid attempts) aur "Account lockout duration" (e.g. 15 ya 30 minutes) kitna configured hai.
+// - L1 Ki Limit: Advanced audit failure logging enable karna, SMB signing enforce karna, ya UAC administrative rules setup karna L2 ko escalate hota hai.
 
-
-// 18. inetcpl.cpl
-// * Naam: Internet Properties
-// * Kaam: Proxy settings, Trusted Sites, SSL/TLS certificates aur browser security zones configure karna.
-// * Airport Use Case: Web-based DCS application ya airport internal portal open nahi ho raha kyunki trusted site add nahi hai ya proxy mismatch hai.
-
-// * STEP 1: PEHLA TAREEQA (Trusted Sites Add Karna):
-// Step 1: [Win + R] -> type "inetcpl.cpl" -> Enter.
-// Step 2: "Security" tab par click karo -> "Trusted sites" icon par click karo -> "Sites" button par click karo.
-// Step 3: "Add this website to the zone:" box mein internal URL daalo (e.g. https://*.emirates.corp) -> "Add" -> "Close".
-
-// * STEP 2: DOOSRA TAREEQA (Proxy Server Setup & SSL State Clear):
-// Step A: "Connections" tab par click karo -> "LAN settings" button par click karo.
-// Step B: "Use a proxy server for your LAN" tick mark karke Proxy Address aur Port fill karo -> "OK".
-// Step C: "Content" tab par jao -> "Clear SSL state" button par click karo ("The SSL cache was successfully cleared").
+// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// Target: Brute-force attacks detect karne ke liye Audit logging enable karna aur UAC lockdown lagana.
+// - Step 1: Detailed Logon Failure Audit Enable Karna (Brute Force Detection):
+//   Command: `Win + R` -> type `secpol.msc` -> Enter.
+//   Kaam: System par hone wale unauthorized login attempts ko Event Viewer me capture karwana.
+//   Andar jaakar: `Security Settings` > `Advanced Audit Policy Configuration` > `Audit Policies` > `Logon/Logoff` -> "Audit Logon" par DOUBLE-CLICK -> "Success" aur "Failure" dono checkboxes TICK karta hai -> "Apply" -> "OK". (Result: Attacker ka IP aur machine name Event Viewer Security Log Event ID 4625 me log hona shuru ho jata hai).
+// - Step 2: SMB Signing Enforce Karna (Man-in-the-Middle Block):
+//   Command: `Win + R` -> type `secpol.msc` -> Enter.
+//   Kaam: Network shared files par unauthorized tampering aur SMB relay attacks block karna.
+//   Andar jaakar: `Security Settings` > `Local Policies` > `Security Options` -> "Microsoft network client: Digitally sign communications (always)" par DOUBLE-CLICK -> "Enabled" select karo -> "Apply" -> "OK".
+// - Step 3: User Account Control (UAC) Elevation Policy:
+//   Command: `Win + R` -> type `secpol.msc` -> Enter.
+//   Kaam: Malware ko bina prompt silent admin privileges lene se rokna.
+//   Andar jaakar: `Security Settings` > `Local Policies` > `Security Options` -> "User Account Control: Behavior of the elevation prompt for administrators in Admin Approval Mode" ko "Prompt for credentials" ya "Prompt for consent" enforce karta hai.
 
 
-// 19. msinfo32
-// * Naam: System Information
-// * Kaam: Hardware specs, Processor, Motherboard model, BIOS version, OS build, RAM type, Secure Boot status check karna.
-// * STEP 1: PEHLA TAREEQA (Quick Hardware & OS Version Check):
-// Step 1: [Win + R] -> type "msinfo32" -> Enter.
-// Step 2: "System Summary" par click karo -> OS Name, System Model (HP/Dell), Processor, aur Total Physical RAM note karo.
-// * STEP 2: DOOSRA TAREEQA (BIOS & Hardware Conflicts Check):
-// Step A: "System Summary" mein "BIOS Version/Date" aur "Secure Boot State" verify karo.
-// Step B: Left pane se "Hardware Resources" > "Conflicts/Sharing" expand karke hardware device conflicts check karo.
+// ================================================================================
+
+// 17. firewall.cpl  &  wf.msc — Windows Defender Firewall
+// --------------------------------------------------------------------------------
+// [ CONCEPT: State-Full Host-Based Packet Filtering ]
+// Windows operating system ka internal traffic gatekeeper jo unauthorized inbound aur outbound TCP/UDP traffic ko block karta hai.
+
+// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// Target: Basic firewall status check karna aur pre-approved application ko quick allow karna.
+// - Problem 1: User Bolta Hai "Nayi App Lagayi Hai Par Server Se Connect Nahi Ho Rahi":
+//   Command: `Win + R` -> type `firewall.cpl` -> Enter.
+//   Kaam: Standard Windows Firewall window khol kar application pass-through allow karna.
+//   Andar jaakar: Left sidebar se "Allow an app or feature through Windows Defender Firewall" par CLICK -> Upar "Change settings" button par click -> Application ke samne "Domain" aur "Private" checkboxes TICK karo -> "OK".
+// - L1 Ki Limit: Custom TCP/UDP port open karna, IP subnet scoping, ya outbound block rules lagana L2 ko escalate hota hai.
+
+// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// Target: Custom enterprise port Inbound rules banana aur IP whitelist security lock lagana.
+// - Step 1: Custom Enterprise Inbound Port Open Karna (wf.msc):
+//   Command: `Win + R` -> type `wf.msc` -> Enter.
+//   Kaam: Advanced Security Firewall console me specific port rule create karna.
+//   Andar jaakar:
+//   * Step A: Left pane me "Inbound Rules" par CLICK -> Right pane me "New Rule..." par CLICK.
+//   * Step B: "Port" radio button choose karo -> Next -> "TCP" select karo -> "Specific local ports:" me required port type karo (e.g. `8080` ya `3389`) -> Next.
+//   * Step C: "Allow the connection" select karo -> Next -> Profiles me "Domain" aur "Private" tick rakho ("Public" untick karo) -> Next.
+//   * Step D: Rule Name daalo (e.g. `Allow_ERP_Application_8080`) -> "Finish".
+// - Step 2: IP Scope Whitelisting (Security Hardening):
+//   Command: `Win + R` -> type `wf.msc` -> Enter.
+//   Kaam: Har kisi ke liye port khula chhodne ke bajaye sirf official application server ko allow karna.
+//   Andar jaakar: Banaye gaye rule par DOUBLE-CLICK -> "Scope" tab me jao -> "Remote IP address" me "These IP addresses" radio button choose karo -> "Add..." click karke application server ka exact IP daal kar "OK" -> "Apply" karta hai.
 
 
-// 20. resmon
-// * Naam: Resource Monitor
-// * Kaam: CPU, Memory, Disk, aur Network bandwidth ka deep real-time breakdown.
-// * STEP 1: PEHLA TAREEQA (Listening Ports & Network Traffic Check):
-// Step 1: [Win + R] -> type "resmon" -> Enter.
-// Step 2: "Network" tab par click karo -> "Listening Ports" expand karo aur check karo kaun sa process kis port par listen kar raha hai.
-// * STEP 2: DOOSRA TAREEQA (Locked File ko Unlock Karna — Associated Handles):
-// Step A: "CPU" tab par click karo -> "Associated Handles" section expand karo.
-// Step B: "Search Handles" box mein locked file ka name type karo.
-// Step C: Jis process ne file lock ki hai uspe RIGHT-CLICK karo -> "End Process" par click karo (File unlock ho jayegi).
+// ================================================================================
+
+// 18. inetcpl.cpl — Internet Properties
+// --------------------------------------------------------------------------------
+// [ CONCEPT: WinINet System Networking, Proxy & Certificate Zones ]
+// Windows OS level proxy configuration, security trust zones, SSL/TLS certificate cache, aur cryptographic protocols ka central control panel.
+
+// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// Target: Internal web portals ko Trusted Sites me add karna aur corrupt SSL cache clear karna.
+// - Problem 1: Company Internal Portal Par "Certificate Error" Ya "Untrusted Site" Aana:
+//   Command: `Win + R` -> type `inetcpl.cpl` -> Enter.
+//   Kaam: Browser security zone me company intranet URL allow karna.
+//   Andar jaakar: "Security" tab par CLICK -> "Trusted sites" green checkmark icon par CLICK -> "Sites" button par CLICK -> "Add this website to the zone:" box me internal portal URL daalo (e.g. `https://*.company.corp`) -> "Add" -> "Close".
+// - Problem 2: Stale SSL Handshake Cache Clear Karna:
+//   Command: `Win + R` -> type `inetcpl.cpl` -> Enter.
+//   Kaam: Website par secure session refresh karne ke liye SSL cache wipe karna.
+//   Andar jaakar: "Content" tab par CLICK -> "Clear SSL state" button par CLICK -> "The SSL cache was successfully cleared" confirmation popup dekhta hai.
+// - L1 Ki Limit: Corporate PAC proxy script setup, IP subnet bypass, ya TLS version deprecation issues L2 ko escalate hote hain.
+
+// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// Target: Corporate PAC script proxy route assign karna aur insecure TLS 1.0/1.1 protocols deprecate karna.
+// - Step 1: Corporate PAC / Proxy Server Configuration:
+//   Command: `Win + R` -> type `inetcpl.cpl` -> Enter.
+//   Kaam: Enterprise network me web traffic ko central secure web gateway (Zscaler/BlueCoat) se guzaarna.
+//   Andar jaakar: "Connections" tab par CLICK -> "LAN settings" button par CLICK -> "Use automatic configuration script" tick karke company ka PAC URL daalta hai (ya "Use a proxy server for your LAN" tick karke Proxy IP aur Port daal kar "Bypass proxy server for local addresses" TICK karta hai) -> "OK".
+// - Step 2: TLS Protocol Hardening (Banking & PCI-DSS Compliance):
+//   Command: `Win + R` -> type `inetcpl.cpl` -> Enter.
+//   Kaam: Vulnerable encryption protocols band karke secure ciphers enforce karna.
+//   Andar jaakar: "Advanced" tab par CLICK -> Scroll down to "Security" section -> "Use TLS 1.0" aur "Use TLS 1.1" ko UNCHECK karta hai aur "Use TLS 1.2" aur "Use TLS 1.3" ko TICK karta hai -> "Apply" -> "OK".
 
 
-// 21. msconfig
-// * Naam: System Configuration Utility
-// * Kaam: Safe Mode boot configure karna, Clean Boot test karna.
-// * STEP 1: PEHLA TAREEQA (Safe Mode Boot Setup):
-// Step 1: [Win + R] -> type "msconfig" -> Enter -> "Boot" tab par jao.
-// Step 2: "Safe boot" checkbox tick karo ("Minimal" radio button) -> "Apply" -> "OK" -> "Restart".
-// * STEP 2: DOOSRA TAREEQA (Clean Boot Diagnostics — 3rd Party Issues Trace Karna):
-// Step A: "Services" tab par jao -> Neeche "Hide all Microsoft services" par tick lagao (Important).
-// Step B: "Disable all" button par click karo -> "Apply" -> "OK" -> Restart.
+// ================================================================================
+
+// 19. msinfo32 — System Information
+// --------------------------------------------------------------------------------
+// [ CONCEPT: Hardware Abstraction & Firmware Architecture Engine ]
+// Windows hardware components, BIOS/UEFI firmware architecture, Secure Boot cryptography, aur driver resource sharing ka master diagnostic viewer.
+
+// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// Target: PC ke hardware specs, serial number, processor aur RAM capacity audit karna.
+// - Step 1: System Specs Note Karna (Hardware Audit):
+//   Command: `Win + R` -> type `msinfo32` -> Enter.
+//   Kaam: IT Asset Management ke liye machine configuration report nikalna.
+//   Andar jaakar: Left pane me "System Summary" par CLICK karta hai -> Right pane me note karta hai: OS Name, System Manufacturer/Model (e.g. HP EliteDesk 800 G6), Processor (e.g. Intel Core i7-10700), aur Total Physical Memory (RAM 16.0 GB).
+// - L1 Ki Limit: BIOS mode mismatch (Legacy vs UEFI), BitLocker PCR validation failure, ya hardware IRQ conflict analysis L2 ko escalate hota hai.
+
+// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// Target: UEFI vs Legacy boot check, Secure Boot State audit, Kernel DMA protection, aur IRQ sharing conflicts audit.
+// - Step 1: Modern Security & Firmware Compliance Audit:
+//   Command: `Win + R` -> type `msinfo32` -> Enter.
+//   Kaam: Machine corporate security compliance me pass ho rahi hai ya nahi check karna.
+//   Andar jaakar: "System Summary" me inspect karta hai:
+//   * "BIOS Mode": `UEFI` hona zaroori hai (agar Legacy hai toh Windows 11 upgrade fail hoga).
+//   * "Secure Boot State": `On` hona chahiye (Rootkit boot virus protection ke liye).
+//   * "Virtualization-based security": `Running` hona chahiye (Credential Guard protection).
+// - Step 2: Hardware Resource Conflict Analysis:
+//   Command: `Win + R` -> type `msinfo32` -> Enter.
+//   Kaam: Blue Screen (BSOD) crashes aane par hardware IRQ channel overlaps pakadna.
+//   Andar jaakar: Left pane se `Hardware Resources` > `Conflicts/Sharing` expand karta hai -> Check karta hai do alag PCIe cards (jaise dedicated GPU aur Network NIC) same IRQ channel par collision toh nahi kar rahe.
 
 
-// 22. cleanmgr
-// * Naam: Disk Cleanup
-// * Kaam: Temporary files, Windows update cache, memory dumps delete karke C: drive space free karna.
-// * STEP 1: PEHLA TAREEQA (Basic Drive Cleanup):
-// Step 1: [Win + R] -> type "cleanmgr" -> Enter -> Drive C: select karke "OK" karo.
-// Step 2: Temporary files aur Recycle Bin tick mark karke "OK" -> "Delete Files" karo.
-// * STEP 2: DOOSRA TAREEQA (Deep System Files & Update Cache Cleanup):
-// Step A: cleanmgr box mein neeche "Clean up system files" button par click karo -> C: select karo.
-// Step B: "Windows Update Cleanup" tick mark karo (GBs of space khali hogi) -> "OK" -> "Delete Files".
+// ================================================================================
+
+// 20. resmon — Resource Monitor
+// --------------------------------------------------------------------------------
+// [ CONCEPT: Real-Time Process Kernel Telemetry ]
+// Windows micro-telemetry engine jo CPU threads, Disk I/O queue depth, Memory commit charge, aur Network TCP sockets ka real-time breakdown provide karta hai.
+
+// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// Target: Kaun sa software 100% CPU ya RAM consume karke PC freeze kar raha hai identify karke kill karna.
+// - Step 1: High CPU / Memory Process Identify & Kill:
+//   Command: `Win + R` -> type `resmon` -> Enter.
+//   Kaam: Freeze ho chuke computer ko bina reboot kiye responsive banana.
+//   Andar jaakar: "Overview" tab me jata hai -> CPU ya Memory column par CLICK karke highest usage sort karta hai -> Freeze karne wale software (jaise `chrome.exe` ya `excel.exe`) par RIGHT-CLICK -> "End Process" par click karke turant system ko normal karta hai.
+// - L1 Ki Limit: Locked files ko background handle se release karna, Disk queue depth 100% active time triage, ya listening ports audit L2 ko di jaati hai.
+
+// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// Target: "File In Use" error aane par locked handle release karna aur active network sockets audit karna.
+// - Step 1: Locked File Ko Bina Reboot Kiye Release Karna (Associated Handles):
+//   Command: `Win + R` -> type `resmon` -> Enter.
+//   Kaam: Jab user bole "File delete ya rename nahi ho rahi, koi doosra process use kar raha hai".
+//   Andar jaakar: "CPU" tab par CLICK -> "Associated Handles" section ko expand karta hai -> "Search Handles" box me locked file ka naam type karta hai (e.g. `report.xlsx` ya `data.db`) -> List me exact process name dikh jata hai -> Us process par RIGHT-CLICK -> "End Process" select karta hai (File instantly unlock ho jati hai!).
+// - Step 2: Network Listening Ports & Socket Binding Audit:
+//   Command: `Win + R` -> type `resmon` -> Enter.
+//   Kaam: Check karna ki local application kis exact port aur IP par listen kar rahi hai.
+//   Andar jaakar: "Network" tab par CLICK -> "Listening Ports" section expand karta hai -> Port number (jaise 80, 443, 3389) kis exact Process Name aur PID se bind hai verify karta hai (Port conflict diagnosis).
 
 
-// 23. dxdiag
-// * Naam: DirectX Diagnostic Tool
-// * Kaam: Display adapters, Screen resolution, Graphics memory aur Display drivers test karna.
-// * STEP 1: PEHLA TAREEQA (Display Specs & Driver Check):
-// Step 1: [Win + R] -> type "dxdiag" -> Enter.
-// Step 2: "Display" tab par click karo -> Device Name, Approx Total Memory aur Driver Model verify karo.
-// * STEP 2: DOOSRA TAREEQA (Hardware Acceleration & Direct3D Verification):
-// Step A: "Display" tab mein "DirectDraw Acceleration", "Direct3D Acceleration" dono "Enabled" hone chahiye.
+// ================================================================================
+
+// 21. msconfig — System Configuration Utility
+// --------------------------------------------------------------------------------
+// [ CONCEPT: OS Boot Loader & Diagnostic Boot Subsystem ]
+// Windows boot loader parameters, diagnostic minimal boot (Safe Mode), aur 3rd-party software isolation (Clean Boot) ka primary recovery console.
+
+// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// Target: System ko Safe Mode me boot karna malware scan aur driver recovery ke liye.
+// - Step 1: Safe Mode Diagnostic Boot Setup:
+//   Command: `Win + R` -> type `msconfig` -> Enter.
+//   Kaam: Windows ko basic drivers aur bina 3rd party apps ke chalana.
+//   Andar jaakar: "Boot" tab par CLICK -> "Safe boot" checkbox TICK karta hai ("Minimal" radio button select) -> "Apply" -> "OK" -> "Restart". Kaam khatam hone par normal boot karne ke liye wapas msconfig khol kar "Safe boot" ko UNCHECK karke restart karta hai.
+// - L1 Ki Limit: Blue Screen (BSOD) ke baad 3rd-party startup services ka isolation test (Clean Boot) L2 ko di jaati hai.
+
+// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// Target: 3rd-party background service conflicts aur persistent startup crashes ka isolation diagnosis (Clean Boot).
+// - Step 1: Clean Boot Isolation Triage:
+//   Command: `Win + R` -> type `msconfig` -> Enter.
+//   Kaam: Unknown crashing software ko pinpoint karna.
+//   Andar jaakar:
+//   * Step A: "Services" tab par CLICK -> Sabse pehle NEECHE "Hide all Microsoft services" checkbox ko TICK karo (Ye sabse critical step hai! Agar ye tick nahi kiya aur sab disable kar diya, toh Windows boot nahi hogi!).
+//   * Step B: Ab bachi hui 3rd-party services me "Disable all" button par CLICK karta hai.
+//   * Step C: "Startup" tab par CLICK -> "Open Task Manager" link par click -> Saare non-essential startup apps ko RIGHT-CLICK karke "Disable" karta hai.
+//   * Step D: msconfig me wapas aakar "Apply" -> "OK" -> PC Restart karta hai. Agar issue gayab ho gaya, toh ek-ek karke service enable karke culprit crashing software pakad leta hai.
 
 
-// 24. %temp%  &  temp
-// * Kaam: Temporary cache files delete karna jab applications slow ya freeze ho jayein.
-// * STEP 1: PEHLA TAREEQA (User Temp Folder Clear — %temp%):
-// Step 1: [Win + R] -> type "%temp%" -> Enter.
-// Step 2: [Ctrl + A] dabao -> [Shift + Delete] dabao -> "Yes" confirm karo.
-// Step 3: "File In Use" popup aane par "Do this for all current items" tick karke "Skip" click karo.
-// * STEP 2: DOOSRA TAREEQA (System-Level Temp Folder Clear — temp):
-// Step A: [Win + R] -> type "temp" -> Enter -> Permission prompt par "Continue" click karo.
-// Step B: [Ctrl + A] -> [Shift + Delete] -> In-use files par "Skip" karo.
+// ================================================================================
+
+// 22. cleanmgr — Disk Cleanup Utility
+// --------------------------------------------------------------------------------
+// [ CONCEPT: Storage Reclamation & Component Store Sweeper ]
+// Windows storage junk cleaner jo user temporary cache, error dump files, aur Windows Update superseded component store files ko wipe karta hai.
+
+// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// Target: User temporary cache aur Recycle Bin clean karke C: drive par instant space banana.
+// - Step 1: Basic Storage Cleanup:
+//   Command: `Win + R` -> type `cleanmgr` -> Enter.
+//   Kaam: 1 se 3 GB space quick free karna.
+//   Andar jaakar: Drive `C:` select -> "OK" -> "Temporary files", "Recycle Bin", aur "Thumbnails" checkboxes TICK karta hai -> "OK" -> "Delete Files" par click karta hai.
+// - L1 Ki Limit: Windows Update component store cache, old OS install dumps (Windows.old), ya GBs of WinSxS junk clean karna L2 ko di jaati hai.
+
+// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// Target: C: Drive 100% full (Red Bar) hone par 15GB+ deep system update cache aur memory dumps purge karna.
+// - Step 1: Deep System Store & Update Cleanup:
+//   Command: `Win + R` -> type `cleanmgr` -> Enter.
+//   Kaam: Hidden system installer cache wipe karna.
+//   Andar jaakar:
+//   * Step A: C: drive select -> cleanmgr dialog me neeche "Clean up system files" button par CLICK karta hai -> Dobara Drive `C:` select karke "OK" click karta hai.
+//   * Step B: List me "Windows Update Cleanup" (ye akela 5-15 GB khali karta hai), "Previous Windows installation(s)" (Windows.old folder), aur "System error memory dump files" sabhi boxes TICK karta hai -> "OK" -> "Delete Files".
+// - Step 2: Component Store Base Reset via CLI:
+//   Command: `Win + R` -> type `cmd` (Run as Administrator) -> Enter.
+//   Kaam: Windows WinSxS folder ka size permanent reduce karna.
+//   Andar jaakar: Command execute karta hai:
+//   `dism.exe /online /cleanup-image /startcomponentcleanup /resetbase`
 
 
-// 25. control printers  (ya shell:PrintersFolder)
-// * Kaam: Classic "Devices and Printers" folder kholna.
-// * Airport Use Case: Boarding pass printer (ATB), Bag-tag printer (BTP) ki print queue dekhna, stuck documents cancel karna, default printer set karna.
+// ================================================================================
 
-// * STEP 1: PEHLA TAREEQA (Print Queue Clear & Set Default Printer):
-// Step 1: [Win + R] -> type "control printers" -> Enter.
-// Step 2: Targeted printer par RIGHT-CLICK karo -> "See what's printing" par click karo.
-// Step 3: Top menu se "Printer" > "Cancel All Documents" select karo -> "Yes".
-// Step 4: Printer par RIGHT-CLICK -> "Set as default printer" par click karo.
+// 23. dxdiag — DirectX Diagnostic Tool
+// --------------------------------------------------------------------------------
+// [ CONCEPT: Graphics Pipeline & Multimedia Acceleration Subsystem ]
+// Windows display driver model (WDDM), Direct3D hardware acceleration, monitor refresh rates, aur GPU VRAM ka hardware verification utility.
 
-// * STEP 2: DOOSRA TAREEQA (Printer Properties & Port Test — Jab Printer Offline Show Ho):
-// Step A: Printer par RIGHT-CLICK karo -> "Printer properties" par click karo.
-// Step B: "Ports" tab par click karo -> Check karo correct Standard TCP/IP Port selected hai ya nahi.
-// Step C: "General" tab par jaakar "Print Test Page" button click karke physical print verify karo.
+// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// Target: Monitor resolution, GPU model aur dedicated VRAM verify karna.
+// - Step 1: Display Specs Verification:
+//   Command: `Win + R` -> type `dxdiag` -> Enter.
+//   Kaam: Graphics hardware details check karna.
+//   Andar jaakar: "Display" tab par CLICK -> Device Name (e.g. Intel UHD Graphics / NVIDIA GeForce), Display Memory (VRAM), aur Current Display Mode (1920 x 1080 60Hz) verify karta hai.
+// - L1 Ki Limit: Display flickering, multiple monitor rendering failures, ya DirectX hardware acceleration crashes L2 ko escalate hote hain.
 
-
-// 26. shell:startup
-// * Kaam: Startup Folder open karna taaki boot hote hi apps auto-start ho sakein.
-// * STEP 1: PEHLA TAREEQA (Current User Startup Shortcut Add Karna):
-// Step 1: [Win + R] -> type "shell:startup" -> Enter.
-// Step 2: Target application ka shortcut is folder mein paste kar do.
-// * STEP 2: DOOSRA TAREEQA (All Users Kiosk Auto-Start — shell:common startup):
-// Step A: [Win + R] -> type "shell:common startup" -> Enter.
-// Step B: Application shortcut paste karo taaki computer par koi bhi user login kare app auto-launch ho jaye.
-
-
-// 27. netplwiz
-// * Naam: User Accounts GUI Tool
-// * Airport Use Case: Flight Schedule Display (FIDS) monitors ya unattended kiosk PCs par PC boot hote hi auto-login configure karna bina password maange.
-
-// * STEP 1: PEHLA TAREEQA (Auto-Login Configure Karna Without Password):
-// Step 1: [Win + R] -> type "netplwiz" -> Enter.
-// Step 2: List se targeted kiosk user select karo (e.g. FIDS_User).
-// Step 3: Upar checkbox: "Users must enter a user name and password to use this computer" se tick UNCHECK (hata) do.
-// Step 4: "Apply" par click karo -> User ka Password 2 baar enter karo -> "OK" -> "OK".
-
-// * STEP 2: DOOSRA TAREEQA (User Group Membership Change Karna):
-// Step A: User select karo -> "Properties" button par click karo.
-// Step B: "Group Membership" tab par click karo -> Standard User ya Administrator radio button select karo -> "OK".
+// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// Target: Direct3D hardware acceleration engine verify karna aur WDDM driver version crash audit.
+// - Step 1: Hardware Acceleration Verification:
+//   Command: `Win + R` -> type `dxdiag` -> Enter.
+//   Kaam: GPU graphics acceleration broken hone par identify karna.
+//   Andar jaakar:
+//   * "Display" tab me ensure karta hai:
+//     - "DirectDraw Acceleration": `Enabled`
+//     - "Direct3D Acceleration": `Enabled`
+//     - "AGP Texture Acceleration": `Enabled`
+//     (Agar ye Disabled hain, toh graphics driver corrupt ho chuka hai, clean reinstall zaroori hai).
+//   * Notes Box Inspection: Neeche "Notes" box me padhta hai: "No problems found" likha hai ya display driver crash ka event logged hai.
 
 
-// 28. outlook.exe /safe
-// * Kaam: Microsoft Outlook ko Safe Mode mein open karna (Third-party Add-ins bypass karke).
-// * STEP 1: PEHLA TAREEQA (Safe Mode Launch & Problematic Add-ins Disable):
-// Step 1: [Win + R] -> type "outlook.exe /safe" -> Enter -> Profile select karke "OK" karo.
-// Step 2: File > Options > Add-ins > Manage "COM Add-ins" > "Go..." par click karo.
-// Step 3: Crashing add-ins untick karo -> "OK" -> Outlook normally restart karo.
-// * STEP 2: DOOSRA TAREEQA (Corrupted .OST File Rebuild):
-// Step A: Outlook band karo -> [Win + R] -> type `%localappdata%\Microsoft\Outlook` -> Enter.
-// Step B: Corrupt `.ost` file ko rename karke `.ost.old` kar do -> Outlook normal start karo (Nayi fresh .ost file auto-rebuild hogi).
+// ================================================================================
+
+// 24. %temp%  &  temp — Temporary Files Cleaner
+// --------------------------------------------------------------------------------
+// [ CONCEPT: Volatile Application Caches & Kernel Temporary Buffers ]
+// Windows operating system aur 3rd party applications ka temporary runtime swap space jo crash hone par purge na hone ki wajah se disk space consume karta hai.
+
+// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// Target: Current user profile ka local application temp cache clean karna jab PC/Office slow chale.
+// - Step 1: User Temp Folder Purge:
+//   Command: `Win + R` -> type `%temp%` -> Enter.
+//   Kaam: User-level cache aur stuck temp files delete karna.
+//   Andar jaakar: Folder khulne par keyboard par `Ctrl + A` dabakar sab select karta hai -> `Shift + Delete` dabakar permanently delete karta hai -> Agar "File In Use" popup aaye toh "Do this for all current items" checkbox TICK karke "Skip" par click karta hai.
+// - L1 Ki Limit: System-wide temp locks aur C: drive root OS temp clean karna L2 ko escalate hota hai.
+
+// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// Target: System kernel temp, Prefetch index files, aur broken Windows update download cache wipe karna.
+// - Step 1: System-Level Temp Purge:
+//   Command: `Win + R` -> type `temp` -> Enter.
+//   Kaam: OS level temporary swap buffers delete karna.
+//   Andar jaakar: Admin permission prompt aane par "Continue" click -> `Ctrl + A` -> `Shift + Delete` -> in-use files par "Skip" karta hai.
+// - Step 2: Corrupted Application Prefetch Reset:
+//   Command: `Win + R` -> type `prefetch` -> Enter.
+//   Kaam: Corrupted application launch cache reset karna.
+//   Andar jaakar: `Ctrl + A` -> `Delete` karta hai.
+// - Step 3: Windows Update Broken Download Cache Wipe:
+//   Command: `Win + R` -> type `cmd` (Run as Administrator) -> Enter.
+//   Kaam: Windows update 0x80070002 errors fix karna.
+//   Andar jaakar: Sequential commands chalata hai:
+//   `net stop wuauserv` -> `Win + R` -> type `C:\Windows\SoftwareDistribution\Download` -> sab delete -> `net start wuauserv`.
+
+
+// ================================================================================
+
+// 25. control printers — Devices and Printers Management
+// --------------------------------------------------------------------------------
+// [ CONCEPT: Win32 Printing Subsystem & Standard TCP/IP Ports ]
+// Enterprise network printers, raw spool queues, page description languages (PCL/PostScript), aur printer port sockets ka management interface.
+
+// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// Target: Default printer assign karna aur queue me atke huye documents cancel karna.
+// - Step 1: Stuck Print Queue Clear & Set Default:
+//   Command: `Win + R` -> type `control printers` -> Enter.
+//   Kaam: Paper print stuck hone par queue clear karna aur right printer default banana.
+//   Andar jaakar:
+//   * Step A (Queue Clear): Target printer par RIGHT-CLICK -> "See what's printing" par click -> Top menu "Printer" > "Cancel All Documents" -> "Yes" confirm karta hai.
+//   * Step B (Set Default): Printer par RIGHT-CLICK -> "Set as default printer" par click karta hai (Green checkmark aayega).
+// - L1 Ki Limit: Printer properties me TCP/IP port IP badalna, SNMP communication timeout fix karna, ya driver isolation L2 ko di jaati hai.
+
+// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// Target: Network printer ka static IP port verify karna aur "Printer Offline" false status bug fix karna.
+// - Step 1: TCP/IP Port & SNMP Bug Fix (Printer "Offline" Glitch):
+//   Command: `Win + R` -> type `control printers` -> Enter.
+//   Kaam: Network printer physically online hone ke baad bhi PC par offline dikhne ka bug fix karna.
+//   Andar jaakar:
+//   * Step A: Printer par RIGHT-CLICK -> "Printer properties" par CLICK -> "Ports" tab par click -> Selected Standard TCP/IP Port ko highlight karke "Configure Port..." button par click karta hai.
+//   * Step B (The SNMP Fix): "SNMP Status Enabled" checkbox ko UNCHECK (untick) karta hai! (Jab enterprise firewall ya switch SNMP port 161 block karta hai, toh Windows printer ko fake "Offline" show karta hai — ise uncheck karte hi printer instantly Online aa jata hai!).
+//   * Step C (Physical Verification): "General" tab par aakar "Print Test Page" button par CLICK karta hai aur physical tray se page verify karta hai.
+
+
+// ================================================================================
+
+// 26. shell:startup  &  shell:common startup — Windows Startup Auto-Launch
+// --------------------------------------------------------------------------------
+// [ CONCEPT: Windows Shell User/Machine Autorun Profiles ]
+// Windows login session initialization ke waqt automated application launchers ko execute karne ka shell folder architecture.
+
+// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// Target: Specific user ke login hote hi required application auto-launch karana.
+// - Step 1: User-Level Startup App Add Karna:
+//   Command: `Win + R` -> type `shell:startup` -> Enter.
+//   Kaam: Current user ke login hone par customized software open karana.
+//   Andar jaakar: Required application ke shortcut file ko is folder ke andar Copy -> Paste kar deta hai.
+// - L1 Ki Limit: Machine-wide sabhi users (kiosk, multi-shift) ke liye auto-start configure karna ya registry startup audit L2 ko di jaati hai.
+
+// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// Target: All Users (Machine-wide) ke liye software auto-run karana aur malicious autorun entries inspect karna.
+// - Step 1: Machine-Wide (All Users) Auto-Start Setup:
+//   Command: `Win + R` -> type `shell:common startup` -> Enter.
+//   Kaam: Computer par login karne wale har domain user ke liye software launch karna.
+//   Andar jaakar: Folder khulne par application shortcut paste karta hai -> Admin prompt par "Continue" click karta hai.
+// - Step 2: Registry Startup Security Audit:
+//   Command: `Win + R` -> type `regedit` -> Enter.
+//   Kaam: Unauthorized persistence scripts inspect karna.
+//   Andar jaakar: `HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run` me inspect karta hai koi unauthorized script ya background malware boot par inject toh nahi ho raha.
+
+
+// ================================================================================
+
+// 27. netplwiz — User Accounts Configuration
+// --------------------------------------------------------------------------------
+// [ CONCEPT: Local Credential Cache & Automated Interactive Logon ]
+// Windows logon architecture jisme automatic authentication credentials store kiye jate hain taaki unattended computers bina password boot ho sakein.
+
+// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// Target: Unattended kiosk, airport FIDS display, ya hotel lobby PC par boot hote hi bina password auto-login configure karna.
+// - Step 1: Kiosk Auto-Login Setup:
+//   Command: `Win + R` -> type `netplwiz` -> Enter.
+//   Kaam: PC reboot hote hi automated interactive session open karwana.
+//   Andar jaakar:
+//   * Step A: List se target user account select karo (e.g. `Kiosk_User` ya `FIDS_Term`).
+//   * Step B: Upar bane checkbox "Users must enter a user name and password to use this computer" ko UNCHECK (untick) karo -> "Apply" par click karo.
+//   * Step C: Popup window me user ka Password aur Confirm Password type karo -> "OK" -> "OK". (Reboot karne par bina password maange direct desktop open ho jayega).
+// - L1 Ki Limit: Group membership elevation (Domain user ko local admin banana) ya Secure Sign-in policy audit L2 ko di jaati hai.
+
+// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// Target: User ki local security group role elevate/demote karna aur Ctrl+Alt+Del mandatory login enforce karna.
+// - Step 1: Local Group Membership Elevation:
+//   Command: `Win + R` -> type `netplwiz` -> Enter.
+//   Kaam: Local access privileges calibrate karna.
+//   Andar jaakar: User select -> "Properties" button par CLICK -> "Group Membership" tab par CLICK -> "Administrator" ya "Standard user" radio button select karke "Apply" -> "OK" karta hai.
+// - Step 2: Secure Sign-in (Ctrl + Alt + Del) Enforcement:
+//   Command: `Win + R` -> type `netplwiz` -> Enter.
+//   Kaam: Phishing lockscreen overlay attacks se user credentials protect karna.
+//   Andar jaakar: "Advanced" tab par CLICK -> Neeche "Secure sign-in" section me "Require users to press Ctrl + Alt + Delete" checkbox TICK karta hai.
+
+
+// ================================================================================
+
+// 28. outlook.exe /safe — Outlook Diagnostics & Recovery
+// --------------------------------------------------------------------------------
+// [ CONCEPT: MAPI Client Architecture & Add-in Sandboxing ]
+// Microsoft Outlook desktop messaging client ka isolated execution mode jo corrupt 3rd-party COM plugins ko isolate karta hai aur local offline database rebuild karta hai.
+
+// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// Target: Crashing Outlook ko Safe Mode me launch karke faulty 3rd-party plugins disable karna.
+// - Step 1: Outlook Safe Mode Launch & Add-in Fix:
+//   Command: `Win + R` -> type `outlook.exe /safe` -> Enter.
+//   Kaam: Corrupt add-ins ko bypass karke Outlook open karna.
+//   Andar jaakar:
+//   * Step A: Profile prompt aane par "OK" click karta hai (Outlook bina add-ins ke khul jayega).
+//   * Step B: Top menu me `File` > `Options` > `Add-ins` par CLICK -> Neeche Manage: "COM Add-ins" select karke "Go..." button par CLICK.
+//   * Step C: Unnecessary/Crashing add-ins (e.g. Antivirus scanner, Adobe PDF, third-party sync tools) ko UNCHECK karta hai -> "OK" -> Outlook ko close karke normally restart karta hai.
+// - L1 Ki Limit: Corrupted `.OST` offline storage rebuild karna ya clean fresh mail profile banana L2 ko di jaati hai.
+
+// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// Target: Corrupt local offline database (`.ost`) wipe karke server se clean synchronization start karna aur Mail Applet se fresh profile banana.
+// - Step 1: Corrupted .OST File Wipe & Clean Resync:
+//   Command: `Win + R` -> type `%localappdata%\Microsoft\Outlook` -> Enter.
+//   Kaam: Broken local cache delete karke Exchange/M365 server se fresh database download karwana.
+//   Andar jaakar: Outlook process ko Task Manager me end karta hai -> `%localappdata%\Microsoft\Outlook` folder me user ki `.ost` file (e.g. `john@company.com.ost`) ko rename karke `.ost.old` karta hai (ya delete karta hai) -> Outlook open karta hai -> Server se clean fresh .OST file automatically rebuild ho jati hai.
+// - Step 2: Clean Mail Profile Rebuild via Mail Applet:
+//   Command: `Win + R` -> type `control mlcfg32.cpl` -> Enter.
+//   Kaam: Corrupted profile registry keys wipe karke fresh profile create karna.
+//   Andar jaakar: "Show Profiles..." button par CLICK -> "Add..." button par click karke naya profile configure karta hai -> "Always use this profile" me new profile set karke "Apply" -> "OK" karta hai (Outlook crash permanent resolved).
 
 
 // ========================================= Interview Cheatsheet: Kis Situation Me Kaun Sa Command? ======================================= //

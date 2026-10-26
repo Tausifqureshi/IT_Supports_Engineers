@@ -163,22 +163,51 @@
 // Jab User Bole: "Mera Internet / Portal Nahi Chal Raha" — Real Support Escalation Flow
 // ================================================================================
 
-// Step 1 (Physical Check):
-// Check karo laptop/desktop ke LAN port me green light blink kar rahi hai ya nahi. Agar Wi-Fi hai toh check karo sahi SSID connect hai.
+// * 1. L1 ENGINEER KA KAAM (Surface Diagnostics & Fast Reset):
+// Target: Physical link verify karna, local TCP/IP stack self-test, IP release/renew, aur DNS cache flush karna.
+// - Step 1 (Physical Layer & Link LED Check):
+//   Kaam: RJ45 network cable aur switch port link verify karna.
+//   Andar jaakar: Laptop/Desktop ke peeche Ethernet port dekhta hai:
+//   * Solid Green LED -----> Cable aur Switch port ka physical 1 Gbps link 100% active hai.
+//   * Amber / Orange LED --> Link negotiate nahi hua ya sirf 100 Mbps par connect hai (cable crimping loose).
+//   * No Light (Dead) -----> Cable unplugged hai, wall port punch loose hai, ya switch port admin down hai.
+// - Step 2 (Loopback Self-Test via CMD):
+//   Command: `Win + R` -> type `cmd` -> Enter.
+//   Kaam: PC ke internal NIC card aur protocol stack ka self-test karna.
+//   Andar jaakar: Terminal me command run karta hai: `ping 127.0.0.1` -> Agar 4 packets reply aaye (0% loss), matlab internal hardware aur TCP/IP driver 100% healthy hai.
+// - Step 3 (Gateway & Router Reachability):
+//   Command: `Win + R` -> type `cmd` -> Enter -> type `ipconfig` -> Default Gateway note karo -> type `ping <Gateway_IP>` (e.g. `ping 192.168.1.1`).
+//   Kaam: Local floor switch aur router tak connectivity test karna.
+//   Andar jaakar: Agar "Request timed out" aaye, toh cable reconnect karta hai ya wall port change karta hai.
+// - Step 4 (DNS vs Internet Isolation Test):
+//   Command: `ping 8.8.8.8` (Google public IP) aur `ping google.com`.
+//   Kaam: Pata lagana ki internet down hai ya sirf DNS resolution fail hui hai.
+//   Andar jaakar: Agar `8.8.8.8` ping ho raha hai lekin `google.com` par error aaye ("Ping request could not find host"), matlab internet theek hai par DNS cache corrupt hai!
+//   Sequential Commands Execute:
+//   `ipconfig /release` -> `ipconfig /renew` -> `ipconfig /flushdns` chalata hai aur browser refresh karke test karta hai.
+// - L1 Ki Limit: Agar IPv4 par `169.254.x.x` (APIPA) aa raha ho, NIC Speed & Duplex mismatch ho, ya TCP/IP protocol stack corrupt ho, toh L2 ko escalate karta hai.
 
-// Step 2 (Loopback Self Test):
-// Command: ping 127.0.0.1
-// -> Agar reply aaya: Matlab PC ka apna internal TCP/IP network stack aur NIC driver bilkul theek hai.
-
-// Step 3 (Gateway Reachability Test):
-// Command: ping <Gateway_IP> (e.g. 192.168.1.1)
-// -> Agar fail hua: Local switch, LAN cable ya Wi-Fi access point me issue hai.
-
-// Step 4 (DNS Resolution Test):
-// Command: ping 8.8.8.8  (Google Public IP)
-// Command: ping google.com
-// -> Agar 8.8.8.8 ping ho raha hai lekin google.com ping nahi ho raha: Matlab internet theek hai par DNS RESOLUTION FAIL ho gaya hai!
-// -> Solution: ipconfig /flushdns chalao aur DNS server ko 8.8.8.8 ya company internal DNS par set karo.
+// * 2. L2 ENGINEER KA KAAM (Root Cause & Infrastructure Diagnostics):
+// Target: TCP/IP Stack reset, Static IP / VLAN mismatch fix, Switch port duplex negotiation, aur packet drop hop tracing.
+// - Step 1: Complete TCP/IP Stack & Winsock Reset (Master Network Repair):
+//   Command: `Win + R` -> type `cmd` (Press Ctrl + Shift + Enter for Run as Administrator).
+//   Kaam: Corrupt Windows network protocol stack aur winsock sockets ko factory default par restore karna.
+//   Andar jaakar: Terminal me sequence execute karta hai:
+//   1. `netsh int ip reset` (TCP/IP registry keys clean karta hai).
+//   2. `netsh winsock reset` (Winsock catalog reset karta hai).
+//   3. `shutdown /r /t 0` (PC reboot karke clean stack initialize karta hai).
+// - Step 2: APIPA & DHCP DORA Exhaustion Fix via Adapter Properties:
+//   Command: `Win + R` -> type `ncpa.cpl` -> Enter.
+//   Kaam: DHCP Discover drop hone par manual IP assign karna aur VLAN verify karna.
+//   Andar jaakar: Ethernet adapter par RIGHT-CLICK -> "Properties" -> "Internet Protocol Version 4 (TCP/IPv4)" par DOUBLE-CLICK -> "Use the following IP address" select karke verified free static IP, subnet (/24), Gateway aur DNS enter karta hai. Network team se switch port ka Access VLAN check karwata hai.
+// - Step 3: Speed & Duplex Negotiation Mismatch Fix:
+//   Command: `Win + R` -> type `ncpa.cpl` -> Enter.
+//   Kaam: Switch port aur NIC negotiation mismatch hone par speed force karna.
+//   Andar jaakar: Ethernet adapter par RIGHT-CLICK -> "Properties" -> "Configure..." button par CLICK -> "Advanced" tab -> "Speed & Duplex" property me Auto-Negotiation ke bajaye "1.0 Gbps Full Duplex" force select karta hai -> "OK".
+// - Step 4: Hop-by-Hop Packet Loss Tracing (tracert & pathping):
+//   Command: `Win + R` -> type `cmd` -> Enter.
+//   Kaam: Company internal server ya cloud tak packet kis router hop par drop ho raha hai pakadna.
+//   Andar jaakar: Terminal me `tracert 10.20.1.50` ya `pathping 8.8.8.8` run karta hai -> Hops ki latency (ms) inspect karke exact faulty firewall ya core switch identify karta hai.
 
 // ================================================================================
 // Note created for Tausif Qureshi | Universal IT Support & Systems Engineer Blueprint

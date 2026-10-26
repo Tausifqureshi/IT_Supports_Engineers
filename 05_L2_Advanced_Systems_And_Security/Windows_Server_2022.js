@@ -31,23 +31,24 @@
 // ================================================================================
 
 // 1. New DHCP Scope Banana:
-//    - Step 1: dhcpmgmt.msc kholo -> Server name expand karo -> IPv4 par Right-Click -> "New Scope".
-//    - Step 2: Scope Name: "Office_LAN_Scope" ya "Counter_Terminals".
-//    - Step 3: IP Address Range: Start IP `192.168.1.50` to End IP `192.168.1.250`. Subnet Mask: `255.255.255.0` (/24).
-//    - Step 4: Add Exclusions: `192.168.1.50` se `192.168.1.70` (Printers aur Network Switches ke liye reserve rakhna).
-//    - Step 5: Lease Duration:
-//      - Corporate LAN: 8 Days (Devices permanent hote hain).
-//      - Airport / Hotel Guest Wi-Fi: 2 Hours (IP jaldi free honi chahiye taaki exhaustion na ho).
-//    - Step 6: Configure DHCP Options:
-//      - Option 003 (Router / Default Gateway): `192.168.1.1`
-//      - Option 006 (DNS Servers): `192.168.1.10` (Domain Controller ka IP)
-//      - Option 015 (Domain Name): `company.local`
-//    - Step 7: "Activate Scope" par click karo.
+//    - Command: `Win + R` -> type `dhcpmgmt.msc` -> Enter.
+//    - Kaam: DHCP Server console khol kar IP addressing range aur options automate karna.
+//    - Andar jaakar:
+//      * Step 1: Server name expand karo -> "IPv4" par RIGHT-CLICK -> "New Scope..." select karo -> "Next".
+//      * Step 2: Scope Name: "Office_LAN_Scope" ya "Counter_Terminals" -> "Next".
+//      * Step 3: IP Address Range: Start IP `192.168.1.50` to End IP `192.168.1.250`. Subnet Mask: `255.255.255.0` (/24) -> "Next".
+//      * Step 4: Add Exclusions: `192.168.1.50` se `192.168.1.70` (Printers aur Network Switches ke static reserve ke liye) -> "Add" -> "Next".
+//      * Step 5: Lease Duration: Corporate LAN ke liye 8 Days; Guest Wi-Fi ke liye 2 Hours set karo -> "Next".
+//      * Step 6: Configure DHCP Options:
+//        - Option 003 (Router / Default Gateway): `192.168.1.1`
+//        - Option 006 (DNS Servers): `192.168.1.10` (Domain Controller ka IP)
+//        - Option 015 (Domain Name): `company.local`
+//      * Step 7: "Yes, I want to activate this scope now" select karke "Finish" par click karo.
 
 // 2. DHCP Reservation Setup (Static IP Alternative):
-//    - Scope -> Reservations par Right-Click -> "New Reservation".
-//    - IP Address daalo + Device ka exact physical MAC Address daalo (e.g. `00-15-5D-01-A2-34`).
-//    - Device jab bhi network me aayega, usko hamesha wahi IP address milega!
+//    - Command: `Win + R` -> type `dhcpmgmt.msc` -> Enter.
+//    - Kaam: Network printer ya billing machine ke MAC address par specific IP permanent lock karna.
+//    - Andar jaakar: Scope > "Reservations" par RIGHT-CLICK -> "New Reservation..." par click -> Reservation name type karo -> IP Address daalo + Device ka exact physical MAC Address daalo (e.g. `00-15-5D-01-A2-34`) -> Supported types: "Both" select karke "Add" -> "Close".
 
 
 // ================================================================================
@@ -57,18 +58,21 @@
 // Console Shortcut: Win + R -> dnsmgmt.msc
 // ================================================================================
 
-// 1. Forward Lookup Zones:
-//    - Hostname ko IP me convert karta hai.
-//    - A Record (Host): `desktop-01.company.local` -> `192.168.1.105`
-//    - CNAME Record (Alias): `portal.company.local` -> `webserver01.company.local`
+// 1. Forward Lookup Zones (A & CNAME Records):
+//    - Command: `Win + R` -> type `dnsmgmt.msc` -> Enter.
+//    - Kaam: Computer/Server hostname ko IP address me convert karna.
+//    - Andar jaakar: Server expand karo -> "Forward Lookup Zones" expand karo -> company domain (e.g. `company.local`) par RIGHT-CLICK:
+//      * A Record (Host): "New Host (A or AAAA)..." par click -> Name: `desktop-01` -> IP Address: `192.168.1.105` -> "Add Host".
+//      * CNAME Record (Alias): "New Alias (CNAME)..." par click -> Alias Name: `portal` -> FQDN for target host: `webserver01.company.local` -> "OK".
 
 // 2. Reverse Lookup Zones (PTR Record):
-//    - IP address ko Hostname me convert karta hai (Security audit aur mail server reputation ke liye zaroori).
+//    - Kaam: IP address ko Hostname me convert karna (Security audit aur mail server reputation ke liye zaroori).
+//    - Andar jaakar: "Reverse Lookup Zones" me subnet zone par RIGHT-CLICK -> "New Pointer (PTR)..." -> Host IP number aur FQDN daal kar "OK".
 
 // 3. DNS Forwarders (External Internet Resolution):
-//    - Jab internal user `google.com` mangta hai, local DNS server ko nahi pata hota.
-//    - dnsmgmt.msc me Server par Right-Click -> Properties -> "Forwarders" tab.
-//    - Public DNS add karo: `8.8.8.8` (Google) ya `1.1.1.1` (Cloudflare).
+//    - Command: `Win + R` -> type `dnsmgmt.msc` -> Enter.
+//    - Kaam: Internal users jab google.com ya cloud sites open karein toh external internet DNS se resolve karwana.
+//    - Andar jaakar: DNS Server name par RIGHT-CLICK -> "Properties" -> "Forwarders" tab par CLICK -> "Edit..." button par click -> Public DNS add karo: `8.8.8.8` (Google) aur `1.1.1.1` (Cloudflare) -> "OK" -> "Apply" -> "OK".
 
 
 // ================================================================================

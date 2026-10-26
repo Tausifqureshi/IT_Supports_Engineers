@@ -26,41 +26,40 @@
 // * 1. L1 ENGINEER KA KAAM (Daily Floor Operations & Fast Ticket Resolution):
 // Target: 2 se 5 minute ke andar user ka login issue solve karna.
 
-// - Problem 1: User bol raha hai "Mera account lock ho gaya hai (The referenced account is currently locked out)"
-//   Step 1: [Win + R] dabao -> type karo "dsa.msc" -> Enter (Active Directory khulegi).
-//   Step 2: Domain par right-click karo -> "Find" chuno -> User ka first name ya username search karo.
-//   Step 3: User par double-click karo -> "Account" tab me jao.
-//   Step 4: "Unlock account" checkbox ko TICK karo -> "Apply" -> "OK".
+// - Problem 1: User Bol Raha Hai "Mera account lock ho gaya hai (The referenced account is currently locked out)":
+//   Command: `Win + R` -> type `dsa.msc` -> Enter.
+//   Kaam: Active Directory Users and Computers khol kar account unlock karne ke liye.
+//   Andar jaakar: Left pane me domain root par RIGHT-CLICK -> "Find..." par click -> Search box me username type karo -> "Find Now" par click -> User account par DOUBLE-CLICK -> "Account" tab me jao -> "Unlock account" checkbox ko TICK karo -> "Apply" -> "OK".
 //   (User ko bolo: "Sir, apna naya attempt karein, account unlock ho chuka hai").
 
-// - Problem 2: User apna password bhool gaya ya expire ho gaya (Password Reset)
-//   Step 1: dsa.msc me user dhoondo -> User par RIGHT-CLICK karo -> "Reset Password" chuno.
-//   Step 2: Company policy ka temporary password daalo (e.g. Welcome@2026).
-//   Step 3: "User must change password at next logon" checkbox ko zaroor TICK rakho (Security rule).
-//   Step 4: "Unlock the user's account" ko bhi tick karo agar locked tha -> OK dabao.
+// - Problem 2: User Apna Password Bhool Gaya Ya Expire Ho Gaya (Password Reset):
+//   Command: `Win + R` -> type `dsa.msc` -> Enter.
+//   Kaam: Domain Controller par user ka temporary password set karna.
+//   Andar jaakar: dsa.msc me user dhoondo -> User par RIGHT-CLICK -> "Reset Password..." par click -> Company standard temporary password daalo (e.g. `Welcome@2026`) -> "User must change password at next logon" checkbox ko zaroor TICK rakho -> "Unlock the user's account" ko bhi TICK karo -> "OK".
 
-// - Problem 3: User ko kisi Shared Folder ya Department ka access dena
-//   Step 1: User par double-click karo -> "Member Of" tab me jao.
-//   Step 2: "Add" par click karo -> Group ka naam search karo (e.g. "Finance_Share_RW") -> Check Names -> OK -> Apply.
-//   Step 3: Important Note: User ko bolo "PC ko ek baar Sign-out (Log off) karke dobara login karein", kyunki Windows login ke waqt naye Kerberos security token load karta hai!
+// - Problem 3: User Ko Kisi Shared Folder Ya Department Ka Access Dena:
+//   Command: `Win + R` -> type `dsa.msc` -> Enter.
+//   Kaam: User ko authorized department security group ka member banana.
+//   Andar jaakar: User par DOUBLE-CLICK -> "Member Of" tab par CLICK -> "Add..." button par click -> Group ka naam search karo (e.g. "Finance_Share_RW") -> "Check Names" button par click (underlined hoga) -> "OK" -> "Apply" -> "OK".
+//   Important Note: User ko bolo: "PC ko ek baar Sign-out karke dobara login karein", kyunki Windows login ke waqt naye Kerberos security token load karta hai!
 
-// - L1 Ki Limit: Agar user login karne par bole "The trust relationship between this workstation and the primary domain failed", toh L1 ke bas ka nahi hota aur ticket L2 ko jata hai.
+// - L1 Ki Limit: Agar user login karne par bole "The trust relationship between this workstation and the primary domain failed", repeated lockout caller PC audit, ya OU restructure L2 ko di jaati hai.
 
 
 // * 2. L2 ENGINEER KA KAAM (Root Cause, OU Design & Domain Trust Fix):
-// Target: Domain trust repair, bulk user provisioning aur account lockout audit.
+// Target: Domain trust repair, repeated lockout audit, aur bulk provisioning.
 
-// - Step 1: "Trust Relationship Failed" Ka Permanent Fix (Bina PC domain se hataye)
-//   Root Cause: Client PC aur Domain Controller ke beech ka machine account secure channel password out-of-sync ho gaya hai.
-//   Fix via PowerShell (Admin):
-//   Test-ComputerSecureChannel -Verbose -----> Agar False aaye toh trust toot chuka hai.
-//   Reset-ComputerSecureChannel -Credential (Get-Credential) -----> Domain admin credentials daal kar 5 second me trust repair!
+// - Step 1: "Trust Relationship Failed" Ka Permanent Fix (Bina PC Domain Se Hataye):
+//   Command: `Win + R` -> type `powershell` (Run as Administrator) -> Enter.
+//   Kaam: Client PC aur Domain Controller ke beech machine account secure channel password sync karna.
+//   Andar jaakar: Sequence run karta hai:
+//   `Test-ComputerSecureChannel -Verbose` -----> Agar False aaye toh trust toot chuka hai.
+//   `Reset-ComputerSecureChannel -Credential (Get-Credential)` -----> Domain admin credentials daal kar 5 second me trust repair karta hai!
 
-// - Step 2: Account Bar-Bar Lockout Hone Ka Root Cause Pakadna
-//   Root Cause: User ne phone me Wi-Fi ya Outlook me purana password save rakha hai jo background me baar-baar galat attempt bhejta hai.
-//   Audit via Event Viewer on Domain Controller:
-//   Security Log me filter karo: Event ID 4740 (A user account was locked out).
-//   Caller Computer Name check karo: Pata chal jata hai kis specific PC ya mobile IP se lock signal aaya.
+// - Step 2: Account Bar-Bar Lockout Hone Ka Root Cause Pakadna:
+//   Command: `Win + R` -> type `eventvwr.msc` -> Enter (Domain Controller par).
+//   Kaam: Caller Machine (mobile ya purane PC) ko identify karna jo background me wrong cached credentials bhej raha hai.
+//   Andar jaakar: "Windows Logs" > "Security" log me filter karta hai: Event ID 4740 (A user account was locked out) -> Event detail me "Caller Computer Name" note karta hai -> Us device par jakar saved Wi-Fi/Outlook credentials update karta hai.
 
 // - Step 3: Security Groups vs Distribution Lists Ka Fark (Interview Favorite):
 //   - Security Group -----> Iska use NTFS permissions, shared folders aur VPN access dene ke liye hota hai (Is par email bhi enable ho sakti hai).
@@ -81,9 +80,30 @@
 // Golden Rule (Most Restrictive Wins):
 // Agar Share me "Full Control" hai lekin NTFS me "Read Only" hai, toh user ko sirf "READ ONLY" access hi milega!
 
-// Enterprise Best Practice (L2 Standard):
-// 1. Share Permissions: Hamesha "Authenticated Users" ko "Full Control" ya "Change" de kar chhod do.
-// 2. NTFS Permissions: Asli granular control (Read, Write, Modify) yahan "Security" tab me jakar AD Security Groups ko assign karo.
+// * 1. L1 ENGINEER KA KAAM (Surface Access & Drive Mapping):
+// Target: Shared drive reachability test aur user desk par drive map karna.
+// - Step 1: Network Share Path Open Karna:
+//   Command: `Win + R` -> type `\\FILESERVER01\SharedData` -> Enter.
+//   Kaam: Check karna ki network cable aur file server reachable hain ya nahi.
+//   Andar jaakar: Agar files dikh rahi hain toh user connection OK hai.
+// - Step 2: Persistent Drive Letter Map Karna:
+//   Command: `Win + R` -> type `explorer` -> Enter -> Left sidebar se "This PC" par click karo.
+//   Kaam: User ke My Computer me permanent drive icon banana.
+//   Andar jaakar: Top menu bar se "Map network drive" button par CLICK -> "Drive:" dropdown se letter select karo (e.g. `Z:`) -> "Folder:" box me network path daalo (`\\FILESERVER01\SharedData`) -> "Reconnect at sign-in" checkbox TICK karo -> "Finish" par click karo.
+// - L1 Ki Limit: "Access Denied" permission conflicts, locked files release karna, ya NTFS inheritance break karna L2 ko di jaati hai.
+
+// * 2. L2 ENGINEER KA KAAM (Root Cause, File Locks & NTFS Hardening):
+// Target: Locked files release karna, Share vs NTFS permission design, aur session disconnect.
+// - Step 1: Locked Files Release Karna (Shared Folders Console):
+//   Command: `Win + R` -> type `fsmgmt.msc` -> Enter.
+//   Kaam: Bina server reboot kiye locked file release karna.
+//   Andar jaakar: Left pane me "Open Files" par click -> locked file dhoondh kar uspe RIGHT-CLICK -> "Close Open File" select karta hai.
+// - Step 2: Enterprise Permission Standard Enforce Karna:
+//   Command: `Win + R` -> type `fsmgmt.msc` -> Enter -> "Shares" par click.
+//   Kaam: Granular role-based access control lagana.
+//   Andar jaakar:
+//   * Share Permissions: Folder par RIGHT-CLICK -> "Properties" -> "Share Permissions" me "Authenticated Users" ko "Change" aur "Read" allow karta hai.
+//   * NTFS Security: "Security" tab me "Edit..." click karke specific AD Security Groups (e.g. `Finance_RW` ko Modify aur `Finance_RO` ko Read) assign karta hai.
 
 
 // ================================================================================
@@ -105,39 +125,37 @@
 
 
 // * 1. L1 ENGINEER KA KAAM (Client Side Verification & Force Refresh):
-// Target: Check karna ki client PC par policy lag rahi hai ya nahi.
-
-// - Problem 1: User ke system par naya mapped drive ya shortcut nahi aaya
-//   Step 1: CMD ya PowerShell Admin me kholo.
-//   Step 2: Forcefully policy update karo:
-//           gpupdate /force
-//   Step 3: Output me dekho:
-//           "Computer Policy update has completed successfully."
-//           "User Policy update has completed successfully."
-
-// - Problem 2: Check karna PC par kaun-kaun si GPO active hain
-//   Step 1: Command chalao:
-//           gpresult /r
-//   Step 2: "Applied Group Policy Objects" section me verify karo policy ka naam list me aa raha hai ya nahi.
-//   Step 3: HTML Report Generator (Management ko bhejne ke liye):
-//           gpresult /h C:\gpreport.html
+// Target: Check karna ki client PC par policy lag rahi hai ya nahi aur diagnostic report nikalna.
+// - Problem 1: User Ke System Par Naya Mapped Drive Ya Policy Nahi Aayi:
+//   Command: `Win + R` -> type `cmd` -> Enter.
+//   Kaam: Domain Controller se latest group policy instantly fetch karna.
+//   Andar jaakar: Terminal me command chalata hai: `gpupdate /force`
+//   Verification: Output me dono success hone chahiye:
+//   "Computer Policy update has completed successfully."
+//   "User Policy update has completed successfully."
+// - Problem 2: Audit Karna PC Par Kaun-Kaun Si GPO Active Hain:
+//   Command: `Win + R` -> type `cmd` -> Enter -> type `gpresult /r` -> Enter.
+//   Kaam: Applied policies aur user security group memberships inspect karna.
+//   Andar jaakar: "Applied Group Policy Objects" section me check karta hai target policy name list me hai ya nahi.
+// - Problem 3: Management Ke Liye HTML Diagnostic Report Generate Karna:
+//   Command: `Win + R` -> type `cmd` -> Enter -> type `gpresult /h C:\gpreport.html` -> Enter.
+//   Kaam: Browser me khulne wali visual GPO audit report tayyar karna.
+// - L1 Ki Limit: Nayi GPO banana, WMI filtering lagana, GPO link order change karna, ya slow boot delay L2 ko escalate hota hai.
 
 
 // * 2. L2 ENGINEER KA KAAM (Policy Creation, WMI Filters & Troubleshooting):
-// Target: Corporate policies design karna aur blocking rules deploy karna.
-
-// - Step 1: USB Storage Device Block Policy Deploy Karna (Data Security)
-//   Path in gpmc.msc:
-//   Computer Configuration -> Policies -> Administrative Templates -> System -> Removable Storage Access
-//   Setting: "All Removable Storage classes: Deny all access" -> Enabled.
-
-// - Step 2: Automatic Network Shared Drive Map Karna (Group Policy Preferences)
-//   User Configuration -> Preferences -> Windows Settings -> Drive Maps
-//   Action: Update | Drive Letter: Z: | Location: \\FILESERVER01\SharedData | Reconnect: Yes.
-
-// - Step 3: GPO Slow Boot Triage (Group Policy Processing Delay)
+// Target: Corporate policies design karna, automatic drive mapping deploy karna, aur boot delays fix karna.
+// - Step 1: USB Storage Device Block Policy Deploy Karna:
+//   Command: `Win + R` -> type `gpmc.msc` -> Enter.
+//   Kaam: Company computers par unauthorized pendrives block karna.
+//   Andar jaakar: Domain expand -> Target OU par RIGHT-CLICK -> "Create a GPO in this domain, and Link it here..." -> GPO Name: `SEC_Block_USB` -> Banayi gayi GPO par RIGHT-CLICK -> "Edit..." -> `Computer Configuration` > `Policies` > `Administrative Templates` > `System` > `Removable Storage Access` -> "All Removable Storage classes: Deny all access" par DOUBLE-CLICK -> "Enabled" select karo -> "Apply" -> "OK".
+// - Step 2: Automatic Network Shared Drive Map Karna (Group Policy Preferences):
+//   Command: `Win + R` -> type `gpmc.msc` -> Enter -> GPO Editor kholo.
+//   Kaam: Sabhi employees ke PC me automatic Z: drive configure karna.
+//   Andar jaakar: `User Configuration` > `Preferences` > `Windows Settings` > `Drive Maps` par RIGHT-CLICK -> "New" > "Mapped Drive" -> Action: `Update` | Location: `\\FILESERVER01\SharedData` | Drive Letter: `Z:` | Reconnect: `Yes` set karke "Apply" -> "OK" karta hai.
+// - Step 3: GPO Slow Boot Triage (Group Policy Processing Delay):
 //   Root Cause: DNS misconfiguration ya Domain Controller unreachable hone par PC login screen par 10 minute atakta hai ("Applying Computer Settings...").
-//   Fix: Client PC ke ncpa.cpl me primary DNS ko Domain Controller ke live IP par set karna.
+//   Fix: Client PC ke `ncpa.cpl` me primary DNS ko Domain Controller ke live IP par set karta hai aur CMD me `dcdiag` se DC health check karta hai.
 
 // ================================================================================
 // Note created for Tausif Qureshi | Universal IT Support & Systems Engineer Blueprint

@@ -15,16 +15,22 @@
 // ================================================================================
 
 // 1. mstsc — Microsoft Terminal Services Client (Native Windows RDP)
-//    - Shortcut: [Win + R] -> mstsc -> Enter.
+//    - Command: `Win + R` -> type `mstsc` -> Enter.
 //    - Protocol & Port: RDP (Remote Desktop Protocol) — TCP Port 3389.
-//    - Floor Use: Domain ke andar doosre computer ya server ka desktop access lene ke liye.
-//    - Common Issue & Fix:
-//      "The remote computer requires Network Level Authentication (NLA)":
-//      Fix: User ke PC par sysdm.cpl -> Remote tab -> "Allow remote connections to this computer" enable karo aur NLA check karo.
+//    - Kaam: Corporate domain ke andar doosre desktop, kiosk machine ya server ka secure GUI screen remote access lene ke liye.
+//    - Andar jaakar:
+//      * Step A (Basic Connect): "Computer:" box me target PC ka IP address (e.g. `192.168.1.50`) ya Hostname (e.g. `DXB-T3-CHK-014`) type karo -> "Connect" button par CLICK karo.
+//      * Step B (Performance Optimization): Neeche "Show Options" dropdown par CLICK karo:
+//        - "Local Resources" tab: "Clipboard" checkbox TICK karo (taaki text/commands copy-paste ho sakein); "Printers" UNCHECK karo (remote login slow hone se bachane ke liye).
+//        - "Experience" tab: Connection speed me "LAN (10 Mbps or higher)" select karo aur "Persistent bitmap caching" TICK karo (screen lag aur freeze permanent solve).
+//      * Step C (NLA Error Resolution):
+//        Agar error aaye: "The remote computer requires Network Level Authentication (NLA)":
+//        Fix on Target PC: `Win + R` -> type `sysdm.cpl` -> Enter -> "Remote" tab me jao -> "Allow remote connections to this computer" TICK karo aur NLA checkbox verify karo.
 
-// 2. AnyDesk / TeamViewer / Quick Assist:
-//    - Floor Use: Jab user work-from-home (VPN se bahar) ho ya RDP domain firewall allow na kare, tab 9-digit AnyDesk address ya Quick Assist code se secure remote session liya jata hai.
-//    - Security Rule: Hamesha user se screen dekhne aur control lene se pehle verbal permission lo!
+// 2. AnyDesk / TeamViewer / Quick Assist (Off-Domain & Cloud Remote):
+//    - Command: `Win + R` -> type `quickassist` -> Enter  (Native Windows Cloud Remote).
+//    - Kaam: Jab employee work-from-home (VPN se bahar) ho ya firewall RDP port 3389 allow na kare.
+//    - Andar jaakar: 6-digit security code generate karke user ko provide karta hai; session start hote hi user se verbal consent lekar screen control leta hai.
 
 
 // ================================================================================
