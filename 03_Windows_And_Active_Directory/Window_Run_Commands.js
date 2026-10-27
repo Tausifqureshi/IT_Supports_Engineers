@@ -254,6 +254,9 @@
 // Problem 1: Second Partition Ya External Drive 'This PC' Me Dikh Nahi Rahi
 // -> Command: `Win + R` -> type `diskmgmt.msc` -> Enter -----> Healthy blue partition par RIGHT-CLICK -> "Change Drive Letter and Paths..." -> "Add..." -> Letter (e.g. D: ya E:) choose karke "OK" karta hai.
 
+// Problem 2: Nayi USB Drive / Hard Disk Attach Ki Lekin Console Me Dikh Nahi Rahi (Disk Bus Rescan)
+// -> Command: `Win + R` -> type `diskmgmt.msc` -> Enter -----> Top menu bar me "Action" > "Rescan Disks" par click karta hai (Plugged storage aur raw volumes ko UI me refresh karne ke liye).
+
 // L1 Ki Limit:
 // -> Agar disk "Offline", "Not Initialized", ya "RAW" show kare, toh data loss ke darr se ticket L2 ko escalate kar di jaati hai.
 
@@ -326,6 +329,9 @@
 // Problem 2: Screen Resolution, Dual-Monitor & Clipboard Setup
 // -> Command: `Win + R` -> type `mstsc` -> Enter -----> "Show Options" dropdown -> "Local Resources" tab me "Clipboard" checkbox TICK karo (text/scripts copy-paste allow karne ke liye). "Display" tab me "Display configuration" slider ko Full Screen par set karo (Dual screens ke liye "Use all my monitors for the remote session" TICK karo). Full Screen toggle shortcut: `Ctrl + Alt + Break` (ya `Ctrl + Alt + Pause`).
 
+// Best Practice: Session Disconnect vs Sign Out Rule (Session Lock Prevention)
+// -> Rule: Remote session khatam hone par window ka close cross button [X] nahi dabana hai (isse session disconnect ho kar background me RAM consume karta rehta hai). Hamesha Start menu me jaakar "Sign out" select karna mandatory hai taaki memory free ho aur dusre engineer ke liye session lock na ho.
+
 // L1 Ki Limit:
 // -> "Remote Desktop cannot connect to the remote computer" error aane par L1 engineer ticket L2 ko escalate kar deta hai.
 
@@ -397,6 +403,9 @@
 // --------------------------------------------------------------------------------
 // [ CONCEPT: .NET Framework Object-Oriented Management Shell ]
 // Windows management instrumentation (WMI/CIM), object-based pipelines, aur system recovery ka advanced CLI engine.
+
+// [ CLI EXECUTION RULE: Privilege Elevation ]
+// PowerShell commands execute karne ke liye hamesha Elevated Prompt use karna mandatory hai: `Win + R` -> type `powershell` -> press `Ctrl + Shift + Enter` (Run as Administrator) karein, warna `Restart-Service -Force` aur `Stop-Process -Force` chalane par "Access is Denied" error aayega.
 
 // * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Basic status check aur daily quick commands chalana.
@@ -547,6 +556,12 @@
 // [ CONCEPT: Local Security Authority & SAM Database ]
 // Local computer ke Security Account Manager (SAM) database ke users aur built-in groups ko manage karne ka master console.
 
+// * WINDOWS EDITION RULE (Home vs Pro/Enterprise):
+// -> Rule: lusrmgr.msc sirf Windows Pro, Enterprise aur Education editions par chalta hai. Windows Home edition par run karne par error aata hai: "This snapin may not be used with this edition of Windows".
+// -> Home Edition CLI Workaround: Home edition par local user manage karne ke liye CMD (Run as Administrator) se command use hoti hai:
+//    - Account Unlock: `net user <username> /active:yes`
+//    - Password Reset: `net user <username> <newpassword>`
+
 // * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Local user password reset aur locked account release karna.
 
@@ -585,6 +600,8 @@
 
 // Step 1: Computer Name Change & Domain Join
 // -> Command: `Win + R` -> type `sysdm.cpl` -> Enter -----> "Computer Name" tab par "Change..." button par CLICK -> "Computer name:" box me company standard name daalo (e.g. `DXB-T3-CHK-014`) -> "Member of" me "Domain" radio button choose karo -> Domain Name type karo (e.g. `airport.local` ya `company.corp`) -> "OK" -> Domain Admin credentials prompt aane par Username/Password daalo -> "Welcome to the domain" popup -> "OK" -> "Restart Now" par click.
+// -> Post-Reboot First Login Rule: Domain join hone ke baad system Reboot (Restart) hona mandatory hai. Restart ke baad L1 engineer user ko pehli baar login karwate waqt format sikhata hai:
+//    - Login Format: `DOMAIN\username` ya `username@domain.com` (Agar sirf plain username daalenge toh PC local SAM account se login attempt karke fail hoga).
 
 // L1 Ki Limit:
 // -> Virtual memory paging size tuning, BSOD crash dump configuration, ya Remote Desktop NLA rules L2 ko escalate hote hain.
@@ -638,6 +655,10 @@
 // Step 3: User Rights Assignment Security Audit
 // -> Command: `Win + R` -> type `gpedit.msc` -> Enter -----> `Computer Configuration` > `Windows Settings` > `Security Settings` > `Local Policies` > `User Rights Assignment` -> "Allow log on through Remote Desktop Services" me jakar verify karta hai unauthorized users list me na hon.
 
+// Step 4: Domain GPO vs Local GPO Conflict (Winning GPO Audit)
+// -> Command: `Win + R` -> type `cmd` -> Enter -----> `gpresult /h gpreport.html` chalata hai.
+// -> Rule & Kaam: Agar PC Active Directory Domain ka member hai, toh Domain Controller ki banayi hui GPO local gpedit.msc ki policy ko override (overwrite) kar deti hai. L2 engineer HTML audit report (`gpreport.html`) generate karke check karta hai ki kaun si policy kis level se enforce ho rahi hai (Winning GPO identify karna).
+
 
 // ================================================================================
 
@@ -685,6 +706,9 @@
 // Problem 1: User Bolta Hai "Nayi App Lagayi Hai Par Server Se Connect Nahi Ho Rahi"
 // -> Command: `Win + R` -> type `firewall.cpl` -> Enter -----> Left sidebar se "Allow an app or feature through Windows Defender Firewall" par CLICK -> Upar "Change settings" button par click -> Application ke samne "Domain" aur "Private" checkboxes TICK karo -> "OK".
 
+// Problem 2: Quick Isolation: Temporarily Turn Off Firewall for Testing
+// -> Command: `Win + R` -> type `firewall.cpl` -> Enter -----> Left sidebar se "Turn Windows Defender Firewall on or off" par click karta hai -> "Domain network" aur "Private network" ke liye "Turn off Windows Defender Firewall" select karke OK karta hai -> Agar connection ban jata hai, toh confirm ho jata hai ki firewall rule banana padega (test ke baad wapas ON karna mandatory hai).
+
 // L1 Ki Limit:
 // -> Custom TCP/UDP port open karna, IP subnet scoping, ya outbound block rules lagana L2 ko escalate hota hai.
 
@@ -721,6 +745,9 @@
 
 // Problem 2: Stale SSL Handshake Cache Clear Karna
 // -> Command: `Win + R` -> type `inetcpl.cpl` -> Enter -----> "Content" tab par CLICK -> "Clear SSL state" button par CLICK -> "The SSL cache was successfully cleared" confirmation popup dekhta hai.
+
+// Problem 3: Internet Explorer/Edge WinINet Settings Factory Reset
+// -> Command: `Win + R` -> type `inetcpl.cpl` -> Enter -----> "Advanced" tab par click karta hai -> Neeche "Restore advanced settings" button par click karta hai (isse corporate security baseline intact rehte hue corrupted browser networking flags default ho jaate hain).
 
 // L1 Ki Limit:
 // -> Corporate PAC proxy script setup, IP subnet bypass, ya TLS version deprecation issues L2 ko escalate hote hain.
@@ -792,8 +819,11 @@
 // * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: System ko Safe Mode me boot karna malware scan aur driver recovery ke liye.
 
-// Step 1: Safe Mode Diagnostic Boot Setup
-// -> Command: `Win + R` -> type `msconfig` -> Enter -----> "Boot" tab par CLICK -> "Safe boot" checkbox TICK karta hai ("Minimal" radio button select) -> "Apply" -> "OK" -> "Restart". Kaam khatam hone par normal boot karne ke liye wapas msconfig khol kar "Safe boot" ko UNCHECK karke restart karta hai.
+// Step 1: Safe Mode Diagnostic Boot Setup (Minimal vs Network Variant)
+// -> Command: `Win + R` -> type `msconfig` -> Enter -----> "Boot" tab par CLICK -> "Safe boot" checkbox TICK karta hai:
+//    - Minimal Variant: "Minimal" radio button select karta hai (Sirf basic core drivers load karta hai, network band rehta hai).
+//    - Safe Mode with Networking Variant: "Network" radio button select karta hai taaki LAN/Internet drivers load rahein aur help desk tools ya remote patches connect ho sakein.
+//    - Normal Restore: Kaam khatam hone par wapas msconfig khol kar "Safe boot" ko UNCHECK karke normal reboot karta hai.
 
 // L1 Ki Limit:
 // -> Blue Screen (BSOD) ke baad 3rd-party startup services ka isolation test (Clean Boot) L2 ko di jaati hai.
@@ -822,6 +852,10 @@
 
 // Step 1: Basic Storage Cleanup
 // -> Command: `Win + R` -> type `cleanmgr` -> Enter -----> Drive `C:` select -> "OK" -> "Temporary files", "Recycle Bin", aur "Thumbnails" checkboxes TICK karta hai -> "OK" -> "Delete Files" par click karta hai (1 se 3 GB space quick free).
+
+// Step 2: Direct All-Drive Purge Shortcut (Automated CLI Clean)
+// -> Command: `Win + R` -> type `cleanmgr /sageset:1` -> Enter -----> Ek baar saari cleanable categories ke boxes tick karke profile save kar leta hai.
+// -> Automated Deep Clean: `Win + R` -> type `cleanmgr /sagerun:1` -> Enter -----> Bina kisi user prompt ke background me poori disk automated space free kar deta hai.
 
 // L1 Ki Limit:
 // -> Windows Update component store cache, old OS install dumps (Windows.old), ya GBs of WinSxS junk clean karna L2 ko di jaati hai.
@@ -891,6 +925,9 @@
 // Problem 2: Printer Status "Offline" Misclick Fix (Use Printer Offline Uncheck)
 // -> Command: `Win + R` -> type `control printers` -> Enter -----> Target printer par DOUBLE-CLICK karo -> Top menu me "Printer" par click karo -> "Use Printer Offline" par agar TICK (✔) laga ho, toh click karke UNCHECK karta hai (printer instantly online aa jata hai).
 
+// Problem 3: End-to-End Output Verification (Print Test Page)
+// -> Command: `Win + R` -> type `control printers` -> Enter -----> Printer par RIGHT-CLICK -> "Printer properties" -> "General" tab -> "Print Test Page" button par click karta hai (Bina user se document maange physical paper output aur ink/tray confirm karne ke liye).
+
 // L1 Ki Limit:
 // -> Agar "Use Printer Offline" uncheck karne ke baad bhi status offline hi show kare, toh issue printer ke network port ya firewall SNMP block ka hota hai, jise L2 engineer Step 1 me root cause se fix karta hai.
 
@@ -952,6 +989,12 @@
 // Windows logon architecture jisme automatic authentication credentials store kiye jate hain taaki unattended computers bina password boot ho sakein.
 // (Note: Kiosk / FIDS display auto-logon aur user role management ka direct operational tool).
 
+// * WARNING / WORKAROUND (Windows 10/11 Checkbox Missing Glitch):
+// -> Issue: Naye Windows 10/11 updates me "Users must enter a user name and password to use this computer" checkbox gayab (hidden) hota hai.
+// -> Fix: Windows Hello sign-in feature is checkbox ko hide karta hai. Isko wapas lane ke 2 tareeqe hain:
+//    - GUI Settings Fix: `Win + I` (Settings) -> Accounts -> Sign-in options -> "For improved security, only allow Windows Hello sign-in for Microsoft accounts on this device" ko Turn OFF karo.
+//    - Registry Workaround: `Win + R` -> type `regedit` -> Enter -> `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\PasswordLess\Device` me `DevicePasswordLessBuildVersion` ko `0` set karke PC reboot karo (Checkbox wapas visible ho jayega).
+
 // * STEP 1: Kiosk & Airport FIDS Display Auto-Logon Setup (Without Password)
 // -> Command: `Win + R` -> type `netplwiz` -> Enter -----> Step-by-Step Auto-Logon:
 //    - Step A: List se target user account select karo (e.g. `Kiosk_User` ya `FIDS_Term`).
@@ -979,6 +1022,10 @@
 //    - Step A: Profile prompt aane par "OK" click karta hai (Outlook bina add-ins ke khul jayega).
 //    - Step B: Top menu me `File` > `Options` > `Add-ins` par CLICK -> Neeche Manage: "COM Add-ins" select karke "Go..." button par CLICK.
 //    - Step C: Unnecessary/Crashing add-ins (e.g. Antivirus scanner, Adobe PDF, third-party sync tools) ko UNCHECK karta hai -> "OK" -> Outlook close karke normally restart karta hai.
+
+// Problem 2: Corrupt Mail Database Repair (SCANPST.EXE)
+// -> Command: `Win + R` -> type `C:\Program Files\Microsoft Office\root\Office16\SCANPST.EXE` -> Enter.
+// -> Kaam & Action: Inbox Repair Tool khol kar corrupted `.pst` ya `.ost` file ko browse karke "Start" dabata hai -> "Repair" click karta hai taaki mail headers fix ho jayein bina data delete kiye.
 
 // L1 Ki Limit:
 // -> Corrupted `.OST` offline storage rebuild karna ya clean fresh mail profile banana L2 ko di jaati hai.
