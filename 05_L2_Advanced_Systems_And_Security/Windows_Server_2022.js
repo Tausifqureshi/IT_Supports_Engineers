@@ -92,7 +92,7 @@
 // 2. Windows Server Backup (Bare-Metal & System State):
 //    - Installation: Server Manager -> Add Features -> "Windows Server Backup".
 //    - Backup Schedule:
-//      Step 1: wbadmin.msc kholo -> "Backup Schedule" wizard.
+//      Step 1: Command: Win + R -> type wbadmin.msc -> Enter -> "Backup Schedule" wizard.
 //      Step 2: Backup Configuration: "Custom" -> Select "System State" (Active Directory database `ntds.dit`, registry aur SYSVOL policies ka backup).
 //      Step 3: Target: Dedicated external storage drive ya network share. Daily 11:00 PM auto-backup schedule set karo.
 

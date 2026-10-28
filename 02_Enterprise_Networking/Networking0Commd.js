@@ -14,27 +14,27 @@
 // ========================================= 1. Core Network Diagnostic Commands ================================= //
 // ================================================================================
 
-// 1. ping -t <IP> -----> Kisi device ya server par continuous packet bhej kar check karna ki network stable hai ya beech-beech me drop ho raha hai.
+// 1. Command: ping -t 192.168.1.1 -----> Kisi device ya server par continuous packet bhej kar check karna ki network stable hai ya beech-beech me drop ho raha hai.
 
-// 2. tracert <domain/IP> -----> (Linux: traceroute) Packet destination tak kis-kis router (hop) se hokar ja raha hai aur kahan packet mara trace karne ke liye.
+// 2. Command: tracert google.com -----> (Linux: traceroute) Packet destination tak kis-kis router (hop) se hokar ja raha hai aur kahan packet mara trace karne ke liye.
 
-// 3. nslookup <domain> -----> DNS server sahi IP return kar raha hai ya nahi yeh lookup test karne ke liye.
+// 3. Command: nslookup google.com -----> DNS server sahi IP return kar raha hai ya nahi yeh lookup test karne ke liye.
 
-// 4. nslookup <domain> 8.8.8.8 -----> Specific Google DNS se query karke check karna ki issue local DNS me hai ya global DNS me.
+// 4. Command: nslookup google.com 8.8.8.8 -----> Specific Google DNS se query karke check karna ki issue local DNS me hai ya global DNS me.
 
-// 5. ipconfig /all -----> (Linux: ip a) Network card ka MAC address, IP address, Subnet Mask, Gateway aur DHCP server dekhne ke liye.
+// 5. Command: ipconfig /all -----> (Linux: ip a) Network card ka MAC address, IP address, Subnet Mask, Gateway aur DHCP server dekhne ke liye.
 
-// 6. ipconfig /release -----> Router se mila hua purana IP address chhodne (drop karne) ke liye.
+// 6. Command: ipconfig /release -----> Router se mila hua purana IP address chhodne (drop karne) ke liye.
 
-// 7. ipconfig /renew -----> DHCP server se naya fresh IP address lene ke liye (IP conflict aane par best command).
+// 7. Command: ipconfig /renew -----> DHCP server se naya fresh IP address lene ke liye (IP conflict aane par best command).
 
-// 8. ipconfig /flushdns -----> Corrupt ya purane local DNS cache ko flush (clean) karne ke liye.
+// 8. Command: ipconfig /flushdns -----> Corrupt ya purane local DNS cache ko flush (clean) karne ke liye.
 
-// 9. netstat -ano -----> (Linux: ss -tulnp) System par kaun se ports active hain aur kis process PID se jude hain dekhne ke liye.
+// 9. Command: netstat -ano -----> (Linux: ss -tulnp) System par kaun se ports active hain aur kis process PID se jude hain dekhne ke liye.
 
-// 10. netstat -ano | findstr :<Port> -----> Specific port (jaise 80, 443, 3389) open hai ya blocked dekhne ke liye.
+// 10. Command: netstat -ano | findstr :3389 -----> Specific port (jaise 80, 443, 3389) open hai ya blocked dekhne ke liye.
 
-// 11. arp -a -----> Local network me judey devices ke IP address se unke physical MAC address ki mapping table dekhne ke liye.
+// 11. Command: arp -a -----> Local network me judey devices ke IP address se unke physical MAC address ki mapping table dekhne ke liye.
 
 
 // ================================================================================
@@ -43,19 +43,19 @@
 // ========================================= 2. TCP/IP Stack Repair, Routing & Wi-Fi Commands =================== //
 // ================================================================================
 
-// 12. pathping <domain/IP> -----> Ping aur Tracert combine karke 250 packets bhej kar hop-by-hop exact packet loss percentage calculate karne ke liye.
+// 12. Command: pathping 8.8.8.8 -----> Ping aur Tracert combine karke 250 packets bhej kar hop-by-hop exact packet loss percentage calculate karne ke liye.
 
-// 13. route print -----> System ka active IPv4 routing table, interface metrics aur default gateway route check karne ke liye.
+// 13. Command: route print -----> System ka active IPv4 routing table, interface metrics aur default gateway route check karne ke liye.
 
-// 14. netsh int ip reset -----> Corrupt TCP/IP protocol stack ko factory default settings par reset karne ke liye (Network down ka master repair).
+// 14. Command: netsh int ip reset -----> Corrupt TCP/IP protocol stack ko factory default settings par reset karne ke liye (Network down ka master repair).
 
-// 15. netsh winsock reset -----> Winsock socket catalog ko reset karke browser me website na khulne ke socket issues theek karne ke liye.
+// 15. Command: netsh winsock reset -----> Winsock socket catalog ko reset karke browser me website na khulne ke socket issues theek karne ke liye.
 
-// 16. netsh wlan show profiles -----> Laptop par pehle se judey sabhi Wi-Fi access points aur SSIDs ki list dekhne ke liye.
+// 16. Command: netsh wlan show profiles -----> Laptop par pehle se judey sabhi Wi-Fi access points aur SSIDs ki list dekhne ke liye.
 
-// 17. netsh wlan show profile name="Office_WiFi" key=clear -----> Saved Wi-Fi network ka security key password (Key Content) terminal par nikalne ke liye.
+// 17. Command: netsh wlan show profile name="Office_WiFi" key=clear -----> Saved Wi-Fi network ka security key password (Key Content) terminal par nikalne ke liye.
 
-// 18. nbtstat -R -----> NetBIOS remote cache name table ko purge aur reload karne ke liye (Shared network drives naming issue).
+// 18. Command: nbtstat -R -----> NetBIOS remote cache name table ko purge aur reload karne ke liye (Shared network drives naming issue).
 
 
 // ================================================================================
@@ -176,7 +176,7 @@
 //   Kaam: PC ke internal NIC card aur protocol stack ka self-test karna.
 //   Andar jaakar: Terminal me command run karta hai: `ping 127.0.0.1` -> Agar 4 packets reply aaye (0% loss), matlab internal hardware aur TCP/IP driver 100% healthy hai.
 // - Step 3 (Gateway & Router Reachability):
-//   Command: `Win + R` -> type `cmd` -> Enter -> type `ipconfig` -> Default Gateway note karo -> type `ping <Gateway_IP>` (e.g. `ping 192.168.1.1`).
+//   Command: `Win + R` -> type `cmd` -> Enter -> type `ipconfig` -> Default Gateway note karo -> type `ping 192.168.1.1`.
 //   Kaam: Local floor switch aur router tak connectivity test karna.
 //   Andar jaakar: Agar "Request timed out" aaye, toh cable reconnect karta hai ya wall port change karta hai.
 // - Step 4 (DNS vs Internet Isolation Test):

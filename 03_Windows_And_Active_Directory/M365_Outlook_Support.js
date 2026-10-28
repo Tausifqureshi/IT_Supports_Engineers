@@ -17,7 +17,7 @@
 // 1. .OST (Offline Storage Table):
 //    - Kya hai: Server par maujood mailbox (Exchange/M365) ka local synchronized offline cache copy hota hai.
 //    - Golden Rule: .OST file ko bina dare delete kiya ja sakta hai! Jab aap Outlook dobara kholte hain, toh server se saare emails dobara fresh download ho kar nayi .OST file ban jati hai.
-//    - Default Location: C:\Users\<Username>\AppData\Local\Microsoft\Outlook\
+//    - Default Location: C:\Users\johndoe\AppData\Local\Microsoft\Outlook\ (ya %localappdata%\Microsoft\Outlook)
 
 // 2. .PST (Personal Storage Table):
 //    - Kya hai: Manual archive ya backup file hoti hai jo sirf user ke computer ki local hard drive par rehti hai (server par sync nahi hoti).

@@ -48,7 +48,7 @@
 
 // 3. Manual Outlook Data Backup:
 //    - Agar user ke paas local `.pst` archives hain:
-//      Location: `C:\Users\<user>\Documents\Outlook Files\`
+//      Location: `C:\Users\johndoe\Documents\Outlook Files\`
 //      Copy karke naye laptop me same path par paste karo aur Outlook me Open & Export -> Open Outlook Data File chuno.
 
 
@@ -110,7 +110,7 @@
 // "Sir, main bottom-up approach (OSI Physical to Application) follow karunga:
 // 1. Physical Layer: Check karunga LAN cable me green light blink kar rahi hai ya Wi-Fi connected hai.
 // 2. Loopback Test: 'ping 127.0.0.1' karke check karunga PC ka internal TCP/IP stack healthy hai ya nahi.
-// 3. Gateway Test: 'ping <Gateway_IP>' karke check karunga local router/switch reach ho raha hai ya nahi.
+// 3. Gateway Test: 'ping 192.168.1.1' karke check karunga local router/switch reach ho raha hai ya nahi.
 // 4. DNS Test: 'ping 8.8.8.8' chalaunga, agar 8.8.8.8 ping hota hai lekin google.com ping nahi hota, toh confirm ho jayega ki issue DNS ka hai. Main 'ipconfig /flushdns' chala kar DNS verify karunga."
 
 // Q2: Computer par 169.254.x.x IP address aa raha hai, iska kya matlab hai aur kaise fix karoge?

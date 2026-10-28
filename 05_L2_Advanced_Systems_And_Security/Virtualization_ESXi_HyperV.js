@@ -20,7 +20,7 @@
 
 // 2. Microsoft Hyper-V:
 //    - Kya hai: Windows Server 2022 ka built-in native virtualization role.
-//    - Console: [Win + R] -> `virtmgmt.msc` (Hyper-V Manager).
+//    - Console: Command: Win + R -> type virtmgmt.msc -> Enter (Hyper-V Manager).
 //    - Feature: Windows Server licenses ke sath tightly integrated, licensing cost kam hoti hai.
 
 

@@ -92,13 +92,13 @@
 
 // 1. Microsoft Teams Support:
 //    - Teams Cache Clean Fix (Teams freeze/camera error):
-//      CMD: `taskkill /F /IM ms-teams.exe`
-//      Cache delete: `C:\Users\<user>\AppData\Local\Packages\MSTeams_8wekyb3d8bbwe\LocalCache`
+//      Command: taskkill /F /IM ms-teams.exe
+//      Command (Run): %localappdata%\Packages\MSTeams_8wekyb3d8bbwe\LocalCache (Folder khol kar saara cache clean karna).
 //    - Meeting audio/video mic permissions: Windows Settings -> Privacy & Security -> Microphone -> Teams toggle ON.
 
 // 2. SharePoint Online & OneDrive Sync:
 //    - Sync Issues (Red X mark on files):
-//      CMD: `%localappdata%\Microsoft\OneDrive\onedrive.exe /reset`
+//      Command: %localappdata%\Microsoft\OneDrive\onedrive.exe /reset
 //      (OneDrive restart ho kar fresh cloud comparison karta hai bina file delete kiye).
 //    - Site Permissions: Owners (Full Control), Members (Edit/Contribute), Visitors (Read Only).
 

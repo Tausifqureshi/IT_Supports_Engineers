@@ -24,10 +24,10 @@
 //    - L2 Permanent Fix via CMD (Admin):
 //      Step 1: Recovery key daal kar Windows me login karo.
 //      Step 2: Protection suspend karo:
-//              manage-bde -protectors -disable C:
+//              Command: manage-bde -protectors -disable C:
 //      Step 3: System ko ek baar normally RESTART karo (TPM nayi PCR values capture kar leta hai).
 //      Step 4: Login ke baad protection wapas enable karo:
-//              manage-bde -protectors -enable C:
+//              Command: manage-bde -protectors -enable C:
 //      (Iske baad system kabhi dobara key nahi mangega!).
 
 
@@ -46,11 +46,11 @@
 // 2. Stuck Windows Update Universal Reset Script:
 //    - Problem: Update "Downloading 0%" ya "Failed to install - Error 0x80240034" par atki hui hai.
 //    - Resolution Steps via CMD (Admin):
-//      Step 1: net stop wuauserv && net stop bits && net stop cryptsvc
-//      Step 2: ren C:\Windows\SoftwareDistribution SoftwareDistribution.bak
-//      Step 3: ren C:\Windows\System32\catroot2 catroot2.bak
-//      Step 4: net start wuauserv && net start bits && net start cryptsvc
-//      Step 5: usoclient StartScan
+//      Step 1: Command: net stop wuauserv && net stop bits && net stop cryptsvc
+//      Step 2: Command: ren C:\Windows\SoftwareDistribution SoftwareDistribution.bak
+//      Step 3: Command: ren C:\Windows\System32\catroot2 catroot2.bak
+//      Step 4: Command: net start wuauserv && net start bits && net start cryptsvc
+//      Step 5: Command: usoclient StartScan
 //      (Isse purana corrupt cache wipe out hota hai aur updates smoothly install ho jati hain).
 
 
@@ -62,8 +62,10 @@
 
 // 1. Windows Defender for Endpoint / CrowdStrike / SentinelOne:
 //    - Daily Floor Tasks:
-//      - Definition Updates Verify Karna: `mpcmdrun.exe -SignatureUpdate`
-//      - Quick / Full Malware Scan Trigger Karna: `mpcmdrun.exe -Scan -ScanType 2`
+//      - Definition Updates Verify Karna:
+//        Command: mpcmdrun.exe -SignatureUpdate
+//      - Quick / Full Malware Scan Trigger Karna:
+//        Command: mpcmdrun.exe -Scan -ScanType 2
 //      - False Positive Whitelisting: Agar company ka internal software Antivirus se block ho jaye, toh Security Center me jakar specific file path ko Exclusion list me add karna.
 //      - Quarantine Item Inspection: Block hui file ko sandbox me investigate karna ki virus hai ya safe program.
 

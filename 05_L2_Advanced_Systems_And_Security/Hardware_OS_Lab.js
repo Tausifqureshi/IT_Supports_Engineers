@@ -23,7 +23,8 @@
 //      Step 1: Power cable nikalo, RAM stick ko side clips press karke bahar nikalo.
 //      Step 2: Golden contacts ko school eraser (rubber) se clean karo (carbon/oxidation hatane ke liye).
 //      Step 3: Single channel vs Dual channel verify karo (Hamesha Slot 2 aur Slot 4 me RAM lagayi jati hai for dual channel speed).
-//      Step 4: Windows Built-in RAM Test: [Win + R] -> mdsched.exe -> "Restart now and check for problems".
+//      Step 4: Windows Built-in RAM Test:
+//              Command: Win + R -> type mdsched.exe -> Enter -----> "Restart now and check for problems".
 
 // 2. Storage Drive (SSD vs Mechanical HDD) Diagnostics:
 //    - Hard Disk Drive (HDD): Mechanical spindle disk (5400/7200 RPM). Slow read/write (~100 MB/s), physical shock se bad sectors bante hain.
@@ -33,7 +34,8 @@
 //      - Boot error: "No bootable device found" ya "Disk read error occurred".
 //      - BSOD: 0x0000007B (INACCESSIBLE_BOOT_DEVICE).
 //    - L2 Health Check Tool: CrystalDiskInfo tool chala kar S.M.A.R.T health check karo (Health "Good 95%" hai ya "Caution / Bad").
-//    - Bad Sector Check via CLI: chkdsk C: /f /r
+//    - Bad Sector Check via CLI:
+//      Command: chkdsk C: /f /r
 
 // 3. Power Supply (SMPS / PSU) Diagnostics:
 //    - Symptoms: PC power button dabane par bilkul dead hai, ya heavy load par achanak shut down ho jata hai.
@@ -67,7 +69,8 @@
 
 // 3. TPM 2.0 (Trusted Platform Module):
 //    - Role: Motherboard par lagi dedicated cryptographic security chip jo BitLocker encryption keys store karti hai.
-//    - Windows 11 Compatibility Check: [Win + R] -> tpm.msc -> Check status: "The TPM is ready for use (Specification Version: 2.0)".
+//    - Windows 11 Compatibility Check:
+//      Command: Win + R -> type tpm.msc -> Enter -----> Check status: "The TPM is ready for use (Specification Version: 2.0)".
 
 // 4. CMOS Battery Reset (BIOS Password / Corrupt Settings Recovery):
 //    - Symptom: System ka date aur time har baar restart par galat (purane saal) me chala jata hai.

@@ -47,11 +47,6 @@
 // Problem 6: Speaker Icon Par Red Cross 'X' / Sound Output Gayab (Windows Audio Stopped)
 // -> Command: `Win + R` -> type `services.msc` -> Enter -----> "Windows Audio" (AudioSrv) par RIGHT-CLICK -> "Restart" karta hai -> Popup aayega "Windows Audio Endpoint Builder will also restart", "Yes" confirm karta hai (Audio turant normal ho jata hai).
 
-// Problem 7: Windows Update 0% Par Atka Hai (wuauserv & BITS Stuck Download)
-// -> Step A (Services Stop): `services.msc` me "Windows Update" aur "Background Intelligent Transfer Service" (BITS) dono par RIGHT-CLICK -> "Stop" karta hai.
-// -> Step B (Clear Cache): `Win + R` -> type `C:\Windows\SoftwareDistribution\Download` -> Enter -> saari temporary download files [Shift + Delete] se delete karta hai.
-// -> Step C (Services Start): Wapas services console me dono services ("Windows Update" aur "BITS") par RIGHT-CLICK -> "Start" select karta hai (Fresh update download trigger ho jata hai).
-
 // L1 Ki Limit:
 // -> Agar service restart karne ke thodi der baad Spooler fir se ruk jaye, "Use Printer Offline" uncheck karne par bhi printer offline hi dikhaye, ya service crash loop me chali jaye, toh issue corrupt driver, registry lock ya network SNMP port block ka hota hai, jise L2 engineer root cause se fix karta hai.
 
@@ -60,7 +55,7 @@
 // Target: Print Spooler baar-baar crash kyun ho raha hai, usko jad se khatam karna.
 
 // Step 1: Crash Ka Root Cause Pakadna (Event Viewer)
-// -> Command: `Win + R` -> type `eventvwr.msc` -> Enter -----> "Windows Logs" > "Application" me Event ID 1000 check karta hai (`Faulting Module: <Corrupt_Driver>.dll`). Aur "Applications and Services Logs" > "Microsoft" > "Windows" > "PrintService" > "Admin" me jakar crash karne wala user aur document trace karta hai.
+// -> Command: `Win + R` -> type `eventvwr.msc` -> Enter -----> "Windows Logs" > "Application" me Event ID 1000 check karta hai (`Faulting Module: hpzprn01.dll`). Aur "Applications and Services Logs" > "Microsoft" > "Windows" > "PrintService" > "Admin" me jakar crash karne wala user aur document trace karta hai.
 
 // Step 2: Corrupt Driver Ko Root Se Wipe Karna (Print Management)
 // -> Command: `Win + R` -> type `printmanagement.msc` -> Enter -----> "Custom Filters" > "All Drivers" me jata hai -> crash karne wale driver par RIGHT-CLICK -> "Remove Driver Package..." select karke clean wipe karta hai, fir vendor site se fresh driver install karta hai.
@@ -73,6 +68,59 @@
 
 // Step 5: Driver Isolation Mode Set Karna (Spooler Crash Protection)
 // -> Command: `Win + R` -> type `printmanagement.msc` -> Enter -----> Driver par RIGHT-CLICK -> "Set Driver Isolation" -> "Isolated" chunta hai (Agar driver dubara crash bhi ho, toh Spooler aur poore floor ki printing band nahi hogi).
+
+
+// ================================================================================
+
+// --- Windows Update Issues (services.msc) ---
+// --------------------------------------------------------------------------------
+// [ CONCEPT: Windows Update Engine Architecture (wuauserv, BITS & CryptSvc) ]
+// Windows updates background me download karne ke liye BITS (bandwidth optimizer), wuauserv (update installer engine), aur CryptSvc (catalog signature verification) ka use hota hai.
+
+// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// Target: Stuck updates ko 5 minute me resume karna aur failed cache clear karna.
+
+// Problem 1: Windows Update 0% Par Atka Hai (Corrupted Download Cache / BITS & wuauserv Hang)
+// -> Step A (Services Stop): `services.msc` me "Windows Update" aur "BITS" par RIGHT-CLICK -> "Stop" karta hai (Locked folder release karne ke liye).
+// -> Step B (Clear Cache): `Win + R` -> type `C:\Windows\SoftwareDistribution\Download` -> Enter -----> Saari temporary files ko [Shift + Delete] se delete karta hai.
+// -> Step C (Services Start): Wapas `services.msc` me dono services ("Windows Update" aur "BITS") par RIGHT-CLICK -> "Start" select karta hai (Fresh update download trigger karne ke liye).
+
+// Problem 2: Windows Update Service "Disabled" Dikh Rahi Hai (Grayed Out / Stopped)
+// -> Command: `Win + R` -> type `services.msc` -> Enter -----> "Windows Update" par RIGHT-CLICK -> "Properties" -> Startup type me "Automatic (Delayed Start)" select karke "Start" dabata hai (Boot ke baad service automatically run karne ke liye).
+
+// Problem 3: Update Verification Fail / Signature Error 0x800b0109 (Cryptographic Services)
+// -> Command: `Win + R` -> type `services.msc` -> Enter -----> "Cryptographic Services" (CryptSvc) par RIGHT-CLICK -> "Restart" karta hai (Windows update catalog files aur signatures verify karne ke liye).
+
+// L1 Ki Limit:
+// -> Agar cache delete karne aur services restart ke baad bhi update fail ho ya system files corrupt hon, toh issue L2 engineer root cause se fix karta hai.
+
+
+// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// Target: Catroot2 catalog rebuild, WSUS policy conflict check aur component store health repair.
+
+// Step 1: Catroot2 & SoftwareDistribution Complete Reset (Master CLI Sequence)
+// -> Flow: Start -> type `cmd` -> Right-click "Run as administrator" (ya `Ctrl + Shift + Enter`).
+// -> Commands & Wajah:
+//    - `net stop wuauserv && net stop cryptSvc && net stop bits && net stop msiserver` -----> Services stop karke locked folders release karne ke liye.
+//    - `ren C:\Windows\SoftwareDistribution SoftwareDistribution.old` -----> Corrupt download cache aur update database wipe karne ke liye.
+//    - `ren C:\Windows\System32\catroot2 catroot2.old` -----> Damaged catalog signatures aur certificates rebuild karne ke liye.
+//    - `net start wuauserv && net start cryptSvc && net start bits && net start msiserver` -----> Services start karke fresh clean database banane ke liye.
+
+// Step 2: Component Store & Image Corruption Repair (DISM & SFC)
+// -> Flow: Start -> type `cmd` -> Right-click "Run as administrator" (ya `Ctrl + Shift + Enter`).
+// -> Commands & Wajah:
+//    - `DISM /Online /Cleanup-Image /RestoreHealth` -----> Damaged component store ko Microsoft server se repair karne ke liye.
+//    - `sfc /scannow` -----> Sabhi protected core system files scan karke corrupt files replace karne ke liye.
+
+// Step 3: Corporate WSUS Server Connectivity & Group Policy Audit
+// -> Navigation & Commands:
+//    - `Win + R` -> type `regedit` -> Enter -----> `HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate` me WSUS proxy check karne ke liye.
+//    - `gpupdate /force` -----> Domain WSUS group policy aur update rules ko machine par sync karne ke liye.
+
+// Step 4: Windows Update Log Telemetry Audit
+// -> Flow: Start -> type `powershell` -> Right-click "Run as administrator" (ya `Ctrl + Shift + Enter`).
+// -> Command & Wajah:
+//    - `Get-WindowsUpdateLog` -----> Desktop par readable `WindowsUpdate.log` generate karta hai (Exact error code dekhne ke liye).
 
 
 // ================================================================================
@@ -349,10 +397,10 @@
 // -> Command: `Win + R` -> type `sysdm.cpl` -> Enter -----> "Remote" tab me "Allow connections only from computers running Remote Desktop with Network Level Authentication" ko untick karke test karta hai.
 
 // Step 4: Remote Terminal Service Force-Restart
-// -> Command: `Win + R` -> type `powershell` -> Enter -----> `Restart-Service -ComputerName <RemotePC> -Name TermService -Force` chalata hai (Stuck RDP daemon reload karne ke liye).
+// -> Command: `Win + R` -> type `powershell` -> Enter -----> `Restart-Service -ComputerName CounterPC01 -Name TermService -Force` chalata hai (Stuck RDP daemon reload karne ke liye).
 
 // Step 5: Admin Physical Console Session Connect Karna
-// -> Command: `Win + R` -> type `mstsc /v:<IP> /admin` -> Enter -----> Server Session 0 ka direct physical console access lene ke liye.
+// -> Command: `Win + R` -> type `mstsc /v:192.168.1.50 /admin` -> Enter -----> Server Session 0 ka direct physical console access lene ke liye.
 
 
 // ================================================================================
@@ -439,13 +487,13 @@
 // -> Command: `Win + R` -> type `powershell` -> Enter -----> `Get-Process | Sort-Object CPU -Descending | Select-Object -First 5` chalata hai (PC hang hone par top 5 heavy applications ka exact PID nikalna).
 
 // Step 4: Hanging Process Ko Forcefully Kill Karna
-// -> Command: `Win + R` -> type `powershell` -> Enter -----> `Stop-Process -Id <PID> -Force` chalata hai (User ka PC bina reboot kiye sirf hanging program ko turant background me kill karna).
+// -> Command: `Win + R` -> type `powershell` -> Enter -----> `Stop-Process -Id 1420 -Force` chalata hai (User ka PC bina reboot kiye sirf hanging program ko turant background me kill karna).
 
 // Step 5: Forceful Service Bouncing With Dependencies
-// -> Command: `Win + R` -> type `powershell` -> Enter -----> `Restart-Service -Name <service> -Force` chalata hai (Service aur uske sath judi saari dependent background services ko ek sath safely reload karna).
+// -> Command: `Win + R` -> type `powershell` -> Enter -----> `Restart-Service -Name Spooler -Force` chalata hai (Service aur uske sath judi saari dependent background services ko ek sath safely reload karna).
 
 // Step 6: Remote Execution via PSRemoting (WinRM)
-// -> Command: `Win + R` -> type `powershell` -> Enter -----> `Invoke-Command -ComputerName <CounterPC01> -ScriptBlock { Restart-Service Spooler -Force }` chalata hai (User ke desk par jaye bina apni seat se remote computer par terminal command chala kar issue fix karna).
+// -> Command: `Win + R` -> type `powershell` -> Enter -----> `Invoke-Command -ComputerName CounterPC01 -ScriptBlock { Restart-Service Spooler -Force }` chalata hai (User ke desk par jaye bina apni seat se remote computer par terminal command chala kar issue fix karna).
 
 
 // ================================================================================
@@ -559,8 +607,8 @@
 // * WINDOWS EDITION RULE (Home vs Pro/Enterprise):
 // -> Rule: lusrmgr.msc sirf Windows Pro, Enterprise aur Education editions par chalta hai. Windows Home edition par run karne par error aata hai: "This snapin may not be used with this edition of Windows".
 // -> Home Edition CLI Workaround: Home edition par local user manage karne ke liye CMD (Run as Administrator) se command use hoti hai:
-//    - Account Unlock: `net user <username> /active:yes`
-//    - Password Reset: `net user <username> <newpassword>`
+//    - Account Unlock: `net user johndoe /active:yes`
+//    - Password Reset: `net user johndoe Password@123`
 
 // * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Local user password reset aur locked account release karna.
@@ -1050,7 +1098,7 @@
 
 // 2. Situation: "Counter PC par network disconnect ho gaya / DCS server unreachable."
 // -> Action: [Win + R] -> `ncpa.cpl` (Ethernet Right-Click > Disable > Enable).
-// Status > Details mein IP verify karo. CMD mein `ping <Gateway>` aur `ipconfig /renew` run karo.
+// Status > Details mein IP verify karo. CMD mein `ping 192.168.1.1` aur `ipconfig /renew` run karo.
 
 // 3. Situation: "OCR Passport Scanner ya Barcode Reader plug karne par detect nahi ho raha."
 // -> Action: [Win + R] -> `devmgmt.msc` -> Action > "Scan for hardware changes".
