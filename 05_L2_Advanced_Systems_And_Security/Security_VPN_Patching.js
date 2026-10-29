@@ -30,6 +30,14 @@
 //              Command: manage-bde -protectors -enable C:
 //      (Iske baad system kabhi dobara key nahi mangega!).
 
+// 3. BitLocker CLI Forensics & 48-Digit Key Retrieval:
+//    - Terminal Se Current Drive Ki 48-Digit Recovery Key Dekhna:
+//      Command: manage-bde -protectors -get C:
+//      (Screen par "Numerical Password" ke neeche 48-digit key aur uski unique Password ID print karta hai).
+//    - BitLocker Encryption Status & Percentage Check Karna:
+//      Command: manage-bde -status C:
+//      (Verify karta hai ki drive fully encrypted 100% hai ya background encryption atka hua hai).
+
 
 // ================================================================================
 

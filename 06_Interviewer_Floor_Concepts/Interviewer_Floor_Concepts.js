@@ -139,6 +139,32 @@
 // - Caused by Driver (e.g. `nvlddmkm.sys` for Nvidia graphics, ya `e1d65x64.sys` for Intel LAN card).
 // Isse 100% exact pata chal jata hai ki kis driver ya hardware ne OS kernel ko crash kiya!"
 
+// Q6: User bolta hai "Screen black ho gayi / Display freeze hai ya projector me display nahi aa raha", bina restart kiye kaise handle karoge?
+// Golden Answer:
+// "Sir, main Windows ke 2 instant hotkeys use karunga:
+// 1. Display Driver Refresh: Shortcut [Win + Ctrl + Shift + B] press karunga. Screen 1 second blink karegi, beep sound aayega aur graphics driver instant restart ho jayega bina user ka unsaved data khoye.
+
+// 2. Multi-Monitor / Projector Toggle: Shortcut [Win + P] press karke 'Duplicate' ya 'Extend' mode switch karunga taaki external display output verify ho sake."
+
+// Q7: Network printer ping ho raha hai aur web page khul raha hai, lekin Windows me har 2 ghante me 'Offline' ho jata hai, root cause kya hai?
+// Golden Answer:
+// "Sir, iska #1 root cause Windows ka default 'WSD (Web Services for Devices)' port hota hai jo sleep mode me disconnect ho jata hai.
+// Fix: Main Printer Properties > 'Ports' tab me jakar 'Add Port' > 'Standard TCP/IP Port' select karunga, printer ka static IP daal kar protocol 'RAW (Port 9100)' set karunga, aur 'SNMP Status Enabled' ko untick karunga. Iske baad printer hamesha online rehta hai."
+
+// Q8: Company ke CEO/VIP user ka laptop board meeting se 5 minute pehle band ho gaya aur wo gusse me hain, aapka reaction kya hoga?
+// Golden Answer:
+// "Sir, IT Support me golden rule hai: 'Business Continuity Always Comes First Before Troubleshooting'.
+// 1. First 30 seconds: Quick check karunga (Power LED, HDMI cable, Win+P).
+// 2. Immediate Backup: Main technical analysis me unka time waste nahi karunga. Turant pre-configured standby loaner laptop unhe handover karunga aur M365 account login karwa kar meeting start karwaunga.
+// 3. Post-Meeting Action: Meeting shuru hone ke baad faulty laptop ko IT room me laakar deeply diagnose karunga."
+
+// Q9: Dell/HP support ko warranty claim ke liye call karna hai, laptop ko bina ulta kiye serial number kaise nikaloge?
+// Golden Answer:
+// "Sir, main terminal se direct motherboard BIOS chip query karunga:
+// CMD: `wmic bios get serialnumber`
+// PowerShell: `(Get-CimInstance -ClassName Win32_BIOS).SerialNumber`
+// Isse Dell Service Tag ya HP Serial Number 1 second me screen par aa jata hai."
+
 // ================================================================================
 // Note created for Tausif Qureshi | Universal IT Support & Systems Engineer Blueprint
 // ================================================================================

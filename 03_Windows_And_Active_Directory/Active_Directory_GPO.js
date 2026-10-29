@@ -161,6 +161,43 @@
 //   Root Cause: DNS misconfiguration ya Domain Controller unreachable hone par PC login screen par 10 minute atakta hai ("Applying Computer Settings...").
 //   Fix: Client PC ke `ncpa.cpl` me primary DNS ko Domain Controller ke live IP par set karta hai aur CMD me `dcdiag` se DC health check karta hai.
 
+
+// ================================================================================
+// MODULE 3.1: WORKSTATION DOMAIN JOIN, DC DISCOVERY & DIRECTORY SERVICES DEEP-DIVE
+// ================================================================================
+
+// 1. Client PC Domain Join Workflow:
+//    - Prerequisite: `ncpa.cpl` -> IPv4 -> Primary DNS me Domain Controller (DC) ka static IP set hona mandatory hai (Warna domain nahi milega).
+//    - GUI Method: `Win + R` -> `sysdm.cpl` -> "Computer Name" tab -> "Change..." -> "Member of" me "Domain" -> Domain Name -> Domain Admin Credentials -> OK -> Reboot.
+//    - PowerShell CLI Method:
+//      `Add-Computer -DomainName "company.local" -OUPath "OU=Laptops,DC=company,DC=local" -Restart`
+//    - Offline Domain Join (Bina Corporate Network Connect Kiye):
+//      DC par: `djoin.exe /provision /domain company.local /machine Laptop01 /savefile C:\djoin.txt`
+//      Client PC par: `djoin.exe /requestODJ /loadfile C:\djoin.txt /windowspath %SystemRoot% /localos`
+//    - Domain Join Errors & Fixes:
+//      a) "DC cannot be contacted": `nltest /dsgetdc:company.local` se check karo aur DNS flush karo (`ipconfig /flushdns`).
+//      b) Kerberos Time Skew (> 5 Minutes difference): DC aur PC ka time alag hone par join fail hota hai. Fix: `w32tm /resync /force`.
+//      c) 10-Machine Join Limit: Standard user bina admin right ke sirf 10 machines domain me join kar sakta hai (ms-DS-MachineAccountQuota).
+
+// 2. Active Directory DC Discovery & DNS Verification:
+//    - Reachability: `ping company.local`
+//    - DNS Resolution: `nslookup company.local`
+//    - Secure Channel & DC Status: `nltest /dsgetdc:company.local`
+
+// 3. FSMO Roles Architecture (5 Master Roles - L2 Core Concept):
+//    - Roles: Schema Master, Domain Naming Master, RID Master, PDC Emulator, Infrastructure Master.
+//    - Key Role: PDC Emulator time sync, password changes aur account lockout ko real-time handle karta hai.
+//    - Audit Command: `netdom query fsmo`
+
+// 4. Active Directory Recycle Bin (Accidental Deletion Recovery):
+//    - Console: `Win + R` -> `dsac.exe` (Active Directory Administrative Center).
+//    - Workflow: Left pane -> Target Domain -> "Deleted Objects" container -> User/Computer par RIGHT-CLICK -> "Restore".
+
+// 5. GPO Troubleshooting Scope Flags (gpresult Precision):
+//    - User Policies (Standard User, No Admin required): `gpresult /r /scope:user`
+//    - Computer Policies (Machine-level, Run as Administrator): `gpresult /r /scope:computer`
+
 // ================================================================================
 // Note created for Tausif Qureshi | Universal IT Support & Systems Engineer Blueprint
 // ================================================================================
+

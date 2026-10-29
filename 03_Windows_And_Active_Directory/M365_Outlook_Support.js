@@ -62,6 +62,14 @@
 //   * Step C: User ka email aur password daal kar Exchange automatic configuration complete hone do.
 //   * Step D: "When starting Microsoft Outlook, use this profile" me "Outlook_New" ko select karo -> "Apply" -> "OK".
 
+// - Problem 4: Outlook Baar-Baar Password Maang Raha Hai (Stuck / Corrupt Credentials):
+//   Command (CLI): `cmdkey /list`
+//   Kaam: Terminal se corrupt cached MicrosoftOffice16 passwords inspect aur purge karna.
+//   Andar jaakar:
+//   * Step A: CMD kholo -> Command: `cmdkey /list` chalao (Check karo "Generic Credentials" me kaun si purani Office16 entry save hai).
+//   * Step B: Command: `cmdkey /delete:MicrosoftOffice16_Data:live:cid=49a05b` (Corrupt credential terminal se instant delete karta hai).
+//   * Step C (GUI Option): `Win + R` -> type `control keymgr.dll` -> "Windows Credentials" -> "Generic Credentials" se MicrosoftOffice16 entries remove karo -> Outlook launch karke fresh password enter karo.
+
 // - L1 Ki Limit: Tenant-wide mail flow issues, message trace delivery audit, shared mailbox permissions (Send As vs Full Access), aur Entra MFA reset L2 ko escalate hote hain.
 
 

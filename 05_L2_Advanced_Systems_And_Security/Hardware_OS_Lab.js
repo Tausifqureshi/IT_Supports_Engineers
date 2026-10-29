@@ -52,6 +52,12 @@
 //    - Thermal Throttling (Laptop garam hoke slow hona):
 //      CPU cooling fan me dhool jamne se thermal paste sukh jata hai. Heat sink clean karke fresh thermal paste lagana L2 hardware task hai.
 
+// 5. Hardware Serial Number & Asset Tag Retrieval (Warranty Claim & Inventory):
+//    - Dell Service Tag / HP Serial Number bina laptop ko physical ulta kiye terminal se nikalne ke liye:
+//      Command (CMD): wmic bios get serialnumber
+//      Command (PowerShell): (Get-CimInstance -ClassName Win32_BIOS).SerialNumber
+//      (Official Dell/HP/Lenovo support portal par ye serial daal kar motherboard, battery aur onsite warranty status verify kiya jata hai).
+
 
 // ================================================================================
 

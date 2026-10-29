@@ -650,6 +650,8 @@
 // -> Command: `Win + R` -> type `sysdm.cpl` -> Enter -----> "Computer Name" tab par "Change..." button par CLICK -> "Computer name:" box me company standard name daalo (e.g. `DXB-T3-CHK-014`) -> "Member of" me "Domain" radio button choose karo -> Domain Name type karo (e.g. `airport.local` ya `company.corp`) -> "OK" -> Domain Admin credentials prompt aane par Username/Password daalo -> "Welcome to the domain" popup -> "OK" -> "Restart Now" par click.
 // -> Post-Reboot First Login Rule: Domain join hone ke baad system Reboot (Restart) hona mandatory hai. Restart ke baad L1 engineer user ko pehli baar login karwate waqt format sikhata hai:
 //    - Login Format: `DOMAIN\username` ya `username@domain.com` (Agar sirf plain username daalenge toh PC local SAM account se login attempt karke fail hoga).
+// -> Full Advanced Domain Join (PowerShell, djoin, DNS checks & Kerberos errors) ke liye dekhein:
+// -> File: Active_Directory_GPO.js -> Section: "Client PC Domain Join & DC Discovery"
 
 // L1 Ki Limit:
 // -> Virtual memory paging size tuning, BSOD crash dump configuration, ya Remote Desktop NLA rules L2 ko escalate hote hain.
