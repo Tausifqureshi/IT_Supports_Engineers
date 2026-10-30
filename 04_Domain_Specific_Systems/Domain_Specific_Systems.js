@@ -36,7 +36,7 @@
 //    - BGR (Boarding Gate Reader) -----> Boarding gate par laga barcode scanner/turnstile jo passenger ke boarding pass ko scan karke gate open karta hai.
 //    - OCR / Passport Reader -----> Check-in counter par MRZ (Machine Readable Zone) passport swipe reader.
 
-// * Practical Airport Support Workflow (Paper Jam & Driver Freeze):
+// 4. Practical Airport Support Workflow (Paper Jam & Driver Freeze):
 // - Problem: Counter 15 par BTP Bag-tag printer red light blink kar raha hai aur bag tag print nahi nikal raha (Flight check-in ruki hui hai - High Pressure!)
 //   Step 1: Printer ka cover kholo -> Thermal roll sensor par lagi sticky glue dust ko IPA (Alcohol) wipe se clean karo.
 //   Step 2: Paper roll alignment verify karo (Thermal side printhead ki taraf honi chahiye).
@@ -120,6 +120,11 @@
 
 // 3. Credit Card Payment Terminal (EDC Machine):
 //    - Connectivity: Ethernet LAN cable ya 4G SIM. Static IP aur bank gateway port reachability verify karna.
+
+// 4. Barcode Scanner Triage (Common Retail / Airport Issue):
+//    - Problem: Barcode scanner beep kar raha hai lekin screen par billing software me koi text/barcode type nahi ho raha.
+//    - Root Cause: Scanner accidentally "Serial / Virtual COM" mode me switch ho gaya hai jabki system standard keyboard input expect kar raha hai.
+//    - Fix: Scanner manual se "USB HID Keyboard" barcode ko scan karwana -> Scanner turant standard keyboard simulation mode me aa jata hai aur cursor par barcode data type hone lagta hai.
 
 // ================================================================================
 // Note created for Tausif Qureshi | Universal IT Support & Systems Engineer Blueprint

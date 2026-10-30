@@ -18,7 +18,7 @@
 // Capture Filter = Wire par packet record karne se pehle lagta hai.
 // Display Filter = Recorded hazaaron packets me se kaam ka packet samne lane ke liye lagta hai.
 
-// * Core Display Filters (Daily L2 Diagnostics):
+// Core Display Filters (Daily L2 Diagnostics):
 
 // 1. DHCP DORA Process Tracing:
 //    - Display Filter: `bootp` (ya `dhcp`)
@@ -43,6 +43,10 @@
 
 // 5. Specific Host / Port Filter:
 //    - `ip.addr == 192.168.1.100 && tcp.port == 443`
+
+// 6. Follow TCP Stream (Application Conversation Reconstruct):
+//    - Real-World Use: Kisi bhi packet par RIGHT-CLICK karo -> "Follow" -> "TCP Stream" select karo.
+//    - Benefit: Client aur server ke beech ki poori raw conversation (HTTP requests, server error codes, API payloads) ko plain readable text me reconstruct karke 1 second me root cause pakadta hai.
 
 
 // ================================================================================

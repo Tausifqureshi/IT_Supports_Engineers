@@ -23,7 +23,7 @@
 // 4. Security Group -----> Users ka group jisse shared folders ya softwares ka access diya jata hai.
 
 
-// * 1. L1 ENGINEER KA KAAM (Daily Floor Operations & Fast Ticket Resolution):
+// 1. L1 ENGINEER KA KAAM (Daily Floor Operations & Fast Ticket Resolution):
 // Target: 2 se 5 minute ke andar user ka login issue solve karna.
 
 // - Problem 1: User Bol Raha Hai "Mera account lock ho gaya hai (The referenced account is currently locked out)":
@@ -50,7 +50,7 @@
 // - L1 Ki Limit: Agar user login karne par bole "The trust relationship between this workstation and the primary domain failed", repeated lockout caller PC audit, ya OU restructure L2 ko di jaati hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause, OU Design & Domain Trust Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause, OU Design & Domain Trust Fix):
 // Target: Domain trust repair, repeated lockout audit, aur bulk provisioning.
 
 // - Step 1: "Trust Relationship Failed" Ka Permanent Fix (Bina PC Domain Se Hataye):
@@ -69,6 +69,11 @@
 //   - Security Group -----> Iska use NTFS permissions, shared folders aur VPN access dene ke liye hota hai (Is par email bhi enable ho sakti hai).
 //   - Distribution Group -----> Iska use sirf aur sirf mass emails (Email Broadcast) bhejne ke liye hota hai, isse koi folder permission nahi di ja sakti.
 
+// - Step 4: Multi-DC Replication Sync & Accidental Deletion Lock:
+//   - Instant Replication Force: Domain Controllers ke beech data sync na hone par terminal se run karein:
+//     Command: `repadmin /syncall /AePdq` (Sync summary dekhne ke liye: `repadmin /replsummary`).
+//   - Accidental Deletion Protection: `dsa.msc` -> Top Menu "View" -> "Advanced Features" TICK karo -> Target OU par RIGHT-CLICK -> "Properties" -> "Object" tab -> "Protect object from accidental deletion" checkbox ensure karo.
+
 
 // ================================================================================
 
@@ -84,7 +89,7 @@
 // Golden Rule (Most Restrictive Wins):
 // Agar Share me "Full Control" hai lekin NTFS me "Read Only" hai, toh user ko sirf "READ ONLY" access hi milega!
 
-// * 1. L1 ENGINEER KA KAAM (Surface Access & Drive Mapping):
+// 1. L1 ENGINEER KA KAAM (Surface Access & Drive Mapping):
 // Target: Shared drive reachability test aur user desk par drive map karna.
 // - Step 1: Network Share Path Open Karna:
 //   Command: `Win + R` -> type `\\FILESERVER01\SharedData` -> Enter.
@@ -96,7 +101,7 @@
 //   Andar jaakar: Top menu bar se "Map network drive" button par CLICK -> "Drive:" dropdown se letter select karo (e.g. `Z:`) -> "Folder:" box me network path daalo (`\\FILESERVER01\SharedData`) -> "Reconnect at sign-in" checkbox TICK karo -> "Finish" par click karo.
 // - L1 Ki Limit: "Access Denied" permission conflicts, locked files release karna, ya NTFS inheritance break karna L2 ko di jaati hai.
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause, File Locks & NTFS Hardening):
+// 2. L2 ENGINEER KA KAAM (Root Cause, File Locks & NTFS Hardening):
 // Target: Locked files release karna, Share vs NTFS permission design, aur session disconnect.
 // - Step 1: Locked Files Release Karna (Shared Folders Console):
 //   Command: `Win + R` -> type `fsmgmt.msc` -> Enter.
@@ -106,8 +111,8 @@
 //   Command: `Win + R` -> type `fsmgmt.msc` -> Enter -> "Shares" par click.
 //   Kaam: Granular role-based access control lagana.
 //   Andar jaakar:
-//   * Share Permissions: Folder par RIGHT-CLICK -> "Properties" -> "Share Permissions" me "Authenticated Users" ko "Change" aur "Read" allow karta hai.
-//   * NTFS Security: "Security" tab me "Edit..." click karke specific AD Security Groups (e.g. `Finance_RW` ko Modify aur `Finance_RO` ko Read) assign karta hai.
+//   - Share Permissions: Folder par RIGHT-CLICK -> "Properties" -> "Share Permissions" me "Authenticated Users" ko "Change" aur "Read" allow karta hai.
+//   - NTFS Security: "Security" tab me "Edit..." click karke specific AD Security Groups (e.g. `Finance_RW` ko Modify aur `Finance_RO` ko Read) assign karta hai.
 
 
 // ================================================================================
@@ -127,8 +132,12 @@
 //    - OU ----> Organizational Unit Policy (Sabse aakhri me lagti hai aur baaki sabko overwrite karti hai).
 //    - Rule: Jo policy sabse aakhri me lagti hai (OU), wahi jeetti hai!
 
+// 2. GPO Inheritance Overrides (Enforced vs Block Inheritance):
+//    - Block Inheritance: Child OU parent domain ki normal policies ko block karta hai.
+//    - Enforced (No Override): Root policy par "Enforced" set hote hi yeh Block Inheritance ko bypass karke har computer par mandatory apply hota hai (Security GPOs ke liye).
 
-// * 1. L1 ENGINEER KA KAAM (Client Side Verification & Force Refresh):
+
+// 1. L1 ENGINEER KA KAAM (Client Side Verification & Force Refresh):
 // Target: Check karna ki client PC par policy lag rahi hai ya nahi aur diagnostic report nikalna.
 // - Problem 1: User Ke System Par Naya Mapped Drive Ya Policy Nahi Aayi:
 //   Command: `Win + R` -> type `cmd` -> Enter.
@@ -147,7 +156,7 @@
 // - L1 Ki Limit: Nayi GPO banana, WMI filtering lagana, GPO link order change karna, ya slow boot delay L2 ko escalate hota hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Policy Creation, WMI Filters & Troubleshooting):
+// 2. L2 ENGINEER KA KAAM (Policy Creation, WMI Filters & Troubleshooting):
 // Target: Corporate policies design karna, automatic drive mapping deploy karna, aur boot delays fix karna.
 // - Step 1: USB Storage Device Block Policy Deploy Karna:
 //   Command: `Win + R` -> type `gpmc.msc` -> Enter.

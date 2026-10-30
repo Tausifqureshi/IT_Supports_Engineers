@@ -34,21 +34,26 @@
 //    - Command: `Win + R` -> type `dhcpmgmt.msc` -> Enter.
 //    - Kaam: DHCP Server console khol kar IP addressing range aur options automate karna.
 //    - Andar jaakar:
-//      * Step 1: Server name expand karo -> "IPv4" par RIGHT-CLICK -> "New Scope..." select karo -> "Next".
-//      * Step 2: Scope Name: "Office_LAN_Scope" ya "Counter_Terminals" -> "Next".
-//      * Step 3: IP Address Range: Start IP `192.168.1.50` to End IP `192.168.1.250`. Subnet Mask: `255.255.255.0` (/24) -> "Next".
-//      * Step 4: Add Exclusions: `192.168.1.50` se `192.168.1.70` (Printers aur Network Switches ke static reserve ke liye) -> "Add" -> "Next".
-//      * Step 5: Lease Duration: Corporate LAN ke liye 8 Days; Guest Wi-Fi ke liye 2 Hours set karo -> "Next".
-//      * Step 6: Configure DHCP Options:
+//      Step 1: Server name expand karo -> "IPv4" par RIGHT-CLICK -> "New Scope..." select karo -> "Next".
+//      Step 2: Scope Name: "Office_LAN_Scope" ya "Counter_Terminals" -> "Next".
+//      Step 3: IP Address Range: Start IP `192.168.1.50` to End IP `192.168.1.250`. Subnet Mask: `255.255.255.0` (/24) -> "Next".
+//      Step 4: Add Exclusions: `192.168.1.50` se `192.168.1.70` (Printers aur Network Switches ke static reserve ke liye) -> "Add" -> "Next".
+//      Step 5: Lease Duration: Corporate LAN ke liye 8 Days; Guest Wi-Fi ke liye 2 Hours set karo -> "Next".
+//      Step 6: Configure DHCP Options:
 //        - Option 003 (Router / Default Gateway): `192.168.1.1`
 //        - Option 006 (DNS Servers): `192.168.1.10` (Domain Controller ka IP)
 //        - Option 015 (Domain Name): `company.local`
-//      * Step 7: "Yes, I want to activate this scope now" select karke "Finish" par click karo.
+//      Step 7: "Yes, I want to activate this scope now" select karke "Finish" par click karo.
 
 // 2. DHCP Reservation Setup (Static IP Alternative):
 //    - Command: `Win + R` -> type `dhcpmgmt.msc` -> Enter.
 //    - Kaam: Network printer ya billing machine ke MAC address par specific IP permanent lock karna.
 //    - Andar jaakar: Scope > "Reservations" par RIGHT-CLICK -> "New Reservation..." par click -> Reservation name type karo -> IP Address daalo + Device ka exact physical MAC Address daalo (e.g. `00-15-5D-01-A2-34`) -> Supported types: "Both" select karke "Add" -> "Close".
+
+// 3. DHCP IP Conflict Detection (Enterprise Best Practice):
+//    - Problem: Users ko "There is an IP address conflict with another system on the network" error aana.
+//    - Fix: `Win + R` -> `dhcpmgmt.msc` -> "IPv4" par RIGHT-CLICK -> "Properties" -> "Advanced" tab -> "Conflict detection attempts" ko 0 se badha kar `2` set karo -> "OK".
+//    - Benefit: DHCP server naya IP dene se pehle 2 baar ping karta hai; agar koi device respond kare toh duplicate IP assign nahi karta.
 
 
 // ================================================================================
@@ -62,8 +67,8 @@
 //    - Command: `Win + R` -> type `dnsmgmt.msc` -> Enter.
 //    - Kaam: Computer/Server hostname ko IP address me convert karna.
 //    - Andar jaakar: Server expand karo -> "Forward Lookup Zones" expand karo -> company domain (e.g. `company.local`) par RIGHT-CLICK:
-//      * A Record (Host): "New Host (A or AAAA)..." par click -> Name: `desktop-01` -> IP Address: `192.168.1.105` -> "Add Host".
-//      * CNAME Record (Alias): "New Alias (CNAME)..." par click -> Alias Name: `portal` -> FQDN for target host: `webserver01.company.local` -> "OK".
+//      A Record (Host): "New Host (A or AAAA)..." par click -> Name: `desktop-01` -> IP Address: `192.168.1.105` -> "Add Host".
+//      CNAME Record (Alias): "New Alias (CNAME)..." par click -> Alias Name: `portal` -> FQDN for target host: `webserver01.company.local` -> "OK".
 
 // 2. Reverse Lookup Zones (PTR Record):
 //    - Kaam: IP address ko Hostname me convert karna (Security audit aur mail server reputation ke liye zaroori).
@@ -73,6 +78,10 @@
 //    - Command: `Win + R` -> type `dnsmgmt.msc` -> Enter.
 //    - Kaam: Internal users jab google.com ya cloud sites open karein toh external internet DNS se resolve karwana.
 //    - Andar jaakar: DNS Server name par RIGHT-CLICK -> "Properties" -> "Forwarders" tab par CLICK -> "Edit..." button par click -> Public DNS add karo: `8.8.8.8` (Google) aur `1.1.1.1` (Cloudflare) -> "OK" -> "Apply" -> "OK".
+
+// 4. DNS Aging & Scavenging (Stale Records Automatic Cleanup):
+//    - Problem: DNS zone me mahino purane offline computers ke stale A-records jama ho jate hain jisse galat IP resolve hoti hai.
+//    - Fix: `Win + R` -> `dnsmgmt.msc` -> Server name par RIGHT-CLICK -> "Set Aging/Scavenging for All Zones..." -> "Scavenge stale resource records" TICK karo -> Refresh interval 7 days set karo -> "OK".
 
 
 // ================================================================================

@@ -55,6 +55,16 @@
 //    - Azure AD Joined -----> Company ka official laptop (Poora device cloud se manage hota hai, local domain controller nahi chahiye).
 //    - Hybrid Azure AD Joined -> On-premises Domain Controller + Azure AD dono se connected corporate PC.
 
+// 5. Entra ID Device Status CLI Triage (dsregcmd /status):
+//    - Command (CMD/PowerShell): dsregcmd /status
+//    - Real-World Telemetry:
+//      - AzureAdJoined : YES (Device successfully registered in Entra ID).
+//      - DomainJoined  : YES (Device on-premises Active Directory domain se bhi connected hai -> Hybrid Azure AD Joined).
+//      - WamDefaultSet : YES (Web Account Manager broker active hai, Outlook/Teams login smoothly chalega).
+//    - Device Re-Join / Un-Join Commands:
+//      - Command: dsregcmd /leave (Corrupt cloud token detach karne ke liye).
+//      - Command: dsregcmd /join (Device ko cloud me dobara clean join karne ke liye).
+
 
 // ================================================================================
 
@@ -82,6 +92,10 @@
 //    - Remote Lock -----> Laptop screen ko turant lock karna.
 //    - Wipe -----> Laptop chori hone par poori hard drive ko factory reset (erase) kar dena!
 //    - Retire -----> Sirf company ka data aur emails delete karna (user ka personal data safe rehta hai).
+
+// 4. Force Client-Side Intune Policy Refresh (No Wait Time):
+//    - Problem: Intune portal se software assign kiya ya compliance policy banayi, lekin user laptop par aane me ghanto lag rahe hain.
+//    - User PC Action: Windows Settings (Win + I) -> "Accounts" -> "Access work or school" -> Corporate account select karo -> "Info" button par click karo -> "Device sync status" ke niche "Sync" button par CLICK karo! Policy turant download ho jayegi.
 
 
 // ================================================================================

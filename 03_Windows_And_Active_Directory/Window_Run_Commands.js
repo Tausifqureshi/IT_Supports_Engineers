@@ -11,8 +11,8 @@
 // - SECTION 1: Top 11 Core Daily Commands (Jo har roz support floor par 90% use hoti hain).
 // - SECTION 2: Extra Situation-Based Commands (L2 / Airport / Deep issues aane par use hoti hain).
 // - HAR COMMAND MEIN 2 STEPS HAIN:
-//   * STEP 1 (PEHLA TAREEQA): Normal Routine Fix (90% cases me pehle yahi karna hai).
-//   * STEP 2 (DOOSRA TAREEQA): Deep / Emergency Fix (Agar pehle step se theek na ho, tab yeh karna hai).
+//   - STEP 1 (PEHLA TAREEQA): Normal Routine Fix (90% cases me pehle yahi karna hai).
+//   - STEP 2 (DOOSRA TAREEQA): Deep / Emergency Fix (Agar pehle step se theek na ho, tab yeh karna hai).
 
 // ========================================= Section 1: Top 11 Core Must-Know Commands ======================================= //
 // Pehle In 11 Commands Ko Pakka Yaad Karna Hai — Floor Par 90% Kaam Inhi Par Hota Hai
@@ -24,7 +24,7 @@
 // [ CONCEPT: Print Spooler & Background Services ]
 // Windows ke background daemons (services) ko manage karne ka master console. Print Spooler (spoolsv.exe) user ke document ko memory/disk par hold karta hai aur printer ko step-by-step deliver karta hai taaki application hang na ho.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: 5 minute ke andar user ka atka hua print nikalna aur status dekhna.
 
 // Problem 1: Print Queue Me Document Atka Hai ("Deleting..." ya "Error" Status)
@@ -51,7 +51,7 @@
 // -> Agar service restart karne ke thodi der baad Spooler fir se ruk jaye, "Use Printer Offline" uncheck karne par bhi printer offline hi dikhaye, ya service crash loop me chali jaye, toh issue corrupt driver, registry lock ya network SNMP port block ka hota hai, jise L2 engineer root cause se fix karta hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Print Spooler baar-baar crash kyun ho raha hai, usko jad se khatam karna.
 
 // Step 1: Crash Ka Root Cause Pakadna (Event Viewer)
@@ -77,7 +77,7 @@
 // [ CONCEPT: Windows Update Engine Architecture (wuauserv, BITS & CryptSvc) ]
 // Windows updates background me download karne ke liye BITS (bandwidth optimizer), wuauserv (update installer engine), aur CryptSvc (catalog signature verification) ka use hota hai.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Stuck updates ko 5 minute me resume karna aur failed cache clear karna.
 
 // Problem 1: Windows Update 0% Par Atka Hai (Corrupted Download Cache / BITS & wuauserv Hang)
@@ -95,7 +95,7 @@
 // -> Agar cache delete karne aur services restart ke baad bhi update fail ho ya system files corrupt hon, toh issue L2 engineer root cause se fix karta hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Catroot2 catalog rebuild, WSUS policy conflict check aur component store health repair.
 
 // Step 1: Catroot2 & SoftwareDistribution Complete Reset (Master CLI Sequence)
@@ -130,7 +130,7 @@
 // [ CONCEPT: Network Adapter & NDIS Subsystem ]
 // Windows ka network interface controller (NIC) configuration engine (netman.dll). Physical Ethernet, Wi-Fi aur virtual NICs ke IP, Subnet, Gateway aur DNS ko bind karta hai.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Basic connectivity freeze aur cable disconnect issues resolve karna.
 
 // Problem 1: "No Internet" Ya "Unidentified Network" Error Aana
@@ -149,7 +149,7 @@
 // -> Agar IPv4 me 169.254.x.x (APIPA) aa raha ho ya network driver crash ho, toh L1 engineer ticket L2 ko escalate kar deta hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: IP conflict, VLAN mismatch, DHCP server failure aur packet drop fix karna.
 
 // Step 1: APIPA & DHCP DORA Failure Diagnosis
@@ -185,7 +185,7 @@
 // [ CONCEPT: Plug and Play (PnP) & Hardware Driver Tree ]
 // Windows hardware enumeration console. Motherboard chipset, USB controllers, biometric scanners, printers aur external peripherals ke hardware drivers ko manage karta hai.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Peripheral (Scanner, Reader, Printer) ko detect karwana.
 
 // Problem 1: USB Device Attach Kiya Lekin PC Me Response Nahi Aaya
@@ -201,7 +201,7 @@
 // -> Agar driver online na mile ya Code 10 / Code 43 error aaye, toh ticket L2 ko escalate hoti hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Hardware ID se compatible OEM driver dhoondna aur power suspension rokna.
 
 // Step 1: Hardware Error Code Diagnosis
@@ -227,7 +227,7 @@
 // [ CONCEPT: Windows Centralized Event Logging System (eventlog) ]
 // Operating system ka black box forensic repository (.evtx files). Application crashes, security audits, kernel panics aur hardware failure ka timestamped record rakhta hai.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: User ke crash/freeze time par system me red error dekhna.
 
 // Problem 1: PC Achanak Freeze Hua Ya App Crash Hui
@@ -240,7 +240,7 @@
 // -> Log me technical hexadecimal codes (e.g. 0xc0000005) ya Event ID 4625 aane par L1 engineer ticket L2 ko escalate kar deta hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Crash karne wale exact DLL module, BSOD bugcheck aur brute-force logins identify karna.
 
 // Step 1: Application Crash Root Cause (Event ID 1000)
@@ -263,7 +263,7 @@
 // [ CONCEPT: Windows Installer Subsystem (MSI) & Application Registry Database ]
 // System par installed applications, runtimes (Visual C++, .NET), aur software updates ka central control console.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Corrupted software uninstall karna ya repair wizard chalana.
 
 // Problem 1: Software Open Hone Par Error De Raha Hai
@@ -276,7 +276,7 @@
 // -> Agar uninstall me "Another installation is in progress" ya "Error 1603 / Access Denied" aaye, toh ticket L2 ko escalate hoti hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Stuck installer locks break karna aur leftover registry keys wipe karna.
 
 // Step 1: Stuck MSI Windows Installer Process Force-Kill
@@ -296,7 +296,7 @@
 // [ CONCEPT: Virtual Disk Service (VDS) & Storage Partitioning Subsystem ]
 // Physical drives (HDD, NVMe SSD), partitions (MBR/GPT), file systems (NTFS/FAT32), aur drive letters ka management console.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Missing partition ko visible karna aur drive letter assign karna.
 
 // Problem 1: Second Partition Ya External Drive 'This PC' Me Dikh Nahi Rahi
@@ -309,14 +309,14 @@
 // -> Agar disk "Offline", "Not Initialized", ya "RAW" show kare, toh data loss ke darr se ticket L2 ko escalate kar di jaati hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Disk policy conflicts, file system corruption aur GPT initialization solve karna.
 
 // Step 1: Policy Conflict Offline Disk Online Karna
 // -> Command: `Win + R` -> type `diskmgmt.msc` -> Enter -----> Disk ke grey box (Disk 1) par RIGHT-CLICK -> "Online" par click karta hai.
 
 // Step 2: Raw Disk Initialization (GPT vs MBR)
-// -> Command: `Win + R` -> type `diskmgmt.msc` -> Enter -----> Nayi unallocated disk par RIGHT-CLICK -> "Initialize Disk" -> Modern UEFI systems ke liye **GPT (GUID Partition Table)** select karta hai.
+// -> Command: `Win + R` -> type `diskmgmt.msc` -> Enter -----> Nayi unallocated disk par RIGHT-CLICK -> "Initialize Disk" -> Modern UEFI systems ke liye GPT (GUID Partition Table) select karta hai.
 
 // Step 3: Read-Only Attribute Clear Karna (DISKPART)
 // -> Command: `Win + R` -> type `cmd` (Run as Administrator) -> Enter -----> Sequential commands chalata hai: `diskpart` -> `list disk` -> `select disk 1` -> `attributes disk clear readonly`.
@@ -332,7 +332,7 @@
 // [ CONCEPT: Windows Telemetry Engine & Process Execution Monitor ]
 // OS kernel processes, thread execution, handles, CPU scheduler, RAM paging, aur disk I/O ka real-time telemetry monitor.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Frozen software ko close karna aur general resource load dekhna.
 
 // Problem 1: Application Par "Not Responding" Aa Gaya (Frozen App Kill)
@@ -345,11 +345,11 @@
 // -> Agar End task karne par "Access is Denied" aaye ya process turant dobara spawn ho jaye, toh L1 escalate karta hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Rogue worker threads kill karna, memory leak trace karna aur startup bloatware eliminate karna.
 
 // Step 1: Kill Entire Process Tree (Child Threads Elimination)
-// -> Command: `Win + R` -> type `taskmgr` -> Enter -----> "Details" tab me jata hai -> main process par RIGHT-CLICK -> **"End process tree"** select karta hai (Background hidden worker processes samet poore software tree ko terminate karna).
+// -> Command: `Win + R` -> type `taskmgr` -> Enter -----> "Details" tab me jata hai -> main process par RIGHT-CLICK -> "End process tree" select karta hai (Background hidden worker processes samet poore software tree ko terminate karna).
 
 // Step 2: Memory Leak (Non-Paged Pool) Diagnosis
 // -> Command: `Win + R` -> type `taskmgr` -> Enter -----> "Performance" tab > "Memory" me "Non-paged pool" check karta hai; agar ye 2-4GB+ cross kar raha ho toh faulty NIC ya graphics driver leak pakadta hai.
@@ -368,7 +368,7 @@
 // [ CONCEPT: Remote Desktop Protocol (RDP) Subsystem (Port 3389) ]
 // Remote Desktop Protocol (mstsc.exe). Network ke through remote Windows machine ka GUI session lene ke liye use hota hai.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Remote counter PC ya server ka quick session lena.
 
 // Problem 1: Remote Counter PC Ko Login Karna
@@ -384,7 +384,7 @@
 // -> "Remote Desktop cannot connect to the remote computer" error aane par L1 engineer ticket L2 ko escalate kar deta hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Firewall blockage, NLA mismatch, aur remote registry RDP enabling.
 
 // Step 1: CLI Port 3389 Reachability & Handshake Test
@@ -410,7 +410,7 @@
 // [ CONCEPT: Win32 Command Line Interpreter & Diagnostic Shell ]
 // System management routines, batch scripts, network diagnostic utilities, aur administrative repair commands ka execution shell.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Basic network connectivity aur DNS cache clear karna.
 
 // Problem 1: Internet Stability Test (Continuous Ping)
@@ -426,7 +426,7 @@
 // -> Deep system file corruption ya complex network stack failure aane par ticket L2 ko di jaati hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: System integrity repair, network stack reset aur Group Policy audit.
 
 // Step 1: System File Checker & Component Store Repair (DISM & SFC)
@@ -455,7 +455,7 @@
 // [ CLI EXECUTION RULE: Privilege Elevation ]
 // PowerShell commands execute karne ke liye hamesha Elevated Prompt use karna mandatory hai: `Win + R` -> type `powershell` -> press `Ctrl + Shift + Enter` (Run as Administrator) karein, warna `Restart-Service -Force` aur `Stop-Process -Force` chalane par "Access is Denied" error aayega.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Basic status check aur daily quick commands chalana.
 
 // Problem 1: Print Spooler Service Status Check
@@ -474,7 +474,7 @@
 // -> Jab script chalane par red error aaye ("ExecutionPolicy Restricted") ya remote PC par command chalani ho toh L2 ko escalate karta hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Script unblocking, deep port telemetry, heavy process kill, aur remote management.
 
 // Step 1: Execution Policy Unblock Karna
@@ -503,11 +503,11 @@
 // [ CONCEPT: Windows Win32 Administrative Control Engine ]
 // System hardware abstraction, security credentials, mail profiles, aur storage encryption ka master control console.
 
-// * MASTER NAVIGATION (Control Panel Kaise Kholna Aur Use Karna Hai):
+// MASTER NAVIGATION (Control Panel Kaise Kholna Aur Use Karna Hai):
 // Command: `Win + R` -> type `control` -> Enter.
 // View Mode Setup: Control Panel khulne par top-right corner me "View by: Category" dropdown par CLICK karo -> "Large icons" select karo (isse saare administrative applets ek saath visible ho jate hain).
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Settings):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Settings):
 // Target: Standard hardware settings, default printer, sound device aur network adapter quick fix karna.
 
 // Problem 1: Printers, Offline Toggle & Queue Check
@@ -526,7 +526,7 @@
 // -> Stale domain credentials remove karna, corrupt Outlook profiles rebuild karna, BitLocker recovery keys audit karna, ya system sleep power plans tweak karna L2 ko escalate karta hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Corrupt Outlook profiles rebuild karna, cached domain passwords wipe karna, BitLocker audit, aur 24x7 counter sleep prevention.
 
 // Step 1: Corrupted Outlook Profile Rebuild (Mail Applet)
@@ -555,7 +555,7 @@
 // [ CONCEPT: Master Consolidation Management Console ]
 // Device Manager, Disk Management, Event Viewer, Shared Folders, aur Local Users ko ek hi administrative dashboard se control karne ka master tool.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Daily User Admin):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Daily User Admin):
 // Target: Quick user unlock, driver visual check, aur basic storage verification.
 
 // Step 1: Console Open Karna
@@ -574,7 +574,7 @@
 // -> Shared folder locks todna, active server sessions disconnect karna, disk initialization (GPT), ya Event ID deep audit L2 ko escalate karta hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause, Storage Architecture & Audit):
+// 2. L2 ENGINEER KA KAAM (Root Cause, Storage Architecture & Audit):
 // Target: Shared folders file locks release, disk GPT conversion, aur forensic crash analysis.
 
 // Step 1: Locked Files Release & Active Sessions Disconnect
@@ -604,13 +604,13 @@
 // [ CONCEPT: Local Security Authority & SAM Database ]
 // Local computer ke Security Account Manager (SAM) database ke users aur built-in groups ko manage karne ka master console.
 
-// * WINDOWS EDITION RULE (Home vs Pro/Enterprise):
+// WINDOWS EDITION RULE (Home vs Pro/Enterprise):
 // -> Rule: lusrmgr.msc sirf Windows Pro, Enterprise aur Education editions par chalta hai. Windows Home edition par run karne par error aata hai: "This snapin may not be used with this edition of Windows".
 // -> Home Edition CLI Workaround: Home edition par local user manage karne ke liye CMD (Run as Administrator) se command use hoti hai:
 //    - Account Unlock: `net user johndoe /active:yes`
 //    - Password Reset: `net user johndoe Password@123`
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Local user password reset aur locked account release karna.
 
 // Problem 1: Local Account Lock Ho Gaya Hai ("The referenced account is currently locked out")
@@ -626,7 +626,7 @@
 // -> Agar user domain account ka ho (ADUC me hona chahiye) ya machine par domain user ko local administrative rights dene hon, toh L2 ko escalate hota hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Domain user ko local admin banana aur built-in attack surface harden karna.
 
 // Step 1: Domain User Ko Local Administrator Banane Ka Process
@@ -643,7 +643,7 @@
 // [ CONCEPT: Windows Core Identity, Domain Membership & Subsystem Tuning ]
 // Computer ka unique hostname, Active Directory domain trust membership, virtual paging memory aur user environment variables configure karne ka master engine.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Computer Name set karna aur Workgroup se Active Directory Domain me join karana.
 
 // Step 1: Computer Name Change & Domain Join
@@ -657,7 +657,7 @@
 // -> Virtual memory paging size tuning, BSOD crash dump configuration, ya Remote Desktop NLA rules L2 ko escalate hote hain.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: OS visual performance boost, Pagefile virtual memory fix, aur Environment variables setup.
 
 // Step 1: Visual Performance Optimization (Slow PC Boost)
@@ -680,7 +680,7 @@
 // [ CONCEPT: Local Policy Registry Enforcement Engine ]
 // Standalone Windows PC par operating system features, USB ports, Windows updates aur user restrictions enforce karne ka local management tool.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Local restrictions verify karna aur policies ko manually force-refresh karna.
 
 // Step 1: Policy Enforcement Check
@@ -693,7 +693,7 @@
 // -> Enterprise security baseline design karna, automatic update policies configure karna, ya User Rights Assignment L2 ko di jaati hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Data leak prevention (USB block), update reboot prevention, aur local hardening.
 
 // Step 1: USB Mass Storage Devices Block Karna (Data Leak Prevention)
@@ -717,7 +717,7 @@
 // [ CONCEPT: Local Security Hardening & Audit Infrastructure ]
 // Password complexity, account lockout thresholds, Kerberos security policies, aur security audit logs ka master security console.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Account lockout rules aur password complexity policies inspect karna.
 
 // Step 1: Account Lockout Settings Check
@@ -730,7 +730,7 @@
 // -> Advanced audit failure logging enable karna, SMB signing enforce karna, ya UAC administrative rules setup karna L2 ko escalate hota hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Brute-force attacks detect karne ke liye Audit logging enable karna aur UAC lockdown lagana.
 
 // Step 1: Detailed Logon Failure Audit Enable Karna (Brute Force Detection)
@@ -750,7 +750,7 @@
 // [ CONCEPT: State-Full Host-Based Packet Filtering ]
 // Windows operating system ka internal traffic gatekeeper jo unauthorized inbound aur outbound TCP/UDP traffic ko block karta hai.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Basic firewall status check karna aur pre-approved application ko quick allow karna.
 
 // Problem 1: User Bolta Hai "Nayi App Lagayi Hai Par Server Se Connect Nahi Ho Rahi"
@@ -763,7 +763,7 @@
 // -> Custom TCP/UDP port open karna, IP subnet scoping, ya outbound block rules lagana L2 ko escalate hota hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Custom enterprise port Inbound rules banana aur IP whitelist security lock lagana.
 
 // Step 1: Custom Enterprise Inbound Port Open Karna (wf.msc)
@@ -787,7 +787,7 @@
 // [ CONCEPT: WinINet System Networking, Proxy & Certificate Zones ]
 // Windows OS level proxy configuration, security trust zones, SSL/TLS certificate cache, aur cryptographic protocols ka central control panel.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Internal web portals ko Trusted Sites me add karna aur corrupt SSL cache clear karna.
 
 // Problem 1: Company Internal Portal Par "Certificate Error" Ya "Untrusted Site" Aana
@@ -803,7 +803,7 @@
 // -> Corporate PAC proxy script setup, IP subnet bypass, ya TLS version deprecation issues L2 ko escalate hote hain.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Corporate PAC script proxy route assign karna aur insecure TLS 1.0/1.1 protocols deprecate karna.
 
 // Step 1: Corporate PAC / Proxy Server Configuration
@@ -821,10 +821,10 @@
 // Windows hardware components, BIOS/UEFI firmware architecture, Secure Boot cryptography, aur driver resource sharing ka master diagnostic viewer.
 // (Note: Yeh ek direct inspection tool hai — isme L1/L2 ka artificial split nahi balki standard hardware aur firmware audit hota hai).
 
-// * STEP 1: Quick Hardware Specs & Asset Audit
+// STEP 1: Quick Hardware Specs & Asset Audit
 // -> Command: `Win + R` -> type `msinfo32` -> Enter -----> Left pane me "System Summary" par CLICK karo -> Right pane me note karo: OS Name, System Model (e.g. HP EliteDesk 800 G6), Processor (e.g. Intel Core i7-10700), aur Total Physical Memory (RAM 16.0 GB).
 
-// * STEP 2: Modern UEFI, Secure Boot & Hardware Conflict Audit (Advanced)
+// STEP 2: Modern UEFI, Secure Boot & Hardware Conflict Audit (Advanced)
 // -> Command: `Win + R` -> type `msinfo32` -> Enter -----> Inspect parameters:
 //    - BIOS Mode: `UEFI` hona zaroori hai (agar Legacy hai toh Windows 11 upgrade fail hoga).
 //    - Secure Boot State: `On` hona chahiye (Rootkit boot virus protection ke liye).
@@ -839,7 +839,7 @@
 // [ CONCEPT: Real-Time Process Kernel Telemetry ]
 // Windows micro-telemetry engine jo CPU threads, Disk I/O queue depth, Memory commit charge, aur Network TCP sockets ka real-time breakdown provide karta hai.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Kaun sa software 100% CPU ya RAM consume karke PC freeze kar raha hai identify karke kill karna.
 
 // Step 1: High CPU / Memory Process Identify & Kill
@@ -849,7 +849,7 @@
 // -> Locked files ko background handle se release karna, Disk queue depth 100% active time triage, ya listening ports audit L2 ko di jaati hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: "File In Use" error aane par locked handle release karna aur active network sockets audit karna.
 
 // Step 1: Locked File Ko Bina Reboot Kiye Release Karna (Associated Handles)
@@ -866,7 +866,7 @@
 // [ CONCEPT: OS Boot Loader & Diagnostic Boot Subsystem ]
 // Windows boot loader parameters, diagnostic minimal boot (Safe Mode), aur 3rd-party software isolation (Clean Boot) ka primary recovery console.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: System ko Safe Mode me boot karna malware scan aur driver recovery ke liye.
 
 // Step 1: Safe Mode Diagnostic Boot Setup (Minimal vs Network Variant)
@@ -879,7 +879,7 @@
 // -> Blue Screen (BSOD) ke baad 3rd-party startup services ka isolation test (Clean Boot) L2 ko di jaati hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: 3rd-party background service conflicts aur persistent startup crashes ka isolation diagnosis (Clean Boot).
 
 // Step 1: Clean Boot Isolation Triage
@@ -897,7 +897,7 @@
 // [ CONCEPT: Storage Reclamation & Component Store Sweeper ]
 // Windows storage junk cleaner jo user temporary cache, error dump files, aur Windows Update superseded component store files ko wipe karta hai.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: User temporary cache aur Recycle Bin clean karke C: drive par instant space banana.
 
 // Step 1: Basic Storage Cleanup
@@ -911,7 +911,7 @@
 // -> Windows Update component store cache, old OS install dumps (Windows.old), ya GBs of WinSxS junk clean karna L2 ko di jaati hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: C: Drive 100% full (Red Bar) hone par 15GB+ deep system update cache aur memory dumps purge karna.
 
 // Step 1: Deep System Store & Update Cleanup
@@ -931,10 +931,10 @@
 // Windows display driver model (WDDM), Direct3D hardware acceleration, monitor refresh rates, aur GPU VRAM ka hardware verification utility.
 // (Note: Yeh ek direct display diagnostic tool hai — isme L1/L2 ka artificial split nahi balki GPU hardware aur Direct3D acceleration check hoti hai).
 
-// * STEP 1: Display Specs & Driver Verification
+// STEP 1: Display Specs & Driver Verification
 // -> Command: `Win + R` -> type `dxdiag` -> Enter -----> "Display" tab par CLICK karo -> Device Name (e.g. Intel UHD Graphics / NVIDIA GeForce), Display Memory (VRAM), aur Current Display Mode (1920 x 1080 60Hz) note karo.
 
-// * STEP 2: Direct3D Hardware Acceleration & Crash Audit
+// STEP 2: Direct3D Hardware Acceleration & Crash Audit
 // -> Command: `Win + R` -> type `dxdiag` -> Enter -----> Hardware Acceleration & Error Check:
 //    - DirectDraw, Direct3D aur AGP Texture Acceleration: Teeno `Enabled` hone chahiye (Agar Disabled hain toh driver corrupt hai, clean reinstall zaroori hai).
 //    - Notes Box Inspection: Neeche "Notes" box me padho: "No problems found" likha hai ya display driver crash ka event logged hai.
@@ -948,10 +948,10 @@
 // Windows operating system aur 3rd party applications ka temporary runtime swap space jo crash hone par purge na hone ki wajah se disk space consume karta hai.
 // (Note: Yeh direct cache cleanup task hai — user profile cache aur system kernel cache dono clear karna).
 
-// * STEP 1: User-Level Temporary Cache Clear (%temp%)
+// STEP 1: User-Level Temporary Cache Clear (%temp%)
 // -> Command: `Win + R` -> type `%temp%` -> Enter -----> Folder khulne par keyboard par `Ctrl + A` dabakar sab select karo -> `Shift + Delete` dabakar permanently delete karo -> Agar "File In Use" popup aaye toh "Do this for all current items" checkbox TICK karke "Skip" par click karo.
 
-// * STEP 2: System-Level Kernel Temp & Broken Update Cache Wipe (temp)
+// STEP 2: System-Level Kernel Temp & Broken Update Cache Wipe (temp)
 // -> Command: `Win + R` -> type `temp` -> Enter -----> System Temp & Download Cache Wipe:
 //    - System Temp: Admin permission prompt aane par "Continue" click -> `Ctrl + A` -> `Shift + Delete` -> in-use files par "Skip" karo.
 //    - Broken Update Download Cache: CMD Admin me sequence chalao: `net stop wuauserv` -> `Win + R` -> type `C:\Windows\SoftwareDistribution\Download` -> sab delete karo -> `net start wuauserv`.
@@ -964,7 +964,7 @@
 // [ CONCEPT: Win32 Printing Subsystem & Standard TCP/IP Ports ]
 // Enterprise network printers, raw spool queues, page description languages (PCL/PostScript), aur printer port sockets ka management interface.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Default printer assign karna, queue clear karna, aur offline status toggle theek karna.
 
 // Problem 1: Stuck Print Queue Clear & Set Default
@@ -982,7 +982,7 @@
 // -> Agar "Use Printer Offline" uncheck karne ke baad bhi status offline hi show kare, toh issue printer ke network port ya firewall SNMP block ka hota hai, jise L2 engineer Step 1 me root cause se fix karta hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Network printer ka static IP port verify karna, fake "Offline" glitches jad se khatam karna, WSD sleep disconnects eliminate karna, corrupt print processor reset karna, aur network diagnostics execute karna.
 
 // Step 1: TCP/IP Port & SNMP Bug Fix (Printer Fake "Offline" Glitch)
@@ -1024,10 +1024,10 @@
 // Windows login session initialization ke waqt automated application launchers ko execute karne ka shell folder architecture.
 // (Note: Single user shortcut vs machine-wide multi-user kiosk setup ka direct standard).
 
-// * STEP 1: Current User Ke Liye App Auto-Start (shell:startup)
+// STEP 1: Current User Ke Liye App Auto-Start (shell:startup)
 // -> Command: `Win + R` -> type `shell:startup` -> Enter -----> Target application ke shortcut file ko is folder me Copy -> Paste kar do (Specific user ke login hote hi required application shortcut auto-launch karana).
 
-// * STEP 2: Machine-Wide (All Users) Kiosk Auto-Start (shell:common startup)
+// STEP 2: Machine-Wide (All Users) Kiosk Auto-Start (shell:common startup)
 // -> Command: `Win + R` -> type `shell:common startup` -> Enter -----> Application shortcut paste karo -> Admin prompt par "Continue" click karo (Computer par login karne wale har domain user / shift worker ke liye software auto-run karana). Registry audit: `Win + R` -> `regedit` -> `HKLM\Software\Microsoft\Windows\CurrentVersion\Run`.
 
 
@@ -1039,19 +1039,19 @@
 // Windows logon architecture jisme automatic authentication credentials store kiye jate hain taaki unattended computers bina password boot ho sakein.
 // (Note: Kiosk / FIDS display auto-logon aur user role management ka direct operational tool).
 
-// * WARNING / WORKAROUND (Windows 10/11 Checkbox Missing Glitch):
+// WARNING / WORKAROUND (Windows 10/11 Checkbox Missing Glitch):
 // -> Issue: Naye Windows 10/11 updates me "Users must enter a user name and password to use this computer" checkbox gayab (hidden) hota hai.
 // -> Fix: Windows Hello sign-in feature is checkbox ko hide karta hai. Isko wapas lane ke 2 tareeqe hain:
 //    - GUI Settings Fix: `Win + I` (Settings) -> Accounts -> Sign-in options -> "For improved security, only allow Windows Hello sign-in for Microsoft accounts on this device" ko Turn OFF karo.
 //    - Registry Workaround: `Win + R` -> type `regedit` -> Enter -> `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\PasswordLess\Device` me `DevicePasswordLessBuildVersion` ko `0` set karke PC reboot karo (Checkbox wapas visible ho jayega).
 
-// * STEP 1: Kiosk & Airport FIDS Display Auto-Logon Setup (Without Password)
+// STEP 1: Kiosk & Airport FIDS Display Auto-Logon Setup (Without Password)
 // -> Command: `Win + R` -> type `netplwiz` -> Enter -----> Step-by-Step Auto-Logon:
 //    - Step A: List se target user account select karo (e.g. `Kiosk_User` ya `FIDS_Term`).
 //    - Step B: Upar bane checkbox "Users must enter a user name and password to use this computer" ko UNCHECK (untick) karo -> "Apply" par click karo.
 //    - Step C: Popup window me user ka Password aur Confirm Password type karo -> "OK" -> "OK" (Reboot karne par bina password maange direct desktop open hoga).
 
-// * STEP 2: User Group Membership & Secure Sign-in (Advanced)
+// STEP 2: User Group Membership & Secure Sign-in (Advanced)
 // -> Command: `Win + R` -> type `netplwiz` -> Enter -----> Group Role & Security:
 //    - Group Role: User select karo -> "Properties" button -> "Group Membership" tab -> "Administrator" ya "Standard user" choose karke "Apply" -> "OK" karo.
 //    - Secure Sign-in: "Advanced" tab par CLICK karo -> "Require users to press Ctrl + Alt + Delete" checkbox TICK karke phishing screen attacks prevent karo.
@@ -1064,7 +1064,7 @@
 // [ CONCEPT: MAPI Client Architecture & Add-in Sandboxing ]
 // Microsoft Outlook desktop messaging client ka isolated execution mode jo corrupt 3rd-party COM plugins ko isolate karta hai aur local offline database rebuild karta hai.
 
-// * 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
+// 1. L1 ENGINEER KA KAAM (Surface Level & Quick Fix):
 // Target: Crashing Outlook ko Safe Mode me launch karke faulty 3rd-party plugins disable karna.
 
 // Step 1: Outlook Safe Mode Launch & Add-in Fix
@@ -1081,7 +1081,7 @@
 // -> Corrupted `.OST` offline storage rebuild karna ya clean fresh mail profile banana L2 ko di jaati hai.
 
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Permanent Fix):
 // Target: Corrupt local offline database (`.ost`) wipe karke server se clean synchronization start karna aur Mail Applet se fresh profile banana.
 
 // Step 1: Corrupted .OST File Wipe & Clean Resync

@@ -163,14 +163,14 @@
 // Jab User Bole: "Mera Internet / Portal Nahi Chal Raha" — Real Support Escalation Flow
 // ================================================================================
 
-// * 1. L1 ENGINEER KA KAAM (Surface Diagnostics & Fast Reset):
+// 1. L1 ENGINEER KA KAAM (Surface Diagnostics & Fast Reset):
 // Target: Physical link verify karna, local TCP/IP stack self-test, IP release/renew, aur DNS cache flush karna.
 // - Step 1 (Physical Layer & Link LED Check):
 //   Kaam: RJ45 network cable aur switch port link verify karna.
 //   Andar jaakar: Laptop/Desktop ke peeche Ethernet port dekhta hai:
-//   * Solid Green LED -----> Cable aur Switch port ka physical 1 Gbps link 100% active hai.
-//   * Amber / Orange LED --> Link negotiate nahi hua ya sirf 100 Mbps par connect hai (cable crimping loose).
-//   * No Light (Dead) -----> Cable unplugged hai, wall port punch loose hai, ya switch port admin down hai.
+//   - Solid Green LED -----> Cable aur Switch port ka physical 1 Gbps link 100% active hai.
+//   - Amber / Orange LED --> Link negotiate nahi hua ya sirf 100 Mbps par connect hai (cable crimping loose).
+//   - No Light (Dead) -----> Cable unplugged hai, wall port punch loose hai, ya switch port admin down hai.
 // - Step 2 (Loopback Self-Test via CMD):
 //   Command: `Win + R` -> type `cmd` -> Enter.
 //   Kaam: PC ke internal NIC card aur protocol stack ka self-test karna.
@@ -187,7 +187,7 @@
 //   `ipconfig /release` -> `ipconfig /renew` -> `ipconfig /flushdns` chalata hai aur browser refresh karke test karta hai.
 // - L1 Ki Limit: Agar IPv4 par `169.254.x.x` (APIPA) aa raha ho, NIC Speed & Duplex mismatch ho, ya TCP/IP protocol stack corrupt ho, toh L2 ko escalate karta hai.
 
-// * 2. L2 ENGINEER KA KAAM (Root Cause & Infrastructure Diagnostics):
+// 2. L2 ENGINEER KA KAAM (Root Cause & Infrastructure Diagnostics):
 // Target: TCP/IP Stack reset, Static IP / VLAN mismatch fix, Switch port duplex negotiation, aur packet drop hop tracing.
 // - Step 1: Complete TCP/IP Stack & Winsock Reset (Master Network Repair):
 //   Command: `Win + R` -> type `cmd` (Press Ctrl + Shift + Enter for Run as Administrator).

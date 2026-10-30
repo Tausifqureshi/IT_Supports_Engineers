@@ -23,6 +23,15 @@
 //    - Console: Command: Win + R -> type virtmgmt.msc -> Enter (Hyper-V Manager).
 //    - Feature: Windows Server licenses ke sath tightly integrated, licensing cost kam hoti hai.
 
+// 3. ESXi DCUI (Direct Console User Interface — Server Room Fix):
+//    - Access: Physical server ke monitor/keyboard par samne yellow/grey screen dikhti hai.
+//    - Real-World Issue: Jab ESXi host web browser ya vCenter se achanak "Disconnected / Not Responding" ho jaye.
+//    - Action: Press F2 -> Root password daalo -> Arrow key se "Restart Management Network" select karo -> Enter -> Press Y.
+//    - Benefit: Host par chal rahi VMs bina band hue ESXi ka management agent (hostd / vpxa) restart ho jata hai aur host vCenter me wapas online aa jata hai!
+
+// 4. VMware Tools & Hyper-V Integration Services:
+//    - Role: VM ke andar dedicated drivers install karna taaki VMXNET3 high-speed 10Gbps NIC, proper mouse pointer, display scaling aur graceful host shutdown kaam karein.
+
 
 // ================================================================================
 

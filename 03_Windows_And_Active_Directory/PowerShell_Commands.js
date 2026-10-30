@@ -382,7 +382,44 @@
 // ================================================================================
 
 
-// ========================================= 17. Windows vs Linux Commands Comparison (Complete Farq) ============ //
+// ========================================= 17. Enterprise Floor & MSP Daily Driver Commands (Top 5 Essentials) ======= //
+// Target: Corporate, Airports & MSPs — Floor & Interview Standard Daily Commands
+// ================================================================================
+
+// [ CONCEPT & SCOPE: Daily Enterprise IT Operations ]
+// Enterprise IT floor (corporate, airports aur MSPs) aur technical interview standards ke hisaab se yeh 5 practical daily commands hain jo floor par roz use hoti hain:
+
+// 1. PowerShell Execution Policy (Script Running Block Fix):
+//    - Kab Use Hogi / Problem: Floor par jab bhi L1/L2 engineer koi automation, cleanup ya audit script (.ps1) chalata hai, toh Windows default security policy ki wajah se error deta hai: "cannot be loaded because running scripts is disabled on this system".
+//    - Command: Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force
+//    - Kaam / Benefit: Machine-wide security policy ko tode bina sirf current open PowerShell session ke liye temporary script running allow karta hai.
+
+// 2. Modern Windows Image & System File Repair (DISM & SFC via PowerShell):
+//    - Kab Use Hogi / Problem: Jab Windows OS freeze hota hai, Start Menu / Taskbar crash ho jata hai, ya corrupt DLL/system file se Blue Screen (BSOD) aata hai.
+//    - Command (DISM Repair): Repair-WindowsImage -Online -RestoreHealth
+//    - Command (SFC Repair): sfc /scannow
+//    - Kaam / Benefit: Repair-WindowsImage corrupt Windows component store ko Microsoft online update server se fresh replace karta hai (DISM alternative), aur sfc /scannow protected system DLLs ko scan karke auto-repair karta hai.
+
+// 3. Web Request & File Download CLI (curl / wget Replacement):
+//    - Kab Use Hogi / Problem: Bina browser (Chrome/Edge) khole direct terminal se support tools, Antivirus agents, VPN clients ya software patches download karne ke liye.
+//    - Command: Invoke-WebRequest -Uri "https://download.url/agent.msi" -OutFile "C:\agent.msi"
+//    - Kaam / Benefit: Direct URL endpoint se package download karke target disk path par save karta hai (Linux wget/curl equivalent).
+
+// 4. Direct Mapped Network Drive via PowerShell (New-PSDrive):
+//    - Kab Use Hogi / Problem: Workstation ya airport billing terminal par persistent network shared folder ko drive letter (Z:) assign karne ke liye (CMD ke "net use" ka modern PowerShell replacement).
+//    - Command: New-PSDrive -Name "Z" -PSProvider FileSystem -Root "\\FILESERVER01\SharedData" -Persist
+//    - Kaam / Benefit: -Persist flag ke sath user ke Windows Explorer me permanent shared drive map karta hai jo PC reboot hone ke baad bhi disconnect nahi hoti.
+
+// 5. Remote Session Direct Access (Enter-PSSession):
+//    - Kab Use Hogi / Problem: User ki desk par physically jaye bina ya remote kiosk/billing machine ke terminal me direct interactive login karke troubleshoot karne ke liye.
+//    - Command: Enter-PSSession -ComputerName CounterPC01 -Credential (Get-Credential)
+//    - Kaam / Benefit: Remote computer ke terminal ka live interactive shell prompt de deta hai jaise aap usi PC ke aage baithe hon (Linux SSH equivalent).
+
+
+// ================================================================================
+
+
+// ========================================= 18. Windows vs Linux Commands Comparison (Complete Farq) ============ //
 // ================================================================================
 
 // --- NETWORKING ---
@@ -415,7 +452,7 @@
 // ================================================================================
 
 
-// ========================================= 18. Dono Me Technically Kya Farq Hai? =============================== //
+// ========================================= 19. Dono Me Technically Kya Farq Hai? =============================== //
 // ================================================================================
 
 // 1. Output Format -----> PowerShell '.NET Objects' return karta hai (properties filter karna super asaan hai). Linux plain text string stream deta hai (jisme grep, awk lagana padta hai).
