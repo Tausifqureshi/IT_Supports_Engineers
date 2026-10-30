@@ -504,7 +504,46 @@
 // ================================================================================
 
 
-// ========================================= 19. Windows vs Linux Commands Comparison (Complete Farq) ============ //
+// ========================================= 19. Practical Floor Troubleshooting Flow (Step-by-Step) ============= //
+// Real-World Linux Workflows (L1 vs L2 Systems & Kiosk Support)
+// ================================================================================
+
+// 1. L1 ENGINEER KA KAAM (Surface Diagnostics & Fast Reset):
+// Target: Kiosk display freeze, disk space clean, service restart, aur network link recovery.
+// - Problem 1: Linux Kiosk / Desktop GUI Freeze (Black Screen ya Stuck Mouse):
+//   Kaam: Bina hard power-off kiye GUI display manager ko restart karna.
+//   Action: Keyboard par `Ctrl + Alt + F3` press karke virtual TTY terminal me login karo -> Command: `sudo systemctl restart gdm3` (Ubuntu GNOME) ya `sudo systemctl restart lightdm` (Kiosk/XFCE) -> Keyboard par `Ctrl + Alt + F2` press karke live GUI desktop par wapas aao.
+// - Problem 2: Disk Full "No space left on device" (User Login Loop Fix):
+//   Kaam: Disk 100% full hone par Xauthority file create na hona aur user ka login screen par wapas bounce hona fix karna.
+//   Action: Terminal me `df -h` chalao -> `/var/log` ya `/` root partition full dekhne par instant cleanup run karo: `sudo journalctl --vacuum-time=1d` && `sudo apt clean` && `rm -rf ~/.cache/*`.
+// - Problem 3: Production Web / Application Service Down:
+//   Kaam: Service status inspect karke safe bounce karna.
+//   Action: Command: `systemctl status nginx` (ya apache2) -> Red error note karo -> Command: `sudo systemctl restart nginx` -> Verify karo "Active: active (running)".
+// - Problem 4: Kiosk / Terminal Network Drop:
+//   Kaam: Interface down hone par connection refresh karna.
+//   Action: Command: `ip a` (check interface state UP/DOWN) -> Command: `sudo systemctl restart NetworkManager` (ya `sudo netplan apply`) -> Command: `ping -c 4 8.8.8.8` chala kar packet flow verify karo.
+// - L1 Ki Limit: High CPU runaway rogue processes, kernel crash logs (dmesg panics), custom firewall rules (ufw/iptables), aur complex file permission conflicts L2 ko di jaati hain.
+
+// 2. L2 ENGINEER KA KAAM (Root Cause, Performance & Kernel Forensics):
+// Target: Runaway process termination, service crash dumps, listening ports & permission security.
+// - Step 1: Runaway CPU / Memory Hog Process Identification & Safe Kill:
+//   Kaam: Server ya kiosk ko 100% lockup karne wale process ko identify karke safely terminate karna.
+//   Action: Command: `top -b -n 1 | head -n 20` ya `htop` chalao -> Highest %CPU / %MEM process PID note karo -> Command: `ps -fp <PID>` se verify karo process kahan se run ho raha hai -> Command: `sudo kill -15 <PID>` (Graceful SIGTERM) bhejo; agar 10 sec me na ruke toh `sudo kill -9 <PID>` (Force SIGKILL) se terminate karo.
+// - Step 2: Service Crash Loop & Kernel Panic Analysis:
+//   Kaam: Systemd service crash hone ka exact internal reason pakadna.
+//   Action: Command: `journalctl -u <service> -e -n 50 --no-pager` chala kar error traceback padho -> Hardware/PCIe/NIC driver faults ke liye `sudo dmesg -T --level=err,crit` inspect karo.
+// - Step 3: Listening Port & Firewall Rule Verification:
+//   Kaam: Verify karna ki port actually listen ho raha hai aur firewall se allow hai.
+//   Action: Command: `sudo ss -tulnp | grep :<port>` (Check karo `0.0.0.0:<port>` par bound hai ya sirf `127.0.0.1` par) -> Command: `sudo ufw status verbose` -> Block hone par command: `sudo ufw allow <port>/tcp` execute karo.
+// - Step 4: Enterprise File Ownership & Permission Hardening:
+//   Kaam: Application me "Permission Denied" errors ko securely fix karna.
+//   Action: User aur Group ownership assign karo: `sudo chown -R www-data:www-data /var/www/html` -> Directory permissions (755): `sudo find /var/www/html -type d -exec chmod 755 {} +` -> File permissions (644): `sudo find /var/www/html -type f -exec chmod 644 {} +`.
+
+
+// ================================================================================
+
+
+// ========================================= 20. Windows vs Linux Commands Comparison (Complete Farq) ============ //
 // ================================================================================
 
 // --- NETWORKING ---
@@ -537,7 +576,7 @@
 // ================================================================================
 
 
-// ========================================= 20. Dono Me Technically Kya Farq Hai? =============================== //
+// ========================================= 21. Dono Me Technically Kya Farq Hai? =============================== //
 // ================================================================================
 
 // 1. Output Format -----> Linux plain text string stream deta hai (jisme grep, awk, sed lagana padta hai). Windows PowerShell '.NET Objects' return karta hai.

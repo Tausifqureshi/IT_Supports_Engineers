@@ -164,6 +164,21 @@
 //        Step 6: "Mailbox archive status" ka toggle switch ON (Enable) karo -> LEFT-CLICK "Save" button par.
 //        Result: User ke Outlook me primary inbox ke niche ek naya folder appear ho jata hai: "Online Archive - user@company.com" (50GB-1.5TB auto-expanding cloud storage) jisme purane emails automatically archive hone lagte hain.
 
+// 5. Outlook Autocomplete / Nickname Cache Reset:
+//    - Kab Use Hoga: User ka email address change hone par purana address auto-suggest hokar mail bounce (NDR 5.1.1) hona.
+//    - Single Address Clear: Email type karte waqt suggestion ke bagal me [X] par click karo (ya highlight karke Delete dabao).
+//    - Full Cache Reset (CLI): `Win + R` -> type `outlook.exe /cleanautocompletecache` -> Enter.
+
+// 6. Cached Exchange Mode Slider (Missing Old Emails Fix):
+//    - Kab Use Hoga: User bolta hai "Mera 1 ya 2 saal purana email inbox me nahi dikh raha hai".
+//    - Reason: Outlook default me disk space bachane ke liye sirf 1 year ka cache download karta hai.
+//    - Action: `File` -> `Account Settings` -> `Account Settings...` -> Account select karke `Change...` par LEFT-CLICK -> "Download email for the past:" slider ko "All" par drag karo -> "Next" -> "Done" -> Outlook restart.
+
+// 7. Microsoft SaRA Tool (Universal Automated Repair):
+//    - Kab Use Hoga: Manual troubleshooting ke baad bhi jab Outlook crash ya activation error solve na ho.
+//    - Tool: Microsoft Support and Recovery Assistant (SaRA).
+//    - Action: Official tool launch karo -> "Outlook" select karo -> "Outlook won't start / keeps crashing" choose karke automated diagnosis run karo.
+
 
 // ================================================================================
 // Note created for Tausif Qureshi | Universal IT Support & Systems Engineer Blueprint

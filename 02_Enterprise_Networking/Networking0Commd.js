@@ -101,6 +101,13 @@
 //    - Use: Network Printers, POS billing counters, Airport Check-in terminals, Biometric attendance devices.
 //    - Fayda: Device ko hamesha same IP milta hai, aur agar DNS ya Gateway badalna ho toh 1 second me server se update ho jata hai!
 
+// 3. DHCP DORA 4-Step Sequence (Interview Favorite):
+//    - D (Discover): Client broadcast karta hai (Port 68 -> Port 67) "Network par koi DHCP server hai kya?".
+//    - O (Offer): DHCP Server client ke MAC address par available IP address ka offer bhejta hai.
+//    - R (Request): Client offer accept karke formally IP lease request bhejta hai.
+//    - A (Acknowledge): Server confirmation ACK packet bhejta hai aur IP client ko bind kar deta hai.
+//    - APIPA Root Cause: Agar Step O (Offer) ya Step A (Acknowledge) fail ho jaye, toh PC automatic APIPA (`169.254.x.x`) par gir jata hai.
+
 
 // ================================================================================
 
@@ -117,15 +124,19 @@
 
 // 4. Port 443  (TCP) -----> HTTPS — Secure encrypted SSL/TLS web traffic (Banking, ERP, portals).
 
-// 5. Port 22   (TCP) -----> SSH (Secure Shell) — Linux servers aur switches ka secure remote CLI access.
+// 5. Port 88   (TCP/UDP) -----> Kerberos — Windows Active Directory domain authentication token protocol.
 
-// 6. Port 3389 (TCP) -----> RDP (Remote Desktop Protocol) — Windows machines ka remote desktop access (mstsc).
+// 6. Port 389/636 (TCP) -----> LDAP / LDAPS (Secure) — Active Directory directory services query protocol.
 
-// 7. Port 445  (TCP) -----> SMB (Server Message Block) — Windows shared folders aur network file sharing.
+// 7. Port 22   (TCP) -----> SSH (Secure Shell) — Linux servers aur switches ka secure remote CLI access.
 
-// 8. Port 123  (UDP) -----> NTP (Network Time Protocol) — System clock aur biometric devices ka server time sync.
+// 8. Port 3389 (TCP) -----> RDP (Remote Desktop Protocol) — Windows machines ka remote desktop access (mstsc).
 
-// 9. Port 25/587 (TCP) -----> SMTP — Outlook aur mail servers par email send karne ke liye.
+// 9. Port 445  (TCP) -----> SMB (Server Message Block) — Windows shared folders aur network file sharing.
+
+// 10. Port 123  (UDP) -----> NTP (Network Time Protocol) — System clock aur biometric devices ka server time sync.
+
+// 11. Port 25/587 (TCP) -----> SMTP / Secure SMTP Submission — Outlook aur mail servers par email send karne ke liye.
 
 
 // ================================================================================
@@ -138,7 +149,11 @@
 //    - Concept: Ek hi physical switch ke andar virtual networks banana (e.g. Data VLAN 10 aur Voice VLAN 20).
 //    - Support Use: Desk par rakha IP Phone 'Voice VLAN' me hota hai aur computer 'Data VLAN' me. Isse call traffic aur file download alag rehti hai aur voice clear aati hai.
 
-// 2. Switch Link Lights Activity (Front Panel Telemetry):
+// 2. Switch Port Modes (Access Port vs Trunk Port):
+//    - Access Port: Sirf single VLAN ka untagged traffic carry karta hai (End-user laptop, Desktop, Printer, Kiosk ke liye).
+//    - Trunk Port (802.1Q): Multiple VLANs ka tagged traffic carry karta hai (Switch-to-Switch ya Switch-to-Router uplink ke liye).
+
+// 3. Switch Link Lights Activity (Front Panel Telemetry):
 //    - Solid Green Light -----> Cable theek hai, 1 Gbps (Gigabit) high-speed link establish hai.
 //    - Blinking Green Light -----> Data packets actively transmit aur receive ho rahe hain (Normal activity).
 //    - Amber / Orange Light -----> Link sirf 100 Mbps par connect hua hai (Cable crimping loose ya switch port negotiation fault).
